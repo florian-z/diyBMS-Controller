@@ -2,15 +2,15 @@
 * DISCLAIMER
 * This software is supplied by Renesas Electronics Corporation and is only intended for use with Renesas products.
 * No other uses are authorized. This software is owned by Renesas Electronics Corporation and is protected under all
-* applicable laws, including copyright laws. 
+* applicable laws, including copyright laws.
 * THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING THIS SOFTWARE, WHETHER EXPRESS, IMPLIED
 * OR STATUTORY, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
 * NON-INFRINGEMENT.  ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAIMED.TO THE MAXIMUM EXTENT PERMITTED NOT PROHIBITED BY
 * LAW, NEITHER RENESAS ELECTRONICS CORPORATION NOR ANY OF ITS AFFILIATED COMPANIES SHALL BE LIABLE FOR ANY DIRECT,
 * INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR ANY REASON RELATED TO THIS SOFTWARE, EVEN IF RENESAS OR
 * ITS AFFILIATES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
-* Renesas reserves the right, without notice, to make changes to this software and to discontinue the availability 
-* of this software. By using this software, you agree to the additional terms and conditions found by accessing the 
+* Renesas reserves the right, without notice, to make changes to this software and to discontinue the availability
+* of this software. By using this software, you agree to the additional terms and conditions found by accessing the
 * following link:
 * http://www.renesas.com/disclaimer
 *
@@ -36,6 +36,7 @@ Includes
 #include "r_cg_macrodriver.h"
 #include "Config_SCI6_USB.h"
 /* Start user code for include. Do not edit comment generated here */
+#include "process_message.h"
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
 
@@ -48,6 +49,10 @@ extern volatile uint8_t * gp_sci6_rx_address;                /* SCI6 receive buf
 extern volatile uint16_t  g_sci6_rx_count;                   /* SCI6 receive data number */
 extern volatile uint16_t  g_sci6_rx_length;                  /* SCI6 receive data length */
 /* Start user code for global. Do not edit comment generated here */
+static volatile uint8_t g_sci6_tx_buf[TX_BUF_USB] = {0};     /* SCI6 internal transmit buffer */
+static volatile bool g_sci6_tx_busy = false;                 /* SCI6 transmit active */
+static volatile uint8_t g_sci6_rx_buf[RX_BUF_USB] = {0};     /* SCI6 internal receive buffer */
+static void r_Config_SCI6_USB_restart_receiver(void);
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
@@ -60,6 +65,8 @@ extern volatile uint16_t  g_sci6_rx_length;                  /* SCI6 receive dat
 void R_Config_SCI6_USB_Create_UserInit(void)
 {
     /* Start user code for user init. Do not edit comment generated here */
+    R_Config_SCI6_USB_Serial_Receive(g_sci6_rx_buf, RX_BUF_USB);
+    //R_Config_SCI6_USB_Start();
     /* End user code. Do not edit comment generated here */
 }
 
@@ -130,17 +137,32 @@ __interrupt static void r_Config_SCI6_USB_receive_interrupt(void)
 {
     if (g_sci6_rx_length > g_sci6_rx_count)
     {
-        *gp_sci6_rx_address = SCI6.RDR;
+        /* rx buffer has space */
+        uint8_t buf = SCI6.RDR;
+        if (buf == MSG_START)
+        {
+            /* message start detected -> reset incoming buffer */
+            memset(g_sci6_rx_buf, '\0', RX_BUF_USB);
+            g_sci6_rx_count = 0U;
+            g_sci6_rx_length = RX_BUF_USB;
+            gp_sci6_rx_address = g_sci6_rx_buf;
+        }
+        /* append received byte to buffer */
+        *gp_sci6_rx_address = buf;
         gp_sci6_rx_address++;
         g_sci6_rx_count++;
+        if(buf == MSG_END)
+        {
+            /* message end detected -> forward received message */
+            r_Config_SCI6_USB_callback_receiveend();
+        }
     }
-
-    if (g_sci6_rx_length <= g_sci6_rx_count)
+    else
     {
-        /* All data received */
+        /* rx buffer full, but no end character -> restart receiver */
         SCI6.SCR.BIT.RIE = 0U;
         SCI6.SCR.BIT.RE = 0U;
-        r_Config_SCI6_USB_callback_receiveend();
+        r_Config_SCI6_USB_restart_receiver();
     }
 }
 
@@ -160,13 +182,13 @@ __interrupt static void r_Config_SCI6_USB_receiveerror_interrupt(void)
 {
     uint8_t err_type;
 
-    r_Config_SCI6_USB_callback_receiveerror();
-
     /* Clear overrun, framing and parity error flags */
     err_type = SCI6.SSR.BYTE;
     err_type &= 0xC7U;
     err_type |= 0xC0U;
     SCI6.SSR.BYTE = err_type;
+
+    r_Config_SCI6_USB_restart_receiver();
 }
 
 /***********************************************************************************************************************
@@ -179,6 +201,7 @@ __interrupt static void r_Config_SCI6_USB_receiveerror_interrupt(void)
 static void r_Config_SCI6_USB_callback_transmitend(void)
 {
     /* Start user code for r_Config_SCI6_USB_callback_transmitend. Do not edit comment generated here */
+    g_sci6_tx_busy = false;
     /* End user code. Do not edit comment generated here */
 }
 
@@ -192,6 +215,8 @@ static void r_Config_SCI6_USB_callback_transmitend(void)
 static void r_Config_SCI6_USB_callback_receiveend(void)
 {
     /* Start user code for r_Config_SCI6_USB_callback_receiveend. Do not edit comment generated here */
+    pass_message_usb(g_sci6_rx_buf, g_sci6_rx_count);
+    r_Config_SCI6_USB_restart_receiver();
     /* End user code. Do not edit comment generated here */
 }
 
@@ -209,4 +234,28 @@ static void r_Config_SCI6_USB_callback_receiveerror(void)
 }
 
 /* Start user code for adding. Do not edit comment generated here */
+void R_Config_SCI6_USB_Serial_Send_Copy(uint8_t * const tx_buf)
+{
+    __istate_t int_state = __get_interrupt_state();
+    __disable_interrupt();
+
+    if(!g_sci6_tx_busy)
+    {
+        g_sci6_tx_busy = true;
+        memset(g_sci6_tx_buf, '\0', TX_BUF_USB);
+        strncpy(g_sci6_tx_buf, tx_buf, TX_BUF_USB);
+        R_Config_SCI6_USB_Serial_Send(g_sci6_tx_buf, strlen(g_sci6_tx_buf));
+    }
+    else
+    {
+        Error_Handler(); // TODO flo: tx was busy ?!
+    }
+    __set_interrupt_state(int_state);
+}
+
+void r_Config_SCI6_USB_restart_receiver(void)
+{
+    memset(g_sci6_rx_buf, '\0', RX_BUF_USB);
+    R_Config_SCI6_USB_Serial_Receive(g_sci6_rx_buf, RX_BUF_USB);
+}
 /* End user code. Do not edit comment generated here */

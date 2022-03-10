@@ -2,15 +2,15 @@
 * DISCLAIMER
 * This software is supplied by Renesas Electronics Corporation and is only intended for use with Renesas products.
 * No other uses are authorized. This software is owned by Renesas Electronics Corporation and is protected under all
-* applicable laws, including copyright laws. 
+* applicable laws, including copyright laws.
 * THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING THIS SOFTWARE, WHETHER EXPRESS, IMPLIED
 * OR STATUTORY, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
 * NON-INFRINGEMENT.  ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAIMED.TO THE MAXIMUM EXTENT PERMITTED NOT PROHIBITED BY
 * LAW, NEITHER RENESAS ELECTRONICS CORPORATION NOR ANY OF ITS AFFILIATED COMPANIES SHALL BE LIABLE FOR ANY DIRECT,
 * INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR ANY REASON RELATED TO THIS SOFTWARE, EVEN IF RENESAS OR
 * ITS AFFILIATES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
-* Renesas reserves the right, without notice, to make changes to this software and to discontinue the availability 
-* of this software. By using this software, you agree to the additional terms and conditions found by accessing the 
+* Renesas reserves the right, without notice, to make changes to this software and to discontinue the availability
+* of this software. By using this software, you agree to the additional terms and conditions found by accessing the
 * following link:
 * http://www.renesas.com/disclaimer
 *
@@ -50,5 +50,30 @@ Global functions
 void R_Config_PORT_Create(void);
 void R_Config_PORT_Create_UserInit(void);
 /* Start user code for function. Do not edit comment generated here */
+#define LED_GN1_ON      PORT4.PODR |= (1<<0);
+#define LED_GN1_OFF     PORT4.PODR &= ~(1<<0);
+#define LED_GN1_TGL     PORT4.PODR ^= (1<<0);
+#define LED_GE1_ON      PORT4.PODR |= (1<<1);
+#define LED_GE1_OFF     PORT4.PODR &= ~(1<<1);
+#define LED_GE1_TGL     PORT4.PODR ^= (1<<1);
+#define LED_RT1_ON      PORT4.PODR |= (1<<2);
+#define LED_RT1_OFF     PORT4.PODR &= ~(1<<2);
+#define LED_RT1_TGL     PORT4.PODR ^= (1<<2);
+#define LED_BL1_ON      PORT4.PODR |= (1<<3);
+#define LED_BL1_OFF     PORT4.PODR &= ~(1<<3);
+#define LED_BL1_TGL     PORT4.PODR ^= (1<<3);
+
+#define LED_GN2_ON      PORT4.PODR |= (1<<4);
+#define LED_GN2_OFF     PORT4.PODR &= ~(1<<4);
+#define LED_GN2_TGL     PORT4.PODR ^= (1<<4);
+#define LED_GE2_ON      PORT4.PODR |= (1<<5);
+#define LED_GE2_OFF     PORT4.PODR &= ~(1<<5);
+#define LED_GE2_TGL     PORT4.PODR ^= (1<<5);
+#define LED_RT2_ON      PORT4.PODR |= (1<<6);
+#define LED_RT2_OFF     PORT4.PODR &= ~(1<<6);
+#define LED_RT2_TGL     PORT4.PODR ^= (1<<6);
+#define LED_BL2_ON      PORT4.PODR |= (1<<7);
+#define LED_BL2_OFF     PORT4.PODR &= ~(1<<7);
+#define LED_BL2_TGL     PORT4.PODR ^= (1<<7);
 /* End user code. Do not edit comment generated here */
 #endif

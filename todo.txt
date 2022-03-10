@@ -1,0 +1,36 @@
+Quarz an XTAL/EXTAL
+
+18.5 Handling of Unused Pins (MAN p.357)
+The configuration of unused pins is listed in Table 18.8.
+Note 1. Clear the PORTn.PMR bit, the PmnPFS.ISEL bit and the PmnPFS.ASEL bit to 0.
+Note 2. In the case of release when the setting is for output, the port is an input over the period from release from the reset state to the
+pin becoming an output. Since the voltage on the pin is undefined while it is an input, this may lead to an increase in the current
+drawn.
+Table 18.8 Unused Pin Configuration
+Pin Name Description
+MD (Always used as mode pins)
+RES# Connect this pin to VCC via a pull-up resistor.
+P35/NMI Connect this pin to VCC via a pull-up resistor.
+P36/EXTAL When the main clock is not used, set the MOSCCR.MOSTP bit to 1 (general port P36).
+When this pin is not used as port P36 either, it is configured in the same way as port 1 to port 3, port 5, port A
+to port E, port H, port J.
+P37/XTAL When the main clock is not used, set the MOSCCR.MOSTP bit to 1 (general port P37).
+When this pin is not used as port P37 either, it is configured in the same way as port 1 to port 3, port 5, port A
+to port E, port H, port J.
+When the external clock is input to the EXTAL pin, leave this pin open.
+XCIN Connect this pin to VSS via a pull-down resistor.
+XCOUT Leave this pin open.
+Ports 1 to 3, 5
+Ports A to E, H, J
+(except for J6, J7)
+• If the direction setting is for input (PORTn.PDR = 0), the corresponding pin is connected to VCC (pulled up)
+via a resistor or to VSS (pulled down) via a resistor.*1
+• If the direction setting is for output (PORTn.PDR = 1), the pin is released.*1, *2
+Ports 0, 4, J (J6, J7) • If the direction setting is for input (PORTn.PDR = 0), the corresponding pin is connected to AVCC0 (pulled
+up) via a resistor or to AVSS0 (pulled down) via a resistor.*1
+• If the direction setting is for output (PORTn.PDR = 1), the pin is released.*1, *2
+PJ6/VREFH0 When this pin is not used as VREFH0, set the PJ6PFS.ASEL bit to 0 (general port PJ6).
+When this pin is not also used as port PJ6, handle it in the same way as the handling of Ports 1 to 3, 5, A to
+E, H, J (except for J6, J7).
+PJ7/VREFL0 When this pin is not used as VREFL0, set the PJ7PFS.ASEL bit to 0 (general port PJ7).
+When this pin is not also used as port PJ7, handle it in the same way as the handling of Ports 1 to 3, 5, A to
