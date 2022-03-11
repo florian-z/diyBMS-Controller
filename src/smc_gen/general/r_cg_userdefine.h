@@ -70,19 +70,6 @@ Typedef definitions
 Global functions
 ***********************************************************************************************************************/
 /* Start user code for function. Do not edit comment generated here */
-void Error_Handler(void)
-{
-    __disable_interrupt();
-    LED_RE1_OFF
-    LED_RE2_ON
-    for(;;)
-    {
-        LED_RE1_TGL
-        LED_RE2_TGL
-        R_Config_IWDT_Restart();
-        R_BSP_SoftwareDelay(200, BSP_DELAY_MILLISECS);
-    }
-}
 /* End user code. Do not edit comment generated here */
 #endif
 

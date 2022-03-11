@@ -1,4 +1,5 @@
 #include "main.h"
+#include "process_message.h"
 
 void led_test(void);
 void config_communication(void);
@@ -20,8 +21,8 @@ int main(void)
             LED_GE1_TGL
         }
 
-        uint8_t test_msg = "Hi, Testnachricht :)\n";
-        void R_Config_SCI6_USB_Serial_Send_Copy(test_msg);
+        uint8_t* test_msg = "Hi, Testnachricht :)\n";
+        R_Config_SCI6_USB_Send_Copy(test_msg);
 
         process_message_usb();
     }
@@ -73,18 +74,32 @@ void config_communication(void)
 
 //    R_Config_SCI0_CellModule_Serial_Receive(rx_buf_sci0_cellmodule, RX_BUF_CELLMODULE);
     R_Config_SCI0_CellModule_Start();
-    R_Config_SCI5_CellModule_Serial_Receive(rx_buf_sci5_cellmodule, RX_BUF_CELLMODULE);
+    R_Config_SCI5_CellModule_Serial_Receive((uint8_t*)rx_buf_sci5_cellmodule, RX_BUF_CELLMODULE);
     R_Config_SCI5_CellModule_Start();
-    R_Config_SCI8_CellModule_Serial_Receive(rx_buf_sci8_cellmodule, RX_BUF_CELLMODULE);
+    R_Config_SCI8_CellModule_Serial_Receive((uint8_t*)rx_buf_sci8_cellmodule, RX_BUF_CELLMODULE);
     R_Config_SCI8_CellModule_Start();
-    R_Config_SCI9_CellModule_Serial_Receive(rx_buf_sci9_cellmodule, RX_BUF_CELLMODULE);
+    R_Config_SCI9_CellModule_Serial_Receive((uint8_t*)rx_buf_sci9_cellmodule, RX_BUF_CELLMODULE);
     R_Config_SCI9_CellModule_Start();
 
-    R_Config_SCI1_Display_Serial_Receive(rx_buf_sci1_display, RX_BUF_DISPLAY);
+    R_Config_SCI1_Display_Serial_Receive((uint8_t*)rx_buf_sci1_display, RX_BUF_DISPLAY);
     R_Config_SCI1_Display_Start();
 }
 
 void main_timer_tick(void)
 {
     timer_tick = true;
+}
+
+void Error_Handler(void)
+{
+    __disable_interrupt();
+    LED_RT1_OFF
+    LED_RT2_ON
+    for(;;)
+    {
+        LED_RT1_TGL
+        LED_RT2_TGL
+        R_Config_IWDT_Restart();
+        R_BSP_SoftwareDelay(200, BSP_DELAY_MILLISECS);
+    }
 }

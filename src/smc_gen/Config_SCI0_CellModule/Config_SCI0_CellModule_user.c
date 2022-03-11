@@ -37,6 +37,7 @@ Includes
 #include "Config_SCI0_CellModule.h"
 /* Start user code for include. Do not edit comment generated here */
 #include "process_message.h"
+#include "string.h"
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
 
@@ -65,7 +66,7 @@ static void r_Config_SCI0_CellModule_restart_receiver(void);
 void R_Config_SCI0_CellModule_Create_UserInit(void)
 {
     /* Start user code for user init. Do not edit comment generated here */
-    R_Config_SCI0_CellModule_Serial_Receive(g_sci0_rx_buf, RX_BUF_CELLMODULE);
+    R_Config_SCI0_CellModule_Serial_Receive((uint8_t*)g_sci0_rx_buf, RX_BUF_CELLMODULE);
     /* End user code. Do not edit comment generated here */
 }
 
@@ -134,6 +135,7 @@ __fast_interrupt static void r_Config_SCI0_CellModule_receive_interrupt(void)
 __interrupt static void r_Config_SCI0_CellModule_receive_interrupt(void)
 #endif
 {
+    #pragma diag_suppress=Pa082
     if (g_sci0_rx_length > g_sci0_rx_count)
     {
         /* rx buffer has space */
@@ -141,7 +143,7 @@ __interrupt static void r_Config_SCI0_CellModule_receive_interrupt(void)
         if (buf == MSG_START)
         {
             /* message start detected -> reset incoming buffer */
-            memset(g_sci0_rx_buf, '\0', RX_BUF_CELLMODULE);
+            memset((uint8_t*)g_sci0_rx_buf, '\0', RX_BUF_CELLMODULE);
             g_sci0_rx_count = 0U;
             g_sci0_rx_length = RX_BUF_USB;
             gp_sci0_rx_address = g_sci0_rx_buf;
@@ -200,7 +202,7 @@ __interrupt static void r_Config_SCI0_CellModule_receiveerror_interrupt(void)
 static void r_Config_SCI0_CellModule_callback_transmitend(void)
 {
     /* Start user code for r_Config_SCI0_CellModule_callback_transmitend. Do not edit comment generated here */
-    g_sci6_tx_busy = false;
+    g_sci0_tx_busy = false;
     /* End user code. Do not edit comment generated here */
 }
 
@@ -214,7 +216,7 @@ static void r_Config_SCI0_CellModule_callback_transmitend(void)
 static void r_Config_SCI0_CellModule_callback_receiveend(void)
 {
     /* Start user code for r_Config_SCI0_CellModule_callback_receiveend. Do not edit comment generated here */
-    pass_message_cellmodule(g_sci0_rx_buf, g_sci0_rx_count, CELL_MODULE_CHAIN_1);
+    pass_message_cellmodule((uint8_t*)g_sci0_rx_buf, g_sci0_rx_count, CELL_MODULE_CHAIN_1);
     r_Config_SCI0_CellModule_restart_receiver();
     /* End user code. Do not edit comment generated here */
 }
@@ -241,9 +243,9 @@ void R_Config_SCI0_USB_Serial_Send_Copy(uint8_t * const tx_buf)
     if(!g_sci0_tx_busy)
     {
         g_sci0_tx_busy = true;
-        memset(g_sci0_tx_buf, '\0', TX_BUF_CELLMODULE);
-        strncpy(g_sci0_tx_buf, tx_buf, TX_BUF_CELLMODULE);
-        R_Config_SCI0_USB_Serial_Send(g_sci0_tx_buf, strlen(g_sci0_tx_buf));
+        memset((uint8_t*)g_sci0_tx_buf, '\0', TX_BUF_CELLMODULE);
+        strncpy((char*)g_sci0_tx_buf, (char*)tx_buf, TX_BUF_CELLMODULE);
+        R_Config_SCI0_CellModule_Serial_Send((uint8_t*)g_sci0_tx_buf, strlen((char*)g_sci0_tx_buf));
     }
     else
     {
@@ -254,7 +256,7 @@ void R_Config_SCI0_USB_Serial_Send_Copy(uint8_t * const tx_buf)
 
 void r_Config_SCI0_CellModule_restart_receiver(void)
 {
-    memset(g_sci0_rx_buf, '\0', RX_BUF_CELLMODULE);
-    R_Config_SCI0_CellModule_Serial_Receive(g_sci0_rx_buf, RX_BUF_CELLMODULE);
+    memset((uint8_t*)g_sci0_rx_buf, '\0', RX_BUF_CELLMODULE);
+    R_Config_SCI0_CellModule_Serial_Receive((uint8_t*)g_sci0_rx_buf, RX_BUF_CELLMODULE);
 }
 /* End user code. Do not edit comment generated here */

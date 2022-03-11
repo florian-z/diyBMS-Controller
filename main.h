@@ -4,5 +4,6 @@
 #include "r_smc_entry.h"
 
 void main_timer_tick(void);
+void Error_Handler(void);
 
 #endif /* __main_h__ */

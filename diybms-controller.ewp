@@ -356,6 +356,7 @@
                     <state>C:\Projekte\forschung\diybms-controller\src\smc_gen\r_pincfg</state>
                     <state>$PROJ_DIR$\lib\RX130</state>
                     <state>$PROJ_DIR$\lib\unified\logger</state>
+                    <state>$PROJ_DIR$</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>

@@ -50,30 +50,30 @@ Global functions
 void R_Config_PORT_Create(void);
 void R_Config_PORT_Create_UserInit(void);
 /* Start user code for function. Do not edit comment generated here */
-#define LED_GN1_ON      PORT4.PODR |= (1<<0);
-#define LED_GN1_OFF     PORT4.PODR &= ~(1<<0);
-#define LED_GN1_TGL     PORT4.PODR ^= (1<<0);
-#define LED_GE1_ON      PORT4.PODR |= (1<<1);
-#define LED_GE1_OFF     PORT4.PODR &= ~(1<<1);
-#define LED_GE1_TGL     PORT4.PODR ^= (1<<1);
-#define LED_RT1_ON      PORT4.PODR |= (1<<2);
-#define LED_RT1_OFF     PORT4.PODR &= ~(1<<2);
-#define LED_RT1_TGL     PORT4.PODR ^= (1<<2);
-#define LED_BL1_ON      PORT4.PODR |= (1<<3);
-#define LED_BL1_OFF     PORT4.PODR &= ~(1<<3);
-#define LED_BL1_TGL     PORT4.PODR ^= (1<<3);
+#define LED_GN1_ON      PORT4.PODR.BYTE |= (1<<0);
+#define LED_GN1_OFF     PORT4.PODR.BYTE &= ~(1<<0);
+#define LED_GN1_TGL     PORT4.PODR.BYTE ^= (1<<0);
+#define LED_GE1_ON      PORT4.PODR.BYTE |= (1<<1);
+#define LED_GE1_OFF     PORT4.PODR.BYTE &= ~(1<<1);
+#define LED_GE1_TGL     PORT4.PODR.BYTE ^= (1<<1);
+#define LED_RT1_ON      PORT4.PODR.BYTE |= (1<<2);
+#define LED_RT1_OFF     PORT4.PODR.BYTE &= ~(1<<2);
+#define LED_RT1_TGL     PORT4.PODR.BYTE ^= (1<<2);
+#define LED_BL1_ON      PORT4.PODR.BYTE |= (1<<3);
+#define LED_BL1_OFF     PORT4.PODR.BYTE &= ~(1<<3);
+#define LED_BL1_TGL     PORT4.PODR.BYTE ^= (1<<3);
 
-#define LED_GN2_ON      PORT4.PODR |= (1<<4);
-#define LED_GN2_OFF     PORT4.PODR &= ~(1<<4);
-#define LED_GN2_TGL     PORT4.PODR ^= (1<<4);
-#define LED_GE2_ON      PORT4.PODR |= (1<<5);
-#define LED_GE2_OFF     PORT4.PODR &= ~(1<<5);
-#define LED_GE2_TGL     PORT4.PODR ^= (1<<5);
-#define LED_RT2_ON      PORT4.PODR |= (1<<6);
-#define LED_RT2_OFF     PORT4.PODR &= ~(1<<6);
-#define LED_RT2_TGL     PORT4.PODR ^= (1<<6);
-#define LED_BL2_ON      PORT4.PODR |= (1<<7);
-#define LED_BL2_OFF     PORT4.PODR &= ~(1<<7);
-#define LED_BL2_TGL     PORT4.PODR ^= (1<<7);
+#define LED_GN2_ON      PORT4.PODR.BYTE |= (1<<4);
+#define LED_GN2_OFF     PORT4.PODR.BYTE &= ~(1<<4);
+#define LED_GN2_TGL     PORT4.PODR.BYTE ^= (1<<4);
+#define LED_GE2_ON      PORT4.PODR.BYTE |= (1<<5);
+#define LED_GE2_OFF     PORT4.PODR.BYTE &= ~(1<<5);
+#define LED_GE2_TGL     PORT4.PODR.BYTE ^= (1<<5);
+#define LED_RT2_ON      PORT4.PODR.BYTE |= (1<<6);
+#define LED_RT2_OFF     PORT4.PODR.BYTE &= ~(1<<6);
+#define LED_RT2_TGL     PORT4.PODR.BYTE ^= (1<<6);
+#define LED_BL2_ON      PORT4.PODR.BYTE |= (1<<7);
+#define LED_BL2_OFF     PORT4.PODR.BYTE &= ~(1<<7);
+#define LED_BL2_TGL     PORT4.PODR.BYTE ^= (1<<7);
 /* End user code. Do not edit comment generated here */
 #endif
