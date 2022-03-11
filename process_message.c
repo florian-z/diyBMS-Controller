@@ -3,6 +3,17 @@
 
 static volatile uint8_t process_buffer_usb[RX_BUF_USB] = {0};
 
+/* generate and send messages */
+void send_message_cellmodule(void)
+{
+
+}
+
+void send_message_display(void)
+{
+
+}
+
 /* buffer incoming messages */
 void pass_message_usb(uint8_t const * const data, uint8_t const len)
 {
@@ -40,7 +51,7 @@ void process_message_usb()
     }
 }
 
-void process_message_cell_module()
+void process_message_cellmodule()
 {
 
 }

@@ -12,19 +12,38 @@ int main(void)
     config_communication();
     R_Config_TMR0_TMR1_Start(); // start timer tick
 
+    uint8_t count_10ms = 0;
     for(;;)
     {
         R_Config_IWDT_Restart();
-        R_BSP_SoftwareDelay(1000, BSP_DELAY_MILLISECS);
         if (timer_tick)
         {
-            LED_GE1_TGL
+            count_10ms++;
+            if (!(count_10ms % 25))
+            {
+                /* 4 Hz */
+                LED_GE1_TGL
+
+            }
+            if (count_10ms >= 100)
+            {
+                /* 1 Hz */
+                count_10ms = 0;
+                LED_GE2_TGL
+
+                // TODO flo: debug remove
+                uint8_t* test_msg = "Hi, Testnachricht :)\n";
+                R_Config_SCI6_USB_Send_Copy(test_msg);
+
+
+                send_message_cellmodule();
+                send_message_display();
+            }
         }
 
-        uint8_t* test_msg = "Hi, Testnachricht :)\n";
-        R_Config_SCI6_USB_Send_Copy(test_msg);
-
         process_message_usb();
+        process_message_cellmodule();
+        process_message_display();
     }
 }
 
