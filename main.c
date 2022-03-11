@@ -3,6 +3,7 @@
 
 void led_test(void);
 void config_communication(void);
+void test_i2c_pwr(void);
 
 static volatile bool timer_tick = false;
 
@@ -23,22 +24,30 @@ int main(void)
             {
                 /* 4 Hz */
                 LED_GE1_TGL
+                send_message_pwr();
 
+
+                if (count_10ms >= 100)
+                {
+                    /* 1 Hz */
+                    count_10ms = 0;
+                    LED_GE2_TGL
+
+                    // TODO flo: debug remove
+                    uint8_t* test_msg = "Hi, Testnachricht :)\n";
+                    R_Config_SCI6_USB_Send_Copy(test_msg);
+
+
+                    send_message_cellmodule();
+                    send_message_display();
+                    test_i2c_pwr();
+                }
+                else
+                {
+                    /* 4 Hz, but only triggers if 1 Hz part is not executed */
+                }
             }
-            if (count_10ms >= 100)
-            {
-                /* 1 Hz */
-                count_10ms = 0;
-                LED_GE2_TGL
 
-                // TODO flo: debug remove
-                uint8_t* test_msg = "Hi, Testnachricht :)\n";
-                R_Config_SCI6_USB_Send_Copy(test_msg);
-
-
-                send_message_cellmodule();
-                send_message_display();
-            }
         }
 
         process_message_usb();
@@ -91,6 +100,8 @@ void config_communication(void)
 //    R_Config_SCI6_USB_Serial_Receive(rx_buf_sci6_usb, RX_BUF_USB);
     R_Config_SCI6_USB_Start();
 
+    R_Config_RIIC0_PWR_Start();
+
 //    R_Config_SCI0_CellModule_Serial_Receive(rx_buf_sci0_cellmodule, RX_BUF_CELLMODULE);
     R_Config_SCI0_CellModule_Start();
     R_Config_SCI5_CellModule_Serial_Receive((uint8_t*)rx_buf_sci5_cellmodule, RX_BUF_CELLMODULE);
@@ -120,5 +131,16 @@ void Error_Handler(void)
         LED_RT2_TGL
         R_Config_IWDT_Restart();
         R_BSP_SoftwareDelay(200, BSP_DELAY_MILLISECS);
+    }
+}
+
+void test_i2c_pwr(void)
+{
+    static uint8_t flags = 0x01;
+    config_message_pwr(flags);
+    flags <<= 1;
+    if(!flags)
+    {
+        flags = 1;
     }
 }
