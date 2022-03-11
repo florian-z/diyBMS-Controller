@@ -42,7 +42,6 @@ Includes
 #include "Config_SCI1_Display.h"
 #include "Config_RSPI0_Shunt.h"
 #include "Config_RIIC0_PWR.h"
-#include "Config_LVD1.h"
 #include "Config_SCI6_USB.h"
 
 /***********************************************************************************************************************

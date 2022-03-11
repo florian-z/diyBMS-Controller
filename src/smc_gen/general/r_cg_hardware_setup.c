@@ -45,7 +45,6 @@ Includes
 #include "Config_SCI1_Display.h"
 #include "Config_RSPI0_Shunt.h"
 #include "Config_RIIC0_PWR.h"
-#include "Config_LVD1.h"
 #include "Config_SCI6_USB.h"
 #include "r_smc_cgc.h"
 #include "r_smc_interrupt.h"
@@ -106,7 +105,6 @@ void R_Systeminit(void)
     R_Config_SCI1_Display_Create();
     R_Config_RSPI0_Shunt_Create();
     R_Config_RIIC0_PWR_Create();
-    R_Config_LVD1_Create();
     R_Config_SCI6_USB_Create();
 
     /* Register undefined interrupt */

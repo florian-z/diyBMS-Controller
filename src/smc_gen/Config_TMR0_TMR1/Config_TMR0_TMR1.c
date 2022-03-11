@@ -68,11 +68,11 @@ void R_Config_TMR0_TMR1_Create(void)
                     _00_TMR_OVI_INT_DISABLE;
 
     /* Set compare match value */ 
-    TMR01.TCORA = _7CFF_TMR01_COMP_MATCH_VALUE_A;
-    TMR01.TCORB = _F9FF_TMR01_COMP_MATCH_VALUE_B;
+    TMR01.TCORA = _270F_TMR01_COMP_MATCH_VALUE_A;
+    TMR01.TCORB = _03E7_TMR01_COMP_MATCH_VALUE_B;
 
     /* Configure TMR0 interrupts */ 
-    IPR(TMR0, CMIA0) = _05_TMR_PRIORITY_LEVEL5;
+    IPR(TMR0, CMIA0) = _01_TMR_PRIORITY_LEVEL1;
 
     R_Config_TMR0_TMR1_Create_UserInit();
 }
@@ -91,7 +91,7 @@ void R_Config_TMR0_TMR1_Start(void)
     IEN(TMR0, CMIA0) = 1U;
 
     /*Start counting*/
-    TMR1.TCCR.BYTE = _08_TMR_CLK_SRC_PCLK | _00_TMR_PCLK_DIV_1;
+    TMR1.TCCR.BYTE = _08_TMR_CLK_SRC_PCLK | _03_TMR_PCLK_DIV_32;
 }
 
 /***********************************************************************************************************************

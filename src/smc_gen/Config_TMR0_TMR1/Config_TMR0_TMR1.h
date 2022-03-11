@@ -39,9 +39,9 @@ Macro definitions (Register bit)
 /***********************************************************************************************************************
 Macro definitions
 ***********************************************************************************************************************/
-#define TMR0_PCLK_COUNTER_DIVISION                    (1) 
-#define _7CFF_TMR01_COMP_MATCH_VALUE_A                (0x7CFFU)
-#define _F9FF_TMR01_COMP_MATCH_VALUE_B                (0xF9FFU)
+#define TMR0_PCLK_COUNTER_DIVISION                    (32) 
+#define _270F_TMR01_COMP_MATCH_VALUE_A                (0x270FU)
+#define _03E7_TMR01_COMP_MATCH_VALUE_B                (0x03E7U)
 
 /***********************************************************************************************************************
 Typedef definitions

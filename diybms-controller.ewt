@@ -2812,18 +2812,6 @@
                 </file>
             </group>
             <group>
-                <name>Config_LVD1</name>
-                <file>
-                    <name>$PROJ_DIR$\src\smc_gen\Config_LVD1\Config_LVD1.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\src\smc_gen\Config_LVD1\Config_LVD1.h</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\src\smc_gen\Config_LVD1\Config_LVD1_user.c</name>
-                </file>
-            </group>
-            <group>
                 <name>Config_PORT</name>
                 <file>
                     <name>$PROJ_DIR$\src\smc_gen\Config_PORT\Config_PORT.c</name>

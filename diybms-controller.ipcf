@@ -3,7 +3,6 @@
 <includePath>
     <path>C:\Projekte\forschung\diybms-controller\src\smc_gen\Config_ICU</path>
     <path>C:\Projekte\forschung\diybms-controller\src\smc_gen\Config_IWDT</path>
-    <path>C:\Projekte\forschung\diybms-controller\src\smc_gen\Config_LVD1</path>
     <path>C:\Projekte\forschung\diybms-controller\src\smc_gen\Config_PORT</path>
     <path>C:\Projekte\forschung\diybms-controller\src\smc_gen\Config_RIIC0_PWR</path>
     <path>C:\Projekte\forschung\diybms-controller\src\smc_gen\Config_RSPI0_Shunt</path>
@@ -49,21 +48,6 @@
     <group name ="">
         <group name ="Config_IWDT">
             <path>.\src\smc_gen\Config_IWDT\Config_IWDT_user.c</path>
-        </group>
-    </group>
-    <group name ="">
-        <group name ="Config_LVD1">
-            <path>.\src\smc_gen\Config_LVD1\Config_LVD1.c</path>
-        </group>
-    </group>
-    <group name ="">
-        <group name ="Config_LVD1">
-            <path>.\src\smc_gen\Config_LVD1\Config_LVD1.h</path>
-        </group>
-    </group>
-    <group name ="">
-        <group name ="Config_LVD1">
-            <path>.\src\smc_gen\Config_LVD1\Config_LVD1_user.c</path>
         </group>
     </group>
     <group name ="">

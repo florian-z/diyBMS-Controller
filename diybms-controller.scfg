@@ -254,9 +254,9 @@
 <Item currentVect="141" id="MTU5_TGIW5" priority="15" usedState="Not Use"/>
 <Item currentVect="170" id="POE_OEI1" priority="15" usedState="Not Use"/>
 <Item currentVect="171" id="POE_OEI2" priority="15" usedState="Not Use"/>
-<Item currentVect="174" id="TMR0_CMIA0" priority="5" usedState="Used"/>
-<Item currentVect="175" id="TMR0_CMIB0" priority="5" usedState="Not Use"/>
-<Item currentVect="176" id="TMR0_OVI0" priority="5" usedState="Not Use"/>
+<Item currentVect="174" id="TMR0_CMIA0" priority="1" usedState="Used"/>
+<Item currentVect="175" id="TMR0_CMIB0" priority="1" usedState="Not Use"/>
+<Item currentVect="176" id="TMR0_OVI0" priority="1" usedState="Not Use"/>
 <Item currentVect="177" id="TMR1_CMIA1" priority="15" usedState="Not Use"/>
 <Item currentVect="178" id="TMR1_CMIB1" priority="15" usedState="Not Use"/>
 <Item currentVect="179" id="TMR1_OVI1" priority="15" usedState="Not Use"/>
@@ -399,7 +399,7 @@
 <item id="8bitMode" input="" vlaue="0"/>
 <item id="16bitMode" input="" vlaue="0"/>
 </option>
-<option enabled="true" id="ClockSourceOption" selection="PCLK">
+<option enabled="true" id="ClockSourceOption" selection="PCLK32">
 <item id="PCLK" input="" vlaue="0"/>
 <item id="PCLK2" input="" vlaue="0"/>
 <item id="PCLK8" input="" vlaue="0"/>
@@ -419,7 +419,7 @@
 <item id="ClearedResetHigh" input="" vlaue="0"/>
 </option>
 <option enabled="true" id="CompareMatchAValue" selection="CompareMatchAValue">
-<item id="CompareMatchAValue" input="1" vlaue="31999"/>
+<item id="CompareMatchAValue" input="10" vlaue="9999"/>
 </option>
 <option enabled="true" id="MatchValueOptionA" selection="ms">
 <item id="ms" input="" vlaue="0"/>
@@ -428,7 +428,7 @@
 <item id="count" input="" vlaue="0"/>
 </option>
 <option enabled="true" id="CompareMatchBValue" selection="CompareMatchBValue">
-<item id="CompareMatchBValue" input="2" vlaue="63999"/>
+<item id="CompareMatchBValue" input="1" vlaue="999"/>
 </option>
 <option enabled="true" id="TMO0OutputEnable" selection="Disable">
 <item id="Disable" input="" vlaue="0"/>
@@ -458,7 +458,7 @@
 <item id="Disable" input="" vlaue="0"/>
 <item id="Enable" input="" vlaue="0"/>
 </option>
-<option enabled="true" id="130InterruptOption" selection="Level5">
+<option enabled="true" id="130InterruptOption" selection="Level1">
 <item id="Level0" input="" vlaue="0"/>
 <item id="Level1" input="" vlaue="0"/>
 <item id="Level2" input="" vlaue="0"/>
@@ -1494,7 +1494,7 @@
 <item id="Rising" input="" vlaue="0"/>
 <item id="Both" input="" vlaue="0"/>
 </option>
-<option enabled="true" id="IrqFlt" selection="NoFlt">
+<option enabled="true" id="IrqFlt" selection="Div64">
 <item id="NoFlt" input="" vlaue="0"/>
 <item id="Div1" input="" vlaue="0"/>
 <item id="Div8" input="" vlaue="0"/>
@@ -2722,72 +2722,6 @@
 <item enabled="true" id="SMBS"/>
 </option>
 </context>
-</allocator>
-<source description="Code generator components provide peripheral drivers with customized generated source geared towards small code size" display="Code Generator" id="com.renesas.smc.tools.swcomponent.codegenerator.source"/>
-</configuration>
-<configuration id="6483f52e-16fc-4212-a1bc-0629fcc1e89c" inuse="true" name="Config_LVD1">
-<allocatable id="LVD1">
-<isocket id="IClock" selection="Clock.tool_clock_iclk" value="3.2E7"/>
-<isocket id="LOCOClock" selection="Clock.tool_clock_caclclk" value="0.0"/>
-<option enabled="true" id="LVD_VoltLvl" selection="lvd_429">
-<item id="lvd_429" input="" vlaue="0"/>
-<item id="lvd_414" input="" vlaue="0"/>
-<item id="lvd_402" input="" vlaue="0"/>
-<item id="lvd_384" input="" vlaue="0"/>
-<item id="lvd_310" input="" vlaue="0"/>
-<item id="lvd_300" input="" vlaue="0"/>
-<item id="lvd_290" input="" vlaue="0"/>
-<item id="lvd_279" input="" vlaue="0"/>
-<item id="lvd_268" input="" vlaue="0"/>
-<item id="lvd_258" input="" vlaue="0"/>
-<item id="lvd_248" input="" vlaue="0"/>
-<item id="lvd_220" input="" vlaue="0"/>
-<item id="lvd_196" input="" vlaue="0"/>
-<item id="lvd_186" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="VoltMode" selection="Below">
-<item id="Cross" input="" vlaue="0"/>
-<item id="Below" input="" vlaue="0"/>
-<item id="Monitor" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="VolNeg" selection="VccBig">
-<item id="ResetV" input="" vlaue="0"/>
-<item id="VccBig" input="" vlaue="0"/>
-</option>
-<option enabled="false" id="IntType" selection="NonMsk">
-<item id="NonMsk" input="" vlaue="0"/>
-<item id="Msk" input="" vlaue="0"/>
-</option>
-<option enabled="false" id="IntCond" selection="Drop">
-<item id="Rise" input="" vlaue="0"/>
-<item id="Drop" input="" vlaue="0"/>
-<item id="Both" input="" vlaue="0"/>
-</option>
-<option enabled="false" id="Priority" selection="Level15">
-<item id="Level0" input="" vlaue="0"/>
-<item id="Level1" input="" vlaue="0"/>
-<item id="Level2" input="" vlaue="0"/>
-<item id="Level3" input="" vlaue="0"/>
-<item id="Level4" input="" vlaue="0"/>
-<item id="Level5" input="" vlaue="0"/>
-<item id="Level6" input="" vlaue="0"/>
-<item id="Level7" input="" vlaue="0"/>
-<item id="Level8" input="" vlaue="0"/>
-<item id="Level9" input="" vlaue="0"/>
-<item id="Level10" input="" vlaue="0"/>
-<item id="Level11" input="" vlaue="0"/>
-<item id="Level12" input="" vlaue="0"/>
-<item id="Level13" input="" vlaue="0"/>
-<item id="Level14" input="" vlaue="0"/>
-<item id="Level15" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="LVDWaitTime" selection="LVDWaitTime">
-<item id="LVDWaitTime" input="300" vlaue="1921"/>
-</option>
-</allocatable>
-<component description="This software component provides configurations for Voltage Detection Circuit." detailDescription="" display="Voltage Detection Circuit" id="com.renesas.smc.tools.swcomponent.codegenerator.lvd" version="1.10.0"/>
-<allocator channelLevel0="1" channelLevel1="" channelLevel2="" channelLevel3="" channelLevel4="" channelLevel5="" description="LVD1" display="LVD1" id="com.renesas.smc.tools.swcomponent.codegenerator.lvd.rx130.lvd1" type="">
-<context/>
 </allocator>
 <source description="Code generator components provide peripheral drivers with customized generated source geared towards small code size" display="Code Generator" id="com.renesas.smc.tools.swcomponent.codegenerator.source"/>
 </configuration>

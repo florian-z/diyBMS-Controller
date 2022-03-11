@@ -66,6 +66,7 @@ void R_Config_ICU_Create(void)
 
     /* Set IRQ digital filter sampling clock */
     ICU.IRQFLTC0.BIT.FCLKSEL1 = _0003_ICU_IRQ_FILTER_PCLK_64;
+    ICU.IRQFLTC0.BIT.FCLKSEL2 = _0003_ICU_IRQ_FILTER_PCLK_64;
 
     /* Set IRQ1 pin */
     MPC.P31PFS.BYTE = 0x40U;
@@ -83,7 +84,7 @@ void R_Config_ICU_Create(void)
     ICU.IRQCR[2].BYTE = _00_ICU_IRQ_EDGE_LOW_LEVEL;
 
     /* Enable IRQ0~7 digital filter */
-    ICU.IRQFLTE0.BYTE |= (_02_ICU_IRQ1_FILTER_ENABLE);
+    ICU.IRQFLTE0.BYTE |= (_02_ICU_IRQ1_FILTER_ENABLE | _04_ICU_IRQ2_FILTER_ENABLE);
 
     /* Set IRQ1 priority level */
     IPR(ICU,IRQ1) = _0F_ICU_PRIORITY_LEVEL15;
