@@ -237,9 +237,7 @@ static void r_Config_SCI0_CellModule_callback_receiveerror(void)
 /* Start user code for adding. Do not edit comment generated here */
 void R_Config_SCI0_USB_Serial_Send_Copy(uint8_t * const tx_buf)
 {
-    __istate_t int_state = __get_interrupt_state();
-    __disable_interrupt();
-
+    GLOBAL_INT_STORE_AND_DISABLE
     if(!g_sci0_tx_busy)
     {
         g_sci0_tx_busy = true;
@@ -251,7 +249,7 @@ void R_Config_SCI0_USB_Serial_Send_Copy(uint8_t * const tx_buf)
     {
         Error_Handler(); // TODO flo: tx was busy ?!
     }
-    __set_interrupt_state(int_state);
+    GLOBAL_INT_RESTORE
 }
 
 void r_Config_SCI0_CellModule_restart_receiver(void)

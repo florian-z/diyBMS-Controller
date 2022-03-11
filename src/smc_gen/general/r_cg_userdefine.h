@@ -58,6 +58,9 @@ Macro definitions
 #define CELL_MODULE_CHAIN_2 2
 #define CELL_MODULE_CHAIN_3 3
 #define CELL_MODULE_CHAIN_4 4
+
+#define GLOBAL_INT_STORE_AND_DISABLE __istate_t int_state = __get_interrupt_state(); __disable_interrupt();
+#define GLOBAL_INT_RESTORE __set_interrupt_state(int_state);
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
