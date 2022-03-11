@@ -19,6 +19,9 @@ void send_message_display(void);
 void config_message_pwr(uint8_t const flags);
 void send_message_pwr();
 
+void send_message_usb(uint8_t const * const data);
+void send_message_usb_done(void);
+
 void pass_message_usb(uint8_t const * const data, uint8_t const len);
 void pass_message_cellmodule(uint8_t const * const data, uint8_t const len, uint8_t const chain_no);
 void pass_message_display(uint8_t const * const data, uint8_t const len);

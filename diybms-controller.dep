@@ -486,10 +486,6 @@
             <name>$PROJ_DIR$\src\smc_gen\Config_SCI0_CellModule\Config_SCI0_CellModule_user.c</name>
             <outputs>
                 <tool>
-                    <name>ICCRX</name>
-                    <file> 51</file>
-                </tool>
-                <tool>
                     <name>BICOMP</name>
                     <file> 62</file>
                 </tool>

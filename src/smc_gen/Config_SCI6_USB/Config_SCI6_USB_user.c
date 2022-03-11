@@ -50,8 +50,6 @@ extern volatile uint8_t * gp_sci6_rx_address;                /* SCI6 receive buf
 extern volatile uint16_t  g_sci6_rx_count;                   /* SCI6 receive data number */
 extern volatile uint16_t  g_sci6_rx_length;                  /* SCI6 receive data length */
 /* Start user code for global. Do not edit comment generated here */
-static volatile uint8_t g_sci6_tx_buf[TX_BUF_USB] = {0};     /* SCI6 internal transmit buffer */
-static volatile bool g_sci6_tx_busy = false;                 /* SCI6 transmit active */
 static volatile uint8_t g_sci6_rx_buf[RX_BUF_USB] = {0};     /* SCI6 internal receive buffer */
 static void r_Config_SCI6_USB_restart_receiver(void);
 /* End user code. Do not edit comment generated here */
@@ -88,6 +86,7 @@ __interrupt static void r_Config_SCI6_USB_transmit_interrupt(void)
     if (0U < g_sci6_tx_count)
     {
         SCI6.TDR = *gp_sci6_tx_address;
+        *gp_sci6_tx_address = '\0'; // mark as done / free
         gp_sci6_tx_address++;
         g_sci6_tx_count--;
     }
@@ -203,7 +202,7 @@ __interrupt static void r_Config_SCI6_USB_receiveerror_interrupt(void)
 static void r_Config_SCI6_USB_callback_transmitend(void)
 {
     /* Start user code for r_Config_SCI6_USB_callback_transmitend. Do not edit comment generated here */
-    g_sci6_tx_busy = false;
+    send_message_usb_done();
     /* End user code. Do not edit comment generated here */
 }
 
@@ -236,22 +235,22 @@ static void r_Config_SCI6_USB_callback_receiveerror(void)
 }
 
 /* Start user code for adding. Do not edit comment generated here */
-void R_Config_SCI6_USB_Send_Copy(uint8_t * const tx_buf)
-{
-    GLOBAL_INT_STORE_AND_DISABLE
-    if(!g_sci6_tx_busy)
-    {
-        g_sci6_tx_busy = true;
-        memset((uint8_t*)g_sci6_tx_buf, '\0', TX_BUF_USB);
-        strncpy((char*)g_sci6_tx_buf, (char*)tx_buf, TX_BUF_USB);
-        R_Config_SCI6_USB_Serial_Send((uint8_t*)g_sci6_tx_buf, strlen((char*)g_sci6_tx_buf));
-    }
-    else
-    {
-        Error_Handler(); // TODO flo: tx was busy ?!
-    }
-    GLOBAL_INT_RESTORE
-}
+//void R_Config_SCI6_USB_Send_Copy(uint8_t * const tx_buf)
+//{
+//    GLOBAL_INT_STORE_AND_DISABLE
+//    if(!g_sci6_tx_busy)
+//    {
+//        g_sci6_tx_busy = true;
+//        memset((uint8_t*)g_sci6_tx_buf, '\0', TX_BUF_USB);
+//        strncpy((char*)g_sci6_tx_buf, (char*)tx_buf, TX_BUF_USB);
+//        R_Config_SCI6_USB_Serial_Send((uint8_t*)g_sci6_tx_buf, strlen((char*)g_sci6_tx_buf));
+//    }
+//    else
+//    {
+//        Error_Handler(); // TODO flo: tx was busy ?!
+//    }
+//    GLOBAL_INT_RESTORE
+//}
 
 void r_Config_SCI6_USB_restart_receiver(void)
 {
