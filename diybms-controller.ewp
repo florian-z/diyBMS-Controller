@@ -2518,6 +2518,9 @@
         <name>$PROJ_DIR$\main.c</name>
     </file>
     <file>
+        <name>$PROJ_DIR$\messages.c</name>
+    </file>
+    <file>
         <name>$PROJ_DIR$\pcf8574_pwr.c</name>
     </file>
     <file>
