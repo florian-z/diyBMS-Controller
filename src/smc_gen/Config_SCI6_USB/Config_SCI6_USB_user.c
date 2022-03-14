@@ -36,7 +36,7 @@ Includes
 #include "r_cg_macrodriver.h"
 #include "Config_SCI6_USB.h"
 /* Start user code for include. Do not edit comment generated here */
-#include "process_message.h"
+#include "uart_usb.h"
 #include "string.h"
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
@@ -65,7 +65,6 @@ void R_Config_SCI6_USB_Create_UserInit(void)
 {
     /* Start user code for user init. Do not edit comment generated here */
     R_Config_SCI6_USB_Serial_Receive((uint8_t*)g_sci6_rx_buf, RX_BUF_USB);
-    //R_Config_SCI6_USB_Start();
     /* End user code. Do not edit comment generated here */
 }
 
@@ -233,24 +232,6 @@ static void r_Config_SCI6_USB_callback_receiveerror(void)
     /* Start user code for r_Config_SCI6_USB_callback_receiveerror. Do not edit comment generated here */
     /* End user code. Do not edit comment generated here */
 }
-
-/* Start user code for adding. Do not edit comment generated here */
-//void R_Config_SCI6_USB_Send_Copy(uint8_t * const tx_buf)
-//{
-//    GLOBAL_INT_STORE_AND_DISABLE
-//    if(!g_sci6_tx_busy)
-//    {
-//        g_sci6_tx_busy = true;
-//        memset((uint8_t*)g_sci6_tx_buf, '\0', TX_BUF_USB);
-//        strncpy((char*)g_sci6_tx_buf, (char*)tx_buf, TX_BUF_USB);
-//        R_Config_SCI6_USB_Serial_Send((uint8_t*)g_sci6_tx_buf, strlen((char*)g_sci6_tx_buf));
-//    }
-//    else
-//    {
-//        Error_Handler(); // TODO flo: tx was busy ?!
-//    }
-//    GLOBAL_INT_RESTORE
-//}
 
 void r_Config_SCI6_USB_restart_receiver(void)
 {

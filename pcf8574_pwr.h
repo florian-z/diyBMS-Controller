@@ -1,11 +1,8 @@
-#ifndef __process_message_h__
-#define __process_message_h__
+#ifndef __pcf8574_pwr_h__
+#define __pcf8574_pwr_h__
 
 #include "main.h"
 #include "r_cg_userdefine.h"
-
-void send_message_cellmodule(void);
-void send_message_display(void);
 
 #define PCA8574_IDLE                (0)    /* all outputs inactive */
 #define PCA8574_P0_HEAT_ON          (1<<0) /* turn mains heater on */
@@ -19,15 +16,4 @@ void send_message_display(void);
 void config_message_pwr(uint8_t const flags);
 void send_message_pwr();
 
-void send_message_usb(uint8_t const * const data);
-void send_message_usb_done(void);
-
-void pass_message_usb(uint8_t const * const data, uint8_t const len);
-void pass_message_cellmodule(uint8_t const * const data, uint8_t const len, uint8_t const chain_no);
-void pass_message_display(uint8_t const * const data, uint8_t const len);
-
-void process_message_usb();
-void process_message_cellmodule();
-void process_message_display();
-
-#endif /* __process_message_h__ */
+#endif /* __pcf8574_pwr_h__ */

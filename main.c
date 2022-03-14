@@ -1,5 +1,10 @@
 #include "main.h"
-#include "process_message.h"
+#include "display.h"
+#include "uart_usb.h"
+#include "cellmodule.h"
+#include "pcf8574_pwr.h"
+
+#include "string.h"
 
 void led_test(void);
 void config_communication(void);
@@ -35,10 +40,10 @@ int main(void)
 
                     // TODO flo: debug remove
                     uint8_t* test_msg = "Hi, Testnachricht :)\n";
-                    R_Config_SCI6_USB_Send_Copy(test_msg);
+                    R_Config_SCI6_USB_Serial_Send(test_msg, strlen((char*)test_msg));
 
 
-                    send_message_cellmodule();
+                    send_message_cellmodule("!0000*00\n");
                     send_message_display();
                     test_i2c_pwr();
                 }

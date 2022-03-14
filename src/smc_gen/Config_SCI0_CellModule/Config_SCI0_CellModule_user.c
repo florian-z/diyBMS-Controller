@@ -36,7 +36,7 @@ Includes
 #include "r_cg_macrodriver.h"
 #include "Config_SCI0_CellModule.h"
 /* Start user code for include. Do not edit comment generated here */
-#include "process_message.h"
+#include "cellmodule.h"
 #include "string.h"
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
@@ -50,8 +50,6 @@ extern volatile uint8_t * gp_sci0_rx_address;                /* SCI0 receive buf
 extern volatile uint16_t  g_sci0_rx_count;                   /* SCI0 receive data number */
 extern volatile uint16_t  g_sci0_rx_length;                  /* SCI0 receive data length */
 /* Start user code for global. Do not edit comment generated here */
-static volatile uint8_t g_sci0_tx_buf[TX_BUF_CELLMODULE] = {0}; /* SCI0 internal transmit buffer */
-static volatile bool g_sci0_tx_busy = false;                    /* SCI0 transmit active */
 static volatile uint8_t g_sci0_rx_buf[RX_BUF_CELLMODULE] = {0}; /* SCI0 internal receive buffer */
 static void r_Config_SCI0_CellModule_restart_receiver(void);
 /* End user code. Do not edit comment generated here */
@@ -87,6 +85,7 @@ __interrupt static void r_Config_SCI0_CellModule_transmit_interrupt(void)
     if (0U < g_sci0_tx_count)
     {
         SCI0.TDR = *gp_sci0_tx_address;
+        *gp_sci0_tx_address = '\0'; // mark as done / free
         gp_sci0_tx_address++;
         g_sci0_tx_count--;
     }
@@ -202,7 +201,7 @@ __interrupt static void r_Config_SCI0_CellModule_receiveerror_interrupt(void)
 static void r_Config_SCI0_CellModule_callback_transmitend(void)
 {
     /* Start user code for r_Config_SCI0_CellModule_callback_transmitend. Do not edit comment generated here */
-    g_sci0_tx_busy = false;
+    send_message_cellmodule_done(CELL_MODULE_CHAIN_1);
     /* End user code. Do not edit comment generated here */
 }
 
@@ -227,29 +226,11 @@ static void r_Config_SCI0_CellModule_callback_receiveend(void)
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
-
+#pragma diag_suppress=Pe177
 static void r_Config_SCI0_CellModule_callback_receiveerror(void)
 {
     /* Start user code for r_Config_SCI0_CellModule_callback_receiveerror. Do not edit comment generated here */
     /* End user code. Do not edit comment generated here */
-}
-
-/* Start user code for adding. Do not edit comment generated here */
-void R_Config_SCI0_USB_Serial_Send_Copy(uint8_t * const tx_buf)
-{
-    GLOBAL_INT_STORE_AND_DISABLE
-    if(!g_sci0_tx_busy)
-    {
-        g_sci0_tx_busy = true;
-        memset((uint8_t*)g_sci0_tx_buf, '\0', TX_BUF_CELLMODULE);
-        strncpy((char*)g_sci0_tx_buf, (char*)tx_buf, TX_BUF_CELLMODULE);
-        R_Config_SCI0_CellModule_Serial_Send((uint8_t*)g_sci0_tx_buf, strlen((char*)g_sci0_tx_buf));
-    }
-    else
-    {
-        Error_Handler(); // TODO flo: tx was busy ?!
-    }
-    GLOBAL_INT_RESTORE
 }
 
 void r_Config_SCI0_CellModule_restart_receiver(void)
