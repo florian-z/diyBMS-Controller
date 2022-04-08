@@ -183,7 +183,7 @@
 <item enabled="true" id="textoutputitem" input="" value="32.768"/>
 </option>
 <option enabled="true" id="bspversion" selection="textinputitem">
-<item enabled="true" id="textinputitem" input="3.40" value="3.40"/>
+<item enabled="true" id="textinputitem" input="3.40" value="6.20"/>
 </option>
 </tool>
 <tool id="Interrupt">
