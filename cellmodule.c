@@ -1,6 +1,8 @@
 #include "cellmodule.h"
 #include "string.h"
 
+#include "uart_usb.h"
+
 #define CELLMODULE_CHANNELS 1
 
 /*** CellModules UART ***/
