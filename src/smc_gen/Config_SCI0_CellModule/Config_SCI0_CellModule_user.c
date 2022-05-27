@@ -144,7 +144,7 @@ __interrupt static void r_Config_SCI0_CellModule_receive_interrupt(void)
             /* message start detected -> reset incoming buffer */
             memset((uint8_t*)g_sci0_rx_buf, '\0', RX_BUF_CELLMODULE);
             g_sci0_rx_count = 0U;
-            g_sci0_rx_length = RX_BUF_USB;
+            g_sci0_rx_length = RX_BUF_CELLMODULE;
             gp_sci0_rx_address = g_sci0_rx_buf;
         }
         /* append received byte to buffer */
@@ -233,6 +233,7 @@ static void r_Config_SCI0_CellModule_callback_receiveerror(void)
     /* End user code. Do not edit comment generated here */
 }
 
+/* Start user code for adding. Do not edit comment generated here */
 void r_Config_SCI0_CellModule_restart_receiver(void)
 {
     memset((uint8_t*)g_sci0_rx_buf, '\0', RX_BUF_CELLMODULE);

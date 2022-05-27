@@ -233,6 +233,7 @@ static void r_Config_SCI6_USB_callback_receiveerror(void)
     /* End user code. Do not edit comment generated here */
 }
 
+/* Start user code for adding. Do not edit comment generated here */
 void r_Config_SCI6_USB_restart_receiver(void)
 {
     memset((uint8_t*)g_sci6_rx_buf, '\0', RX_BUF_USB);
