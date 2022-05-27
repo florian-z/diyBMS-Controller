@@ -3,7 +3,7 @@
 
 #include "uart_usb.h"
 
-#define CELLMODULE_CHANNELS 1
+#define CELLMODULE_CHANNELS 2
 
 /*** CellModules UART ***/
 static volatile uint8_t process_buffer_cellmodule[CELLMODULE_CHANNELS][RX_BUF_CELLMODULE] = {0};
