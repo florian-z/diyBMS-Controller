@@ -24,6 +24,7 @@ int main(void)
         R_Config_IWDT_Restart();
         if (timer_tick)
         {
+            timer_tick = false;
             count_10ms++;
             if (!(count_10ms % 25))
             {
