@@ -3,6 +3,7 @@
 #include "uart_usb.h"
 #include "cellmodule.h"
 #include "pcf8574_pwr.h"
+#include "log_util.h"
 
 #include "string.h"
 
@@ -16,7 +17,8 @@ int main(void)
 {
     led_test();
     config_communication();
-
+    log("Booting... :)\n");
+    // set safe defaults for relais
     RELAIS_BALANCER_ON
     RELAIS_HEAT_OFF
     RELAIS_PWR_MCU_ON
@@ -25,6 +27,7 @@ int main(void)
     R_Config_TMR0_TMR1_Start(); // start timer tick
 
     uint8_t count_10ms = 0;
+    log("Main Loop\n");
     for(;;)
     {
         R_Config_IWDT_Restart();
@@ -32,6 +35,28 @@ int main(void)
         {
             timer_tick = false;
             count_10ms++;
+
+/// GPIO tests done
+            if (IN_SIGNAL_LINE_PWR)
+            {
+                // line power on
+            } else {
+                // no line power
+            }
+
+            if (IN_SIGNAL_KL15_PWR)
+            {
+                // KL15 on
+            } else {
+                // no KL15
+            }
+
+//            OUT_CHARGER_LOAD_ON
+//            OUT_CHARGER_LOAD_OFF
+//            OUT_CHARGER_DOOR_ON
+//            OUT_CHARGER_DOOR_OFF
+/// GPIO tests done END
+
             if (!(count_10ms % 25))
             {
                 /* 4 Hz */
@@ -45,12 +70,14 @@ int main(void)
                     count_10ms = 0;
                     LED_GE2_TGL
 
-                    // TODO flo: debug remove
-                    uint8_t* test_msg = "Hi, Testnachricht :)\n";
-                    R_Config_SCI6_USB_Serial_Send(test_msg, strlen((char*)test_msg));
+                    /// SPI shunt tests
+                    //OUT_SPI_nMSS_ON
+                    //OUT_SPI_nMSS_OFF
+                    /// SPI shunt tests END
 
 
                     send_message_cellmodule("!0000*00\n");
+
                     send_message_display();
                 }
                 else
@@ -94,21 +121,20 @@ void led_test(void)
 
 
 //static volatile uint8_t rx_buf_sci6_usb[RX_BUF_USB] = {0};
-static volatile uint8_t rx_buf_sci0_cellmodule[RX_BUF_CELLMODULE] = {0};
-static volatile uint8_t rx_buf_sci5_cellmodule[RX_BUF_CELLMODULE] = {0};
-static volatile uint8_t rx_buf_sci8_cellmodule[RX_BUF_CELLMODULE] = {0};
-static volatile uint8_t rx_buf_sci9_cellmodule[RX_BUF_CELLMODULE] = {0};
+//static volatile uint8_t rx_buf_sci0_cellmodule[RX_BUF_CELLMODULE] = {0};
+//static volatile uint8_t rx_buf_sci5_cellmodule[RX_BUF_CELLMODULE] = {0};
+//static volatile uint8_t rx_buf_sci8_cellmodule[RX_BUF_CELLMODULE] = {0};
+//static volatile uint8_t rx_buf_sci9_cellmodule[RX_BUF_CELLMODULE] = {0};
 static volatile uint8_t rx_buf_sci1_display[RX_BUF_DISPLAY] = {0};
 
 //static volatile uint8_t tx_buf_sci6_usb[TX_BUF_USB] = {0};
-static volatile uint8_t tx_buf_sci0_cellmodule[TX_BUF_CELLMODULE] = {0};
-static volatile uint8_t tx_buf_sci5_cellmodule[TX_BUF_CELLMODULE] = {0};
-static volatile uint8_t tx_buf_sci8_cellmodule[TX_BUF_CELLMODULE] = {0};
-static volatile uint8_t tx_buf_sci9_cellmodule[TX_BUF_CELLMODULE] = {0};
+//static volatile uint8_t tx_buf_sci0_cellmodule[TX_BUF_CELLMODULE] = {0};
+//static volatile uint8_t tx_buf_sci5_cellmodule[TX_BUF_CELLMODULE] = {0};
+//static volatile uint8_t tx_buf_sci8_cellmodule[TX_BUF_CELLMODULE] = {0};
+//static volatile uint8_t tx_buf_sci9_cellmodule[TX_BUF_CELLMODULE] = {0};
 static volatile uint8_t tx_buf_sci1_display[TX_BUF_DISPLAY] = {0};
 void config_communication(void)
 {
-    //R_Config_SCI6_USB_Serial_Receive(rx_buf_sci6_usb, RX_BUF_USB);
     R_Config_SCI6_USB_Start();
 
     R_Config_RIIC0_PWR_Start();
@@ -122,8 +148,8 @@ void config_communication(void)
     //R_Config_SCI9_CellModule_Serial_Receive((uint8_t*)rx_buf_sci9_cellmodule, RX_BUF_CELLMODULE);
     //R_Config_SCI9_CellModule_Start();
 
-    R_Config_SCI1_Display_Serial_Receive((uint8_t*)rx_buf_sci1_display, RX_BUF_DISPLAY);
-    R_Config_SCI1_Display_Start();
+//    R_Config_SCI1_Display_Serial_Receive((uint8_t*)rx_buf_sci1_display, RX_BUF_DISPLAY);
+//    R_Config_SCI1_Display_Start();
 }
 
 void main_timer_tick(void)

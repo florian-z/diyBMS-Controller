@@ -1,6 +1,6 @@
 #include "pcf8574_pwr.h"
 #include "string.h"
-#include "uart_usb.h"
+#include "log_util.h"
 
 #define PCA8574_ADR 0x20    /* 7-bit address without read/write-flag */
 
@@ -59,7 +59,7 @@ void callback_pwr_transfer_success()
 /* callback on transfer error */
 void callback_pwr_transfer_error()
 {
-    send_message_usb("I2C slave - transfer error\n");
+    log("I2C slave - transfer error\n");
     // TODO flo GLOBAL_STATUS_HANDLER(I2C, REPORT_ERROR)
 }
 
