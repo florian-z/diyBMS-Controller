@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?><!-- IAR Project Connection File -->
 <iarProjectConnection version="1.6" name="Renesas_AP" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="IarProjectConnection_1.8.xsd">
 <includePath>
-    <path>C:\Projekte\forschung\diybms-controller\src\smc_gen\Config_ICU</path>
-    <path>C:\Projekte\forschung\diybms-controller\src\smc_gen\Config_IWDT</path>
-    <path>C:\Projekte\forschung\diybms-controller\src\smc_gen\Config_PORT</path>
-    <path>C:\Projekte\forschung\diybms-controller\src\smc_gen\Config_RIIC0_PWR</path>
-    <path>C:\Projekte\forschung\diybms-controller\src\smc_gen\Config_RSPI0_Shunt</path>
-    <path>C:\Projekte\forschung\diybms-controller\src\smc_gen\Config_SCI0_CellModule</path>
-    <path>C:\Projekte\forschung\diybms-controller\src\smc_gen\Config_SCI1_Display</path>
-    <path>C:\Projekte\forschung\diybms-controller\src\smc_gen\Config_SCI5_CellModule</path>
-    <path>C:\Projekte\forschung\diybms-controller\src\smc_gen\Config_SCI6_USB</path>
-    <path>C:\Projekte\forschung\diybms-controller\src\smc_gen\Config_SCI8_CellModule</path>
-    <path>C:\Projekte\forschung\diybms-controller\src\smc_gen\Config_SCI9_CellModule</path>
-    <path>C:\Projekte\forschung\diybms-controller\src\smc_gen\Config_TMR0_TMR1</path>
-    <path>C:\Projekte\forschung\diybms-controller\src\smc_gen\general</path>
-    <path>C:\Projekte\forschung\diybms-controller\src\smc_gen\r_bsp</path>
-    <path>C:\Projekte\forschung\diybms-controller\src\smc_gen\r_config</path>
-    <path>C:\Projekte\forschung\diybms-controller\src\smc_gen\r_pincfg</path>
+    <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_ICU</path>
+    <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_IWDT</path>
+    <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_PORT</path>
+    <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_RIIC0_PWR</path>
+    <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_RSPI0_Shunt</path>
+    <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_SCI0_CellModule</path>
+    <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_SCI1_Display</path>
+    <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_SCI5_CellModule</path>
+    <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_SCI6_USB</path>
+    <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_SCI8_CellModule</path>
+    <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_SCI9_CellModule</path>
+    <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_TMR0_TMR1</path>
+    <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\general</path>
+    <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\r_bsp</path>
+    <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\r_config</path>
+    <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\r_pincfg</path>
 </includePath>
 <files>
 <group name="smc_gen">

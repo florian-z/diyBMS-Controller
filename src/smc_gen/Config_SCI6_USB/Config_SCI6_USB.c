@@ -92,9 +92,9 @@ void R_Config_SCI6_USB_Create(void)
     PORTD.PMR.BYTE |= 0x02U;
 
     /* Set TXD6 pin */
-    MPC.PB1PFS.BYTE = 0x0BU;
-    PORTB.PODR.BYTE |= 0x02U;
-    PORTB.PDR.BYTE |= 0x02U;
+    MPC.PD0PFS.BYTE = 0x0BU;
+    PORTD.PODR.BYTE |= 0x01U;
+    PORTD.PDR.BYTE |= 0x01U;
 
     R_Config_SCI6_USB_Create_UserInit();
 }
@@ -129,7 +129,7 @@ void R_Config_SCI6_USB_Start(void)
 void R_Config_SCI6_USB_Stop(void)
 {
     /* Set TXD6 pin */
-    PORTB.PMR.BYTE &= 0xFDU;
+    PORTD.PMR.BYTE &= 0xFEU;
 
     /* Disable serial transmit */
     SCI6.SCR.BIT.TE = 0U;
@@ -204,7 +204,7 @@ MD_STATUS R_Config_SCI6_USB_Serial_Send(uint8_t * const tx_buf, uint16_t tx_num)
         g_sci6_tx_count = tx_num;
 
         /* Set TXD6 pin */
-        PORTB.PMR.BYTE |= 0x02U;
+        PORTD.PMR.BYTE |= 0x01U;
 
         SCI6.SCR.BIT.TIE = 1U;
         SCI6.SCR.BIT.TE = 1U;

@@ -128,10 +128,10 @@ void R_Pins_Create(void)
     // PORTC.PMR.BIT.B3 = 1U; // Please set the PMR bit after TE bit is set to 1.
 
     /* Set TXD6 pin */
-    PORTB.PODR.BYTE |= 0x02U;
-    MPC.PB1PFS.BYTE = 0x0BU;
-    PORTB.PDR.BYTE |= 0x02U;
-    // PORTB.PMR.BIT.B1 = 1U; // Please set the PMR bit after TE bit is set to 1.
+    PORTD.PODR.BYTE |= 0x01U;
+    MPC.PD0PFS.BYTE = 0x0BU;
+    PORTD.PDR.BYTE |= 0x01U;
+    // PORTD.PMR.BIT.B0 = 1U; // Please set the PMR bit after TE bit is set to 1.
 
     /* Set TXD8 pin */
     PORTC.PODR.BYTE |= 0x80U;

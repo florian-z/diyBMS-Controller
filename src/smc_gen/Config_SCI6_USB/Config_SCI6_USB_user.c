@@ -111,7 +111,7 @@ __interrupt static void r_Config_SCI6_USB_transmitend_interrupt(void)
 #endif
 {
     /* Set TXD6 pin */
-    PORTB.PMR.BYTE &= 0xFDU;
+    PORTD.PMR.BYTE &= 0xFEU;
 
     SCI6.SCR.BIT.TIE = 0U;
     SCI6.SCR.BIT.TE = 0U;
