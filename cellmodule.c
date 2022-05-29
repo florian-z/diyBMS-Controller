@@ -13,16 +13,17 @@ static volatile uint8_t cellmodule_rx_waiting_for_response = 0;
 /* generate and send messages */
 void send_message_cellmodule(uint8_t const * const data)
 {
+    LED_GN1_ON
     GLOBAL_INT_STORE_AND_DISABLE
     // check that no channel is currently transmitting
     if (cellmodule_tx_busy)
     {
         log_va("cell channel %02X is transmitting\n", cellmodule_tx_busy);
     }
-//    else if (cellmodule_rx_waiting_for_response)
-//    {
-//        log_va("cell channel %02X waiting for response\n", cellmodule_rx_waiting_for_response);
-//    }
+    else if (cellmodule_rx_waiting_for_response)
+    {
+        log_va("cell channel %02X waiting for response\n", cellmodule_rx_waiting_for_response);
+    }
     else
     {
         log_va("\ncell: %s", data);
@@ -66,6 +67,10 @@ void pass_message_cellmodule(uint8_t const * const data, uint8_t const len, uint
     {
         // buffer is not free -> error
         Error_Handler();
+    }
+    if(!cellmodule_rx_waiting_for_response)
+    {
+        LED_GN1_OFF
     }
     GLOBAL_INT_RESTORE
 }

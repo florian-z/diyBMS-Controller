@@ -41,7 +41,7 @@ void format_dword_to_chars(uint8_t* bytes, const uint32_t data) {
   bytes[7] = encode_nibble(data%16);
 }
 
-/** MSG tools */
+/** NMEA CRC tools */
 void append_nmea_crc(uint8_t * const msg)
 {
     const uint8_t MSG_LEN = strlen((char*)msg);

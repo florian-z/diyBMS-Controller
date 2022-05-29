@@ -120,18 +120,7 @@ void led_test(void)
 }
 
 
-//static volatile uint8_t rx_buf_sci6_usb[RX_BUF_USB] = {0};
-//static volatile uint8_t rx_buf_sci0_cellmodule[RX_BUF_CELLMODULE] = {0};
-//static volatile uint8_t rx_buf_sci5_cellmodule[RX_BUF_CELLMODULE] = {0};
-//static volatile uint8_t rx_buf_sci8_cellmodule[RX_BUF_CELLMODULE] = {0};
-//static volatile uint8_t rx_buf_sci9_cellmodule[RX_BUF_CELLMODULE] = {0};
 static volatile uint8_t rx_buf_sci1_display[RX_BUF_DISPLAY] = {0};
-
-//static volatile uint8_t tx_buf_sci6_usb[TX_BUF_USB] = {0};
-//static volatile uint8_t tx_buf_sci0_cellmodule[TX_BUF_CELLMODULE] = {0};
-//static volatile uint8_t tx_buf_sci5_cellmodule[TX_BUF_CELLMODULE] = {0};
-//static volatile uint8_t tx_buf_sci8_cellmodule[TX_BUF_CELLMODULE] = {0};
-//static volatile uint8_t tx_buf_sci9_cellmodule[TX_BUF_CELLMODULE] = {0};
 static volatile uint8_t tx_buf_sci1_display[TX_BUF_DISPLAY] = {0};
 void config_communication(void)
 {
@@ -139,13 +128,9 @@ void config_communication(void)
 
     R_Config_RIIC0_PWR_Start();
 
-    //R_Config_SCI0_CellModule_Serial_Receive((uint8_t*)rx_buf_sci0_cellmodule, RX_BUF_CELLMODULE);
     R_Config_SCI0_CellModule_Start();
-    //R_Config_SCI5_CellModule_Serial_Receive((uint8_t*)rx_buf_sci5_cellmodule, RX_BUF_CELLMODULE);
     R_Config_SCI5_CellModule_Start();
-    //R_Config_SCI8_CellModule_Serial_Receive((uint8_t*)rx_buf_sci8_cellmodule, RX_BUF_CELLMODULE);
     //R_Config_SCI8_CellModule_Start();
-    //R_Config_SCI9_CellModule_Serial_Receive((uint8_t*)rx_buf_sci9_cellmodule, RX_BUF_CELLMODULE);
     //R_Config_SCI9_CellModule_Start();
 
 //    R_Config_SCI1_Display_Serial_Receive((uint8_t*)rx_buf_sci1_display, RX_BUF_DISPLAY);
