@@ -76,7 +76,7 @@ int main(void)
                     /// SPI shunt tests END
 
 
-                    send_message_cellmodule("!0000*00\n");
+                    send_message_cellmodule("!0100*01\n");
 
                     send_message_display();
                 }

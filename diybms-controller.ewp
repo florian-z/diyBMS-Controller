@@ -20,7 +20,7 @@
                 </option>
                 <option>
                     <name>OGChipSelectMenu</name>
-                    <state>RX600	Generic RX600</state>
+                    <state>R5F51308	R5F51308</state>
                 </option>
                 <option>
                     <name>GenDoubleSize</name>
@@ -783,7 +783,7 @@
                 </option>
                 <option>
                     <name>IlinkIcfFile</name>
-                    <state>$TOOLKIT_DIR$\config\lnkrx600.icf</state>
+                    <state>$TOOLKIT_DIR$\config\lnkr5f51308.icf</state>
                 </option>
                 <option>
                     <name>IlinkIcfFileSlave</name>
@@ -2107,12 +2107,6 @@
         </settings>
     </configuration>
     <group>
-        <name>lib</name>
-        <file>
-            <name>$PROJ_DIR$\lib\RX130\uart.c</name>
-        </file>
-    </group>
-    <group>
         <name>Renesas_AP</name>
         <group>
             <name>smc_gen</name>
@@ -2513,6 +2507,9 @@
     </file>
     <file>
         <name>$PROJ_DIR$\diybms-controller.ipcf</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\log_util.c</name>
     </file>
     <file>
         <name>$PROJ_DIR$\main.c</name>

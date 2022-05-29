@@ -182,6 +182,8 @@ __interrupt static void r_Config_SCI6_USB_receiveerror_interrupt(void)
 {
     uint8_t err_type;
 
+    r_Config_SCI6_USB_callback_receiveerror();
+
     /* Clear overrun, framing and parity error flags */
     err_type = SCI6.SSR.BYTE;
     err_type &= 0xC7U;

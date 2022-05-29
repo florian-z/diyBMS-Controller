@@ -38,6 +38,7 @@ Includes
 /* Start user code for include. Do not edit comment generated here */
 #include "cellmodule.h"
 #include "string.h"
+#include "log_util.h"
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
 
@@ -182,13 +183,15 @@ __interrupt static void r_Config_SCI0_CellModule_receiveerror_interrupt(void)
 {
     uint8_t err_type;
 
+    r_Config_SCI0_CellModule_callback_receiveerror();
+
     /* Clear overrun, framing and parity error flags */
     err_type = SCI0.SSR.BYTE;
     err_type &= 0xC7U;
     err_type |= 0xC0U;
     SCI0.SSR.BYTE = err_type;
 
-    r_Config_SCI0_CellModule_callback_receiveerror();
+    r_Config_SCI0_CellModule_restart_receiver();
 }
 
 /***********************************************************************************************************************
@@ -230,6 +233,7 @@ static void r_Config_SCI0_CellModule_callback_receiveend(void)
 static void r_Config_SCI0_CellModule_callback_receiveerror(void)
 {
     /* Start user code for r_Config_SCI0_CellModule_callback_receiveerror. Do not edit comment generated here */
+    //log_va("sci0c0re%02X\n", SCI0.SSR.BYTE);
     /* End user code. Do not edit comment generated here */
 }
 

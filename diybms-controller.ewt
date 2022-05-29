@@ -2778,12 +2778,6 @@
         </settings>
     </configuration>
     <group>
-        <name>lib</name>
-        <file>
-            <name>$PROJ_DIR$\lib\RX130\uart.c</name>
-        </file>
-    </group>
-    <group>
         <name>Renesas_AP</name>
         <group>
             <name>smc_gen</name>
@@ -3184,6 +3178,9 @@
     </file>
     <file>
         <name>$PROJ_DIR$\diybms-controller.ipcf</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\log_util.c</name>
     </file>
     <file>
         <name>$PROJ_DIR$\main.c</name>

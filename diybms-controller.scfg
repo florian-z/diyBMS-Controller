@@ -183,7 +183,7 @@
 <item enabled="true" id="textoutputitem" input="" value="32.768"/>
 </option>
 <option enabled="true" id="bspversion" selection="textinputitem">
-<item enabled="true" id="textinputitem" input="3.40" value="6.11"/>
+<item enabled="true" id="textinputitem" input="3.40" value="6.20"/>
 </option>
 </tool>
 <tool id="Interrupt">
@@ -1779,7 +1779,7 @@
 <configuration id="9bba2599-1c66-47ae-a965-f4230fa01b6d" inuse="true" name="Config_SCI9_CellModule">
 <allocatable id="SCI9">
 <isocket id="CountingClockB" selection="Clock.tool_clock_pclkb" value="3.2E7"/>
-<option enabled="true" id="BitEdge" selection="LowLevel">
+<option enabled="true" id="BitEdge" selection="FallEdge">
 <item id="LowLevel" input="" vlaue="0"/>
 <item id="FallEdge" input="" vlaue="0"/>
 </option>
@@ -1901,7 +1901,7 @@
 <configuration id="0735ef5e-67e8-4897-8465-547357933066" inuse="true" name="Config_SCI8_CellModule">
 <allocatable id="SCI8">
 <isocket id="CountingClockB" selection="Clock.tool_clock_pclkb" value="3.2E7"/>
-<option enabled="true" id="BitEdge" selection="LowLevel">
+<option enabled="true" id="BitEdge" selection="FallEdge">
 <item id="LowLevel" input="" vlaue="0"/>
 <item id="FallEdge" input="" vlaue="0"/>
 </option>
@@ -2023,7 +2023,7 @@
 <configuration id="450de14c-476d-49f7-889e-e3885cca9022" inuse="true" name="Config_SCI5_CellModule">
 <allocatable id="SCI5">
 <isocket id="CountingClockB" selection="Clock.tool_clock_pclkb" value="3.2E7"/>
-<option enabled="true" id="BitEdge" selection="LowLevel">
+<option enabled="true" id="BitEdge" selection="FallEdge">
 <item id="LowLevel" input="" vlaue="0"/>
 <item id="FallEdge" input="" vlaue="0"/>
 </option>
@@ -2146,7 +2146,7 @@
 <configuration id="7b84c3ad-756b-4dd0-b85d-9360d86fe6bd" inuse="true" name="Config_SCI0_CellModule">
 <allocatable id="SCI0">
 <isocket id="CountingClockB" selection="Clock.tool_clock_pclkb" value="3.2E7"/>
-<option enabled="true" id="BitEdge" selection="LowLevel">
+<option enabled="true" id="BitEdge" selection="FallEdge">
 <item id="LowLevel" input="" vlaue="0"/>
 <item id="FallEdge" input="" vlaue="0"/>
 </option>
@@ -2268,7 +2268,7 @@
 <configuration id="57e4d049-737c-47fb-b5dd-a6af558bb3c4" inuse="true" name="Config_SCI1_Display">
 <allocatable id="SCI1">
 <isocket id="CountingClockB" selection="Clock.tool_clock_pclkb" value="3.2E7"/>
-<option enabled="true" id="BitEdge" selection="LowLevel">
+<option enabled="true" id="BitEdge" selection="FallEdge">
 <item id="LowLevel" input="" vlaue="0"/>
 <item id="FallEdge" input="" vlaue="0"/>
 </option>
@@ -2624,7 +2624,7 @@
 <item id="Enable" input="" vlaue="0"/>
 <item id="Disable" input="" vlaue="0"/>
 </option>
-<option enabled="true" id="ALIEnable" selection="Enable">
+<option enabled="true" id="ALIEnable" selection="Disable">
 <item id="Enable" input="" vlaue="0"/>
 <item id="Disable" input="" vlaue="0"/>
 </option>
@@ -2851,7 +2851,7 @@
 </tool>
 <tool id="System">
 <section id="ocd">
-<option enabled="true" id="debugIF" selection="unused">
+<option enabled="true" id="debugIF" selection="fine">
 <item enabled="true" id="unused"/>
 <item enabled="true" id="fine"/>
 </option>
