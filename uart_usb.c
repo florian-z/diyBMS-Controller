@@ -23,7 +23,7 @@ void send_message_usb(uint8_t const * const data)
         }
         *send_buf_usb_wr++ = data[i];
         /* write pointer roll over */
-        if(send_buf_usb_wr >= send_buf_usb + TX_BUF_USB)
+        if(send_buf_usb_wr >= send_buf_usb + TX_BUF_USB - 1)
         {
             send_buf_usb_wr = send_buf_usb;
         }

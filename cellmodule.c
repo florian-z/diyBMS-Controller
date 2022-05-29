@@ -1,8 +1,12 @@
 #include "cellmodule.h"
 #include "string.h"
 #include "log_util.h"
+#include "messages.h"
 
 #define CELLMODULE_CHANNELS 2
+static const uint8_t CELLMODULES_PER_CHAIN[CELLMODULE_CHANNELS] = { 24, 23 };
+static const uint8_t START_OF_CHAIN[CELLMODULE_CHANNELS] = { 1, 25 };
+#define CELLMODULES_TOTAL 47
 
 /*** CellModules UART ***/
 static volatile uint8_t cellmodule_process_buf[CELLMODULE_CHANNELS][RX_BUF_CELLMODULE] = {0};
@@ -10,19 +14,19 @@ static volatile uint8_t cellmodule_tx_buf[CELLMODULE_CHANNELS][TX_BUF_CELLMODULE
 static volatile uint8_t cellmodule_tx_busy = 0;
 static volatile uint8_t cellmodule_rx_waiting_for_response = 0;
 
+static module_data_t module_data[CELLMODULES_TOTAL+1] = {0};
+static module_data_age_t module_data_age[CELLMODULE_CHANNELS] = {0};
+
 /* generate and send messages */
 void send_message_cellmodule(uint8_t const * const data)
 {
     LED_GN1_ON
+    LED_GN2_ON
     GLOBAL_INT_STORE_AND_DISABLE
     // check that no channel is currently transmitting
     if (cellmodule_tx_busy)
     {
         log_va("cell channel %02X is transmitting\n", cellmodule_tx_busy);
-    }
-    else if (cellmodule_rx_waiting_for_response)
-    {
-        log_va("cell channel %02X waiting for response\n", cellmodule_rx_waiting_for_response);
     }
     else
     {
@@ -57,6 +61,11 @@ void pass_message_cellmodule(uint8_t const * const data, uint8_t const len, uint
     GLOBAL_INT_STORE_AND_DISABLE
     // mark waiting-for-response of this chain as free (not waiting for response)
     cellmodule_rx_waiting_for_response &= ~(1<<chain_no);
+//    if (CELL_MODULE_CHAIN_1 == chain_no) {
+//        LED_GN1_OFF
+//    } else if (CELL_MODULE_CHAIN_2 == chain_no) {
+//        LED_GN2_OFF
+//    }
 
     if (cellmodule_process_buf[chain_no][0] == '\0')
     {
@@ -68,24 +77,157 @@ void pass_message_cellmodule(uint8_t const * const data, uint8_t const len, uint
         // buffer is not free -> error
         Error_Handler();
     }
-    if(!cellmodule_rx_waiting_for_response)
-    {
-        LED_GN1_OFF
-    }
     GLOBAL_INT_RESTORE
 }
 
 /* process buffered incoming messages */
+void process_message_cellmodule_int(uint8_t const chain_no);
 void process_message_cellmodule()
 {
-    for(uint8_t i = 0; i < CELLMODULE_CHANNELS; i++)
+    for(uint8_t chain_no = 0; chain_no < CELLMODULE_CHANNELS; chain_no++)
     {
-        if (cellmodule_process_buf[i][0] != '\0')
+        if (cellmodule_process_buf[chain_no][0] != '\0')
         {
             /* buffer is not empty -> process message */
-            log_va("cell %d: %s", i, (uint8_t*)cellmodule_process_buf[i]);  // TODO flo: debug remove
+            log_va("cell %d: %s", chain_no, (uint8_t*)cellmodule_process_buf[chain_no]);  // TODO flo: debug remove
+            /* check message crc */
+            if (!is_nmea_checksum_good((uint8_t*)cellmodule_process_buf[chain_no]))
+            {
+                //  checksum bad
+                log_va("badcrc cell %d: %s", chain_no, (uint8_t*)cellmodule_process_buf[chain_no]);  // TODO flo: debug remove
+            }
+            else
+            {
+                // checksum ok
+                // clear MSG_CRC, <crc> and MSG_END
+                {
+                    uint8_t* ptr = (uint8_t*)cellmodule_process_buf[chain_no];
+                    while(MSG_CRC != *++ptr);
+                    *ptr++ = '\0'; // '*'
+                    *ptr++ = '\0'; // <crc1>
+                    *ptr++ = '\0'; // <crc2>
+                    *ptr = '\0';   //'\n'
+                }
+
+                if (CELL_MODULE_CHAIN_1 == chain_no)
+                {
+                    LED_GN1_OFF
+                }
+                else if (CELL_MODULE_CHAIN_2 == chain_no)
+                {
+                    LED_GN2_OFF
+                }
+                process_message_cellmodule_int(chain_no);
+            }
             /* last step: free buffer */
-            memset((uint8_t*)cellmodule_process_buf[i], '\0', RX_BUF_CELLMODULE);
+            memset((uint8_t*)cellmodule_process_buf[chain_no], '\0', RX_BUF_CELLMODULE);
         }
     }
+}
+
+void process_message_cellmodule_int(uint8_t const chain_no)
+{
+    uint8_t const * const msg_ptr = (uint8_t*)cellmodule_process_buf[chain_no];
+    uint8_t const msg_cmd = parse_chars_to_byte(msg_ptr + MSG_CMD);
+    // local module id (within this chain)
+    uint8_t const module_cnt = parse_chars_to_byte(msg_ptr + MSG_MOD_CNT);
+    // global module id
+    uint8_t const module_id = CELLMODULES_PER_CHAIN[chain_no] - module_cnt + START_OF_CHAIN[chain_no];
+    uint8_t const * msg_data_ptr = msg_ptr + MSG_DATA_BEGIN;
+
+    if (CELLMODULES_PER_CHAIN[chain_no] != module_cnt)
+    {
+        // incorrect number of modules in response
+        log_va("modulecnt cell %d: %s", chain_no, msg_ptr);
+        return;
+    }
+    switch(msg_cmd)
+    {
+        case GET_BATT_VOLT:
+            // read volts to structs
+            for(uint8_t mod_id = START_OF_CHAIN[chain_no]; mod_id < START_OF_CHAIN[chain_no] + CELLMODULES_PER_CHAIN[chain_no]; mod_id++)
+            {
+                module_data[mod_id].u_batt_mv = parse_chars_to_word(msg_data_ptr);
+                msg_data_ptr += 4; // advance by one word
+            }
+            log_va("log cell %d: UBATT %s", chain_no, msg_ptr);
+            module_data_age[chain_no].u_batt = 0;
+            break;
+
+        case GET_TEMP:
+            // read temps to structs
+            for(uint8_t mod_id = START_OF_CHAIN[chain_no]; mod_id < START_OF_CHAIN[chain_no] + CELLMODULES_PER_CHAIN[chain_no]; mod_id++)
+            {
+                module_data[mod_id].temp_aux_c = parse_chars_to_byte(msg_data_ptr);
+                msg_data_ptr += 2; // advance by one byte
+                module_data[mod_id].temp_batt_c = parse_chars_to_byte(msg_data_ptr);
+                msg_data_ptr += 2; // advance by one byte
+            }
+            log_va("log cell %d: TEMP %s", chain_no, msg_ptr);
+            module_data_age[chain_no].temp = 0;
+            break;
+
+        case IDENTIFY_MODULE:
+            // ignore, just debug
+            log_va("log cell %d: IDENTIFY[%d] %s", chain_no, module_id, msg_ptr);
+            break;
+
+        case ACTIVATE_POWERSAVE:
+            // ignore, just debug
+            log_va("log cell %d: PWRSAFE %s", chain_no, msg_ptr);
+            break;
+
+        case SET_CONFIG_BATT_VOLT_CALIB:
+            // ignore, just debug
+            log_va("log cell %d: SET_CFG_UBATT[%d] %s", chain_no, module_id, msg_ptr);
+            break;
+
+        case SET_CONFIG_TEMP1_B_COEFF:
+            // ignore, just debug
+            log_va("log cell %d: SET_CFG_TEMP1[%d] %s", chain_no, module_id, msg_ptr);
+            break;
+
+        case SET_CONFIG_TEMP2_B_COEFF:
+            // ignore, just debug
+            log_va("log cell %d: SET_CFG_TEMP2[%d] %s", chain_no, module_id, msg_ptr);
+            break;
+
+        case GET_CONFIG:
+            // ignore, just debug
+            log_va("log cell %d: GET_CFG[%d] %s", chain_no, module_id, msg_ptr);
+            break;
+
+        case CLEAR_CONFIG:
+            // ignore, just debug
+            log_va("log cell %d: CLR_CFG[%d] %s", chain_no, module_id, msg_ptr);
+            break;
+
+        default:
+            // ignore, just debug
+            log_va("log cell %d: UNKNOWN %s", chain_no, msg_ptr);
+            break;
+    }
+}
+
+/* cellmodule tick */
+void tick_cellmodule()
+{
+    /* maintain cellmodule data age */
+    for(uint8_t chain_id = 0; chain_id < CELLMODULE_CHANNELS; chain_id++)
+    {
+        module_data_age[chain_id].u_batt++;
+        module_data_age[chain_id].temp++;
+    }
+}
+
+uint16_t get_age_ticks_u_batt()
+{
+    return ((module_data_age[CELL_MODULE_CHAIN_1].u_batt > module_data_age[CELL_MODULE_CHAIN_2].u_batt) ?
+        module_data_age[CELL_MODULE_CHAIN_1].u_batt : module_data_age[CELL_MODULE_CHAIN_2].u_batt);
+}
+
+uint16_t get_age_ticks_temp()
+{
+    return ((module_data_age[CELL_MODULE_CHAIN_1].temp > module_data_age[CELL_MODULE_CHAIN_2].temp) ?
+        module_data_age[CELL_MODULE_CHAIN_1].temp : module_data_age[CELL_MODULE_CHAIN_2].temp);
 }

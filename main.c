@@ -9,8 +9,9 @@
 
 void led_test(void);
 void config_communication(void);
-void test_i2c_pwr(void);
+void register_nmi_interrupt_handler(void);
 
+#define MAINTAIN_WATCHDOG //R_Config_IWDT_Restart();
 static volatile bool timer_tick = false;
 
 int main(void)
@@ -18,19 +19,21 @@ int main(void)
     led_test();
     config_communication();
     log("Booting... :)\n");
+
     // set safe defaults for relais
     RELAIS_BALANCER_ON
     RELAIS_HEAT_OFF
     RELAIS_PWR_MCU_ON
     RELAIS_PWR_SHUNT_ON
 
+    register_nmi_interrupt_handler();
     R_Config_TMR0_TMR1_Start(); // start timer tick
 
     uint8_t count_10ms = 0;
     log("Main Loop\n");
     for(;;)
     {
-        R_Config_IWDT_Restart();
+        MAINTAIN_WATCHDOG
         if (timer_tick)
         {
             timer_tick = false;
@@ -57,6 +60,12 @@ int main(void)
 //            OUT_CHARGER_DOOR_OFF
 /// GPIO tests done END
 
+            if (!(count_10ms % 10))
+            {
+                /* 10 Hz */
+                tick_cellmodule();
+            }
+
             if (!(count_10ms % 25))
             {
                 /* 4 Hz */
@@ -76,7 +85,10 @@ int main(void)
                     /// SPI shunt tests END
 
 
-                    send_message_cellmodule("!0100*01\n");
+                    send_message_cellmodule("!0200*02\n");
+
+
+                    log_va("cell age: ubatt %hu temp %hu\n", get_age_ticks_u_batt(), get_age_ticks_temp());
 
                     send_message_display();
                 }
@@ -105,7 +117,7 @@ void led_test(void)
     LED_RT2_ON
     LED_BL1_ON
     LED_BL2_ON
-    R_Config_IWDT_Restart();
+    MAINTAIN_WATCHDOG
     R_BSP_SoftwareDelay(500, BSP_DELAY_MILLISECS);
     LED_GN1_OFF
     LED_GN2_OFF
@@ -115,7 +127,7 @@ void led_test(void)
     LED_RT2_OFF
     LED_BL1_OFF
     LED_BL2_OFF
-    R_Config_IWDT_Restart();
+    MAINTAIN_WATCHDOG
     R_BSP_SoftwareDelay(200, BSP_DELAY_MILLISECS);
 }
 
@@ -151,7 +163,39 @@ void Error_Handler(void)
     {
         LED_RT1_TGL
         LED_RT2_TGL
-        R_Config_IWDT_Restart();
+        MAINTAIN_WATCHDOG
         R_BSP_SoftwareDelay(200, BSP_DELAY_MILLISECS);
     }
+}
+
+
+
+void nmi_interrupt_handler(void* args)
+{
+    #pragma diag_suppress=Pe177
+    uint8_t reason = ((bsp_int_cb_args_t*)args)->vector;
+    //    BSP_INT_SRC_EXC_SUPERVISOR_INSTR = 0, /* Occurs when privileged instruction is executed in User Mode */
+    //    BSP_INT_SRC_EXC_UNDEFINED_INSTR,      /* Occurs when MCU encounters an unknown instruction */
+    //    BSP_INT_SRC_EXC_NMI_PIN,              /* NMI Pin interrupt */
+    //    BSP_INT_SRC_OSC_STOP_DETECT,          /* Oscillation stop is detected */
+    //    BSP_INT_SRC_IWDT_ERROR,               /* IWDT underflow/refresh error has occurred */
+    //    BSP_INT_SRC_LVD1,                     /* Voltage monitoring 1 interrupt */
+    //    BSP_INT_SRC_LVD2,                     /* Voltage monitoring 2 interrupt */
+    //    BSP_INT_SRC_UNDEFINED_INTERRUPT,      /* Interrupt has triggered for a vector that user did not write a handler. */
+    //    BSP_INT_SRC_BUS_ERROR,                /* Bus error: illegal address access or timeout */
+    //    BSP_INT_SRC_EMPTY
+}
+
+void register_nmi_interrupt_handler(void)
+{
+    R_BSP_InterruptWrite(BSP_INT_SRC_EXC_SUPERVISOR_INSTR, &nmi_interrupt_handler);
+    R_BSP_InterruptWrite(BSP_INT_SRC_EXC_UNDEFINED_INSTR, &nmi_interrupt_handler);
+    R_BSP_InterruptWrite(BSP_INT_SRC_EXC_NMI_PIN, &nmi_interrupt_handler);
+    R_BSP_InterruptWrite(BSP_INT_SRC_OSC_STOP_DETECT, &nmi_interrupt_handler);
+    R_BSP_InterruptWrite(BSP_INT_SRC_IWDT_ERROR, &nmi_interrupt_handler);
+    R_BSP_InterruptWrite(BSP_INT_SRC_LVD1, &nmi_interrupt_handler);
+    R_BSP_InterruptWrite(BSP_INT_SRC_LVD2, &nmi_interrupt_handler);
+    R_BSP_InterruptWrite(BSP_INT_SRC_UNDEFINED_INTERRUPT, &nmi_interrupt_handler);
+    R_BSP_InterruptWrite(BSP_INT_SRC_BUS_ERROR, &nmi_interrupt_handler);
+    R_BSP_InterruptWrite(BSP_INT_SRC_EMPTY, &nmi_interrupt_handler);
 }
