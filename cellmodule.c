@@ -38,7 +38,7 @@ void process_message_cellmodule()
 {
     for(uint8_t i = 0; i < CELLMODULE_CHANNELS; i++)
     {
-        if (process_buffer_cellmodule[i][0] == '\0')
+        if (process_buffer_cellmodule[i][0] != '\0')
         {
             /* buffer is not empty -> process message */
             send_message_usb((uint8_t*)process_buffer_cellmodule[i]);  // TODO flo: debug remove

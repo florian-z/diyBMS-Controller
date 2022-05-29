@@ -26,7 +26,7 @@ void pass_message_display(uint8_t const * const data, uint8_t const len)
 /* process buffered incoming messages */
 void process_message_display()
 {
-    if (process_buffer_display[0] == '\0')
+    if (process_buffer_display[0] != '\0')
     {
         /* buffer is not empty -> process message */
         R_Config_SCI1_Display_Serial_Send((uint8_t*)process_buffer_display, strlen((char*)process_buffer_display));  // TODO flo: debug remove

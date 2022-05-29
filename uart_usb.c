@@ -83,7 +83,7 @@ void pass_message_usb(uint8_t const * const data, uint8_t const len)
 /* process buffered incoming messages */
 void process_message_usb()
 {
-    if (process_buffer_usb[0] == '\0')
+    if (process_buffer_usb[0] != '\0')
     {
         /* buffer is not empty -> process message */
         R_Config_SCI6_USB_Serial_Send((uint8_t*)process_buffer_usb, strlen((char*)process_buffer_usb));  // TODO flo: debug remove
