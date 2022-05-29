@@ -86,7 +86,7 @@ void process_message_usb()
     if (process_buffer_usb[0] != '\0')
     {
         /* buffer is not empty -> process message */
-        R_Config_SCI6_USB_Serial_Send((uint8_t*)process_buffer_usb, strlen((char*)process_buffer_usb));  // TODO flo: debug remove
+        send_message_usb((uint8_t*)process_buffer_usb);  // TODO flo: debug remove
         /* last step: free buffer */
         memset((uint8_t*)process_buffer_usb, '\0', RX_BUF_USB);
     }
