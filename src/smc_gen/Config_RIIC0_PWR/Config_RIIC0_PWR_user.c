@@ -36,6 +36,7 @@ Includes
 #include "r_cg_macrodriver.h"
 #include "Config_RIIC0_PWR.h"
 /* Start user code for include. Do not edit comment generated here */
+#include "pcf8574_pwr.h"
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
 
@@ -323,6 +324,7 @@ __interrupt static void r_Config_RIIC0_PWR_error_interrupt(void)
             }
             RIIC0.ICSR2.BIT.NACKF = 0U;
             RIIC0.ICSR2.BIT.STOP = 0U;
+            r_Config_RIIC0_PWR_callback_transmiterror(MD_ERROR1); // I2C slave not responding
         }
         else if (_0C_IIC_MASTER_RECEIVE == g_riic0_mode_flag)
         {
@@ -414,6 +416,7 @@ __interrupt static void r_Config_RIIC0_PWR_error_interrupt(void)
 static void r_Config_RIIC0_PWR_callback_transmitend(void)
 {
     /* Start user code for r_Config_RIIC0_PWR_callback_transmitend. Do not edit comment generated here */
+    callback_pwr_transfer_success();
     /* End user code. Do not edit comment generated here */
 }
 
@@ -445,4 +448,17 @@ static void r_Config_RIIC0_PWR_callback_receiveerror(MD_STATUS status)
 }
 
 /* Start user code for adding. Do not edit comment generated here */
+/***********************************************************************************************************************
+* Function Name: r_Config_RIIC0_PWR_callback_transmiterror
+* Description  : This function is a callback function when RIIC0 encounters error while transmitting
+* Arguments    : status -
+*                    MD_OK or MD_ARGERROR
+* Return Value : None
+***********************************************************************************************************************/
+
+static void r_Config_RIIC0_PWR_callback_transmiterror(MD_STATUS status)
+{
+    // MD_ERROR1 - I2C slave not responding
+    callback_pwr_transfer_error();
+}
 /* End user code. Do not edit comment generated here */

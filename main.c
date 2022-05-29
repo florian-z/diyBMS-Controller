@@ -16,6 +16,12 @@ int main(void)
 {
     led_test();
     config_communication();
+
+    RELAIS_BALANCER_ON
+    RELAIS_HEAT_OFF
+    RELAIS_PWR_MCU_ON
+    RELAIS_PWR_SHUNT_ON
+
     R_Config_TMR0_TMR1_Start(); // start timer tick
 
     uint8_t count_10ms = 0;
@@ -46,7 +52,6 @@ int main(void)
 
                     send_message_cellmodule("!0000*00\n");
                     send_message_display();
-                    test_i2c_pwr();
                 }
                 else
                 {
@@ -137,16 +142,5 @@ void Error_Handler(void)
         LED_RT2_TGL
         R_Config_IWDT_Restart();
         R_BSP_SoftwareDelay(200, BSP_DELAY_MILLISECS);
-    }
-}
-
-void test_i2c_pwr(void)
-{
-    static uint8_t flags = 0x01;
-    config_message_pwr(flags);
-    flags <<= 1;
-    if(!flags)
-    {
-        flags = 1;
     }
 }

@@ -76,13 +76,13 @@ void R_Config_PORT_Create_UserInit(void);
 #define LED_BL2_OFF     PORT4.PODR.BYTE &= ~(1<<7);
 #define LED_BL2_TGL     PORT4.PODR.BYTE ^= (1<<7);
 
-#define OUT_CHARGER_LOAD_ON     PORTD.PODR.BYTE |= (1<<4)
+#define OUT_CHARGER_LOAD_ON     PORTD.PODR.BYTE |= (1<<4);
 #define OUT_CHARGER_LOAD_OFF    PORTD.PODR.BYTE &= ~(1<<4);
 #define OUT_CHARGER_DOOR_ON     PORTD.PODR.BYTE |= (1<<5);
 #define OUT_CHARGER_DOOR_OFF    PORTD.PODR.BYTE &= ~(1<<5);
 
-#define IN_SIGNAL_LINE_PWR      (PORT3.PIDR.B1)
-#define IN_SIGNAL_KL15_PWR      (PORT3.PIDR.B2)
+#define IN_SIGNAL_LINE_PWR      (PORT3.PIDR.BIT.B1)
+#define IN_SIGNAL_KL15_PWR      (PORT3.PIDR.BIT.B2)
 
 #define OUT_SPI_nMSS_ON         PORTC.PODR.BYTE |= (1<<4);
 #define OUT_SPI_nMSS_OFF        PORTC.PODR.BYTE &= ~(1<<4);

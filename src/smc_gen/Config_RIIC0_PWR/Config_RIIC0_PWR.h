@@ -61,6 +61,7 @@ void R_Config_RIIC0_PWR_IIC_StopCondition(void);
 static void r_Config_RIIC0_PWR_callback_transmitend(void);
 static void r_Config_RIIC0_PWR_callback_receiveend(void);
 static void r_Config_RIIC0_PWR_callback_receiveerror(MD_STATUS status);
+static void r_Config_RIIC0_PWR_callback_transmiterror(MD_STATUS status);
 /* Start user code for function. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
 #endif
