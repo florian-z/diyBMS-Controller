@@ -166,7 +166,7 @@ Configuration Options
 
 /* Interrupt Stack size in bytes.
    NOTE: This setting is available only when using CCRX and GNUC. */
-#define BSP_CFG_ISTACK_BYTES            (0x100)
+#define BSP_CFG_ISTACK_BYTES            (0x200)
 
 /* Heap size in bytes.
    To disable the heap you must follow these steps:

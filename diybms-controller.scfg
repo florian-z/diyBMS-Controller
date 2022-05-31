@@ -298,9 +298,9 @@
 <Item currentVect="243" id="SCI12_SCIX1" priority="15" usedState="Not Use"/>
 <Item currentVect="244" id="SCI12_SCIX2" priority="15" usedState="Not Use"/>
 <Item currentVect="245" id="SCI12_SCIX3" priority="15" usedState="Not Use"/>
-<Item currentVect="246" id="RIIC0_EEI0" priority="11" usedState="Used"/>
+<Item currentVect="246" id="RIIC0_EEI0" priority="12" usedState="Used"/>
 <Item currentVect="247" id="RIIC0_RXI0" priority="11" usedState="Used"/>
-<Item currentVect="248" id="RIIC0_TXI0" priority="10" usedState="Used"/>
+<Item currentVect="248" id="RIIC0_TXI0" priority="11" usedState="Used"/>
 <Item currentVect="249" id="RIIC0_TEI0" priority="11" usedState="Used"/>
 </tool>
 <tool id="Pins" version="1.0.1.0">
@@ -2566,7 +2566,7 @@
 <item id="Enable" input="" vlaue="0"/>
 <item id="Disable" input="" vlaue="0"/>
 </option>
-<option enabled="true" id="IntTXIPriority" selection="Level10">
+<option enabled="true" id="IntTXIPriority" selection="Level11">
 <item id="Level0" input="" vlaue="0"/>
 <item id="Level1" input="" vlaue="0"/>
 <item id="Level2" input="" vlaue="0"/>
@@ -2624,7 +2624,7 @@
 <item id="Enable" input="" vlaue="0"/>
 <item id="Disable" input="" vlaue="0"/>
 </option>
-<option enabled="true" id="ALIEnable" selection="Disable">
+<option enabled="true" id="ALIEnable" selection="Enable">
 <item id="Enable" input="" vlaue="0"/>
 <item id="Disable" input="" vlaue="0"/>
 </option>
@@ -2640,7 +2640,7 @@
 <item id="Enable" input="" vlaue="0"/>
 <item id="Disable" input="" vlaue="0"/>
 </option>
-<option enabled="true" id="IntEEIPriority" selection="Level11">
+<option enabled="true" id="IntEEIPriority" selection="Level12">
 <item id="Level0" input="" vlaue="0"/>
 <item id="Level1" input="" vlaue="0"/>
 <item id="Level2" input="" vlaue="0"/>

@@ -36,6 +36,7 @@ Includes
 #include "r_cg_macrodriver.h"
 #include "Config_RIIC0_PWR.h"
 /* Start user code for include. Do not edit comment generated here */
+#include "Config_PORT.h"
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
 
@@ -84,7 +85,7 @@ void R_Config_RIIC0_PWR_Create(void)
                        _40_IIC_SCL_SYNCHRONOUS_USED;
 
     /* Set ICIER */
-    RIIC0.ICIER.BYTE = _00_IIC_ARBITRATION_LOST_INTERRUPT_DISABLE | _04_IIC_START_CONDITION_INTERRUPT_ENABLE | 
+    RIIC0.ICIER.BYTE = _02_IIC_ARBITRATION_LOST_INTERRUPT_ENABLE | _04_IIC_START_CONDITION_INTERRUPT_ENABLE | 
                        _08_IIC_STOP_CONDITION_INTERRUPT_ENABLE | _10_IIC_NACK_INTERRUPT_ENABLE | 
                        _20_IIC_RECEIVE_DATA_INTERRUPT_ENABLE | _40_IIC_TRANSMIT_END_INTERRUPT_ENABLE | 
                        _80_IIC_TRANSMIT_EMPTY_INTERRUPT_ENABLE;
@@ -93,10 +94,10 @@ void R_Config_RIIC0_PWR_Create(void)
     RIIC0.ICCR1.BIT.IICRST = 0U;
 
     /* Set interrupt priority */
-    IPR(RIIC0, TXI0) = _0A_IIC_PRIORITY_LEVEL10;
+    IPR(RIIC0, TXI0) = _0B_IIC_PRIORITY_LEVEL11;
     IPR(RIIC0, TEI0) = _0B_IIC_PRIORITY_LEVEL11;
     IPR(RIIC0, RXI0) = _0B_IIC_PRIORITY_LEVEL11;
-    IPR(RIIC0, EEI0) = _0B_IIC_PRIORITY_LEVEL11;
+    IPR(RIIC0, EEI0) = _0C_IIC_PRIORITY_LEVEL12;
 
     /* Set SCL pin */
     MPC.P12PFS.BYTE = 0x0FU;

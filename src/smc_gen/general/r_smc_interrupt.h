@@ -170,9 +170,9 @@ Macro definitions
 #define ICU_SCI12_SCIX1_PRIORITY                   (_0F_ICU_PRIORITY_LEVEL15)
 #define ICU_SCI12_SCIX2_PRIORITY                   (_0F_ICU_PRIORITY_LEVEL15)
 #define ICU_SCI12_SCIX3_PRIORITY                   (_0F_ICU_PRIORITY_LEVEL15)
-#define ICU_RIIC0_EEI0_PRIORITY                    (_0B_ICU_PRIORITY_LEVEL11)
+#define ICU_RIIC0_EEI0_PRIORITY                    (_0C_ICU_PRIORITY_LEVEL12)
 #define ICU_RIIC0_RXI0_PRIORITY                    (_0B_ICU_PRIORITY_LEVEL11)
-#define ICU_RIIC0_TXI0_PRIORITY                    (_0A_ICU_PRIORITY_LEVEL10)
+#define ICU_RIIC0_TXI0_PRIORITY                    (_0B_ICU_PRIORITY_LEVEL11)
 #define ICU_RIIC0_TEI0_PRIORITY                    (_0B_ICU_PRIORITY_LEVEL11)
 
 /***********************************************************************************************************************
