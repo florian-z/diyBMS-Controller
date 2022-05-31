@@ -73,6 +73,7 @@ int main(void)
                 send_message_pwr();
 
 
+
                 if (count_10ms >= 100)
                 {
                     /* 1 Hz */
@@ -85,12 +86,14 @@ int main(void)
                     /// SPI shunt tests END
 
 
-                    send_message_cellmodule("!0200*02\n");
+
+                    //send_message_cellmodule("!0000*00\n");
+//                    send_message_cellmodule("!0200*02\n");
 
 
-                    log_va("cell age: ubatt %hu temp %hu\n", get_age_ticks_u_batt(), get_age_ticks_temp());
+                    //print_cellmodule_full_debug();
 
-                    send_message_display();
+                    //send_message_display();
                 }
                 else
                 {

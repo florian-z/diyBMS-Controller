@@ -16,6 +16,17 @@ uint16_t parse_chars_to_word(const uint8_t* bytes) {
   result += decode_nibble(bytes[3]);
   return result;
 }
+uint32_t parse_chars_to_dword(const uint8_t* bytes) {
+  uint32_t result = decode_nibble(bytes[0]) * 268435456;
+  result += decode_nibble(bytes[1]) * 16777216;
+  result += decode_nibble(bytes[2]) * 1048576;
+  result += decode_nibble(bytes[3]) * 65536;
+  result += decode_nibble(bytes[4]) * 4096;
+  result += decode_nibble(bytes[5]) * 256;
+  result += decode_nibble(bytes[6]) * 16;
+  result += decode_nibble(bytes[7]);
+  return result;
+}
 uint8_t encode_nibble(const uint8_t nibble_value) {
   return nibble_value < 10 ? nibble_value + '0' : nibble_value - 10 + 'A';
 }
@@ -49,6 +60,7 @@ void append_nmea_crc(uint8_t * const msg)
     uint8_t crc = 0;
     nmea_calc_checksum(msg, &crc);
     format_byte_to_chars(&msg[MSG_LEN+1], crc);
+    msg[MSG_LEN+1+2] = MSG_END;
 }
 
 bool is_nmea_checksum_good(uint8_t const * const msg)

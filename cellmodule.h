@@ -8,12 +8,17 @@
 #define MSG_MOD_CNT 3
 #define MSG_DATA_BEGIN 5
 
+#define CELLMODULE_CHANNELS 2
+#define CELLMODULES_CHANNEL_1 2
+#define CELLMODULES_CHANNEL_2 1
+#define CELLMODULES_TOTAL CELLMODULES_CHANNEL_1+CELLMODULES_CHANNEL_2
+
 
 typedef enum msg_command { GET_BATT_VOLT=0, GET_TEMP=1, IDENTIFY_MODULE=2, ACTIVATE_POWERSAVE=3,
    SET_CONFIG_BATT_VOLT_CALIB=4, SET_CONFIG_TEMP1_B_COEFF=5, SET_CONFIG_TEMP2_B_COEFF=6, GET_CONFIG=7, CLEAR_CONFIG=8  } msg_command_t;
 
 typedef struct {
-    float u_batt_mv;
+    uint16_t u_batt_mv;
     uint8_t temp_batt_c;
     uint8_t temp_aux_c;
 } module_data_t;
@@ -24,6 +29,7 @@ typedef struct  {
 } module_data_age_t;
 
 void send_message_cellmodule(uint8_t const * const data);
+void send_message_cellmodule_specific(uint8_t const * const data, uint8_t const module_id);
 void send_message_cellmodule_done(uint8_t const chain_no);
 void pass_message_cellmodule(uint8_t const * const data, uint8_t const len, uint8_t const chain_no);
 void process_message_cellmodule();

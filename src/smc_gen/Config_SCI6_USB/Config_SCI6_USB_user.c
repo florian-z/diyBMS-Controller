@@ -141,11 +141,11 @@ __interrupt static void r_Config_SCI6_USB_receive_interrupt(void)
         uint8_t buf = SCI6.RDR;
         if (buf == MSG_START)
         {
-            /* message start detected -> reset incoming buffer */
-            memset((uint8_t*)g_sci6_rx_buf, '\0', RX_BUF_USB);
-            g_sci6_rx_count = 0U;
-            g_sci6_rx_length = RX_BUF_USB;
-            gp_sci6_rx_address = g_sci6_rx_buf;
+//            /* message start detected -> reset incoming buffer */
+//            memset((uint8_t*)g_sci6_rx_buf, '\0', RX_BUF_USB);
+//            g_sci6_rx_count = 0U;
+//            g_sci6_rx_length = RX_BUF_USB;
+//            gp_sci6_rx_address = g_sci6_rx_buf;
         }
         /* append received byte to buffer */
         *gp_sci6_rx_address = buf;

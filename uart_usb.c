@@ -1,5 +1,10 @@
 #include "uart_usb.h"
 #include "string.h"
+#include "stdlib.h"
+
+#include "messages.h"
+#include "cellmodule.h"
+#include "log_util.h"
 
 /*** USB UART ***/
 static volatile uint8_t send_buf_usb[TX_BUF_USB] = {0};     /* transmit buffer */
@@ -86,7 +91,64 @@ void process_message_usb()
     if (process_buffer_usb[0] != '\0')
     {
         /* buffer is not empty -> process message */
-        send_message_usb((uint8_t*)process_buffer_usb);  // TODO flo: debug remove
+        if (!strncmp("CHAIN_CMD", (char*)process_buffer_usb, 9))
+        {
+            uint8_t* ptr = (uint8_t*)process_buffer_usb + 9; // advance behind "CHAIN_CMD"
+            ptr[strlen((char*)ptr)-1] = '\0'; // remove '\n'
+
+            append_nmea_crc(ptr);
+            log(ptr);  // TODO flo: debug remove
+            send_message_cellmodule(ptr); // send to all chains
+        }
+        else if (!strncmp("CELL_CMD", (char*)process_buffer_usb, 8))
+        {
+            uint8_t* ptr = (uint8_t*)process_buffer_usb + 8; // advance behind "CELL_CMD"
+            uint8_t module_id = atoi((char*)ptr); // get target module-id
+            ptr += 2; // move behind target module-id
+            ptr[strlen((char*)ptr)-1] = '\0'; // remove '\n'
+            // add module_count to message
+            if (module_id > CELLMODULES_CHANNEL_1)
+            {
+                format_byte_to_chars(ptr+3, -(module_id -1 -CELLMODULES_CHANNEL_1));
+            }
+            else
+            {
+                format_byte_to_chars(ptr+3, -(module_id -1));
+            }
+
+            append_nmea_crc(ptr);
+            log_va(">CMD: %d %s", module_id, ptr);  // TODO flo: debug remove
+            send_message_cellmodule_specific(ptr, module_id); // only send to chain containing module-id
+        }
+        else if (!strncmp("CELL_CFG", (char*)process_buffer_usb, 8))
+        {
+            uint8_t* ptr = (uint8_t*)process_buffer_usb + 8; // advance behind "CELL_CFG"
+            uint8_t module_id = atoi((char*)ptr); // get target module-id
+            ptr += 3; // move behind target module-id
+            uint16_t cfg_value = atoi((char*)ptr); // get target cfg_value
+            ptr += 4; // move behind target cfg_value
+            ptr[strlen((char*)ptr)-1] = '\0'; // remove '\n'
+            // add module_count to message
+            if (module_id > CELLMODULES_CHANNEL_1)
+            {
+                format_byte_to_chars(ptr+3, -(module_id -1 -CELLMODULES_CHANNEL_1));
+            }
+            else
+            {
+                format_byte_to_chars(ptr+3, -(module_id -1));
+            }
+            format_word_to_chars(ptr+3+2, cfg_value);
+
+            append_nmea_crc(ptr);
+            log_va(">CMD: %d %s", module_id, ptr);  // TODO flo: debug remove
+            send_message_cellmodule_specific(ptr, module_id); // only send to chain containing module-id
+        }
+        else if (!strncmp("HELP", (char*)process_buffer_usb, 4))
+        {
+            log("CHAIN_CMD, CELL_CMD, CELL_CFG\n");
+            log("GET_BATT_VOLT=0, GET_TEMP=1, IDENTIFY_MODULE=2, ACTIVATE_POWERSAVE=3, SET_CONFIG_BATT_VOLT_CALIB=4, SET_CONFIG_TEMP1_B_COEFF=5, SET_CONFIG_TEMP2_B_COEFF=6, GET_CONFIG=7, CLEAR_CONFIG=8\n");
+        }
+
         /* last step: free buffer */
         memset((uint8_t*)process_buffer_usb, '\0', RX_BUF_USB);
     }
