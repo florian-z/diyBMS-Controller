@@ -60,7 +60,7 @@ void send_message_usb_trigger_send(void)
     R_Config_SCI6_USB_Serial_Send((uint8_t*)send_buf_usb_rd, SEND_LEN);
     send_buf_usb_rd += SEND_LEN;
     /* read pointer roll over */
-    if(send_buf_usb_rd >= send_buf_usb + TX_BUF_USB)
+    if(send_buf_usb_rd >= send_buf_usb + TX_BUF_USB - 1)
     {
         send_buf_usb_rd = send_buf_usb;
     }
