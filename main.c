@@ -1,9 +1,11 @@
 #include "main.h"
+#include "log_util.h"
+
 #include "display.h"
 #include "uart_usb.h"
 #include "cellmodule.h"
 #include "pcf8574_pwr.h"
-#include "log_util.h"
+#include "shunt.h"
 
 #include "string.h"
 
@@ -28,6 +30,7 @@ int main(void)
 
     register_nmi_interrupt_handler();
     R_Config_TMR0_TMR1_Start(); // start timer tick
+    shunt_init();
 
     uint8_t count_10ms = 0;
     log("Main Loop\n");
@@ -79,6 +82,8 @@ int main(void)
                     /* 1 Hz */
                     count_10ms = 0;
                     LED_GE2_TGL
+
+                    shunt_tick();
 
                     /// SPI shunt tests
                     //OUT_SPI_nMSS_ON
@@ -150,6 +155,8 @@ void config_communication(void)
 
 //    R_Config_SCI1_Display_Serial_Receive((uint8_t*)rx_buf_sci1_display, RX_BUF_DISPLAY);
 //    R_Config_SCI1_Display_Start();
+
+    R_Config_RSPI0_Shunt_Start();
 }
 
 void main_timer_tick(void)
