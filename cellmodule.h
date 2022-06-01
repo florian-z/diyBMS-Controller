@@ -19,8 +19,8 @@ typedef enum msg_command { GET_BATT_VOLT=0, GET_TEMP=1, IDENTIFY_MODULE=2, ACTIV
 
 typedef struct {
     uint16_t u_batt_mv;
-    uint8_t temp_batt_c;
-    uint8_t temp_aux_c;
+    int8_t temp_batt_c;
+    int8_t temp_aux_c;
 } module_data_t;
 
 typedef struct  {
@@ -37,5 +37,7 @@ void process_message_cellmodule();
 void tick_cellmodule();
 uint16_t get_age_ticks_u_batt();
 uint16_t get_age_ticks_temp();
+
+void print_cellmodule_full_debug();
 
 #endif /* __cellmodule_h__ */

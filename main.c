@@ -166,7 +166,7 @@ void Error_Handler(void)
     {
         LED_RT1_TGL
         LED_RT2_TGL
-        MAINTAIN_WATCHDOG
+        MAINTAIN_WATCHDOG // TODO flo debug only, remove before flight
         R_BSP_SoftwareDelay(200, BSP_DELAY_MILLISECS);
     }
 }

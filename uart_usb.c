@@ -148,6 +148,10 @@ void process_message_usb()
             log("CHAIN_CMD, CELL_CMD, CELL_CFG\n");
             log("GET_BATT_VOLT=0, GET_TEMP=1, IDENTIFY_MODULE=2, ACTIVATE_POWERSAVE=3, SET_CONFIG_BATT_VOLT_CALIB=4, SET_CONFIG_TEMP1_B_COEFF=5, SET_CONFIG_TEMP2_B_COEFF=6, GET_CONFIG=7, CLEAR_CONFIG=8\n");
         }
+        else if (!strncmp("BATT", (char*)process_buffer_usb, 4))
+        {
+            print_cellmodule_full_debug();
+        }
 
         /* last step: free buffer */
         memset((uint8_t*)process_buffer_usb, '\0', RX_BUF_USB);

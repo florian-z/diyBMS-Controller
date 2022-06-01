@@ -225,20 +225,32 @@ void process_message_cellmodule_int(uint8_t const chain_no)
             break;
 
         case SET_CONFIG_BATT_VOLT_CALIB:
+        {
             // ignore, just debug
-            log_va("log cell %d: SET_CFG_UBATT[%d] %s\n", chain_no, module_id, msg_ptr);
+            uint16_t ubatt_mv_default_calib = parse_chars_to_word(msg_ptr+5+4);
+            uint16_t ubatt_mv_after = parse_chars_to_word(msg_ptr+5+4+4);
+            uint16_t volt_calib_value_after = parse_chars_to_word(msg_ptr+5+4+4+4);
+            log_va("log cell %d: SET_CFG_UBATT[%d] %s default-calib-ubatt:%d new-ubatt:%d new-calib:%d\n", chain_no, module_id, msg_ptr, ubatt_mv_default_calib, ubatt_mv_after, volt_calib_value_after);
             break;
-
+        }
         case SET_CONFIG_TEMP1_B_COEFF:
+        {
             // ignore, just debug
-            log_va("log cell %d: SET_CFG_TEMP1[%d] %s\n", chain_no, module_id, msg_ptr);
+            uint16_t temp_b_coeff = parse_chars_to_word(msg_ptr+5+4);
+            int8_t temp_before = parse_chars_to_byte(msg_ptr+5+4+4);
+            int8_t temp_after = parse_chars_to_byte(msg_ptr+5+4+4+2);
+            log_va("log cell %d: SET_CFG_TEMP1[%d] %s new-b-coeff:%d before:%d after:%d\n", chain_no, module_id, msg_ptr, temp_b_coeff, temp_before, temp_after);
             break;
-
+        }
         case SET_CONFIG_TEMP2_B_COEFF:
+        {
             // ignore, just debug
-            log_va("log cell %d: SET_CFG_TEMP2[%d] %s\n", chain_no, module_id, msg_ptr);
+            uint16_t temp_b_coeff = parse_chars_to_word(msg_ptr+5+4);
+            int8_t temp_before = parse_chars_to_byte(msg_ptr+5+4+4);
+            int8_t temp_after = parse_chars_to_byte(msg_ptr+5+4+4+2);
+            log_va("log cell %d: SET_CFG_TEMP2[%d] %s new-b-coeff:%d before:%d after:%d\n", chain_no, module_id, msg_ptr, temp_b_coeff, temp_before, temp_after);
             break;
-
+        }
         case CLEAR_CONFIG:
         {
             // ignore, just debug
