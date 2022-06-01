@@ -92,7 +92,9 @@ __interrupt static void r_Config_RSPI0_Shunt_transmit_interrupt(void)
         {
             /* Disable transmit interrupt */
             RSPI0.SPCR.BIT.SPTIE = 0U;
-            r_Config_RSPI0_Shunt_callback_transmitend();
+
+            /* Enable idle interrupt */
+            RSPI0.SPCR2.BIT.SPIIE = 1U;
             break;
         }
     }
@@ -163,6 +165,9 @@ __interrupt static void r_Config_RSPI0_Shunt_error_interrupt(void)
     /* Disable error interrupt */
     RSPI0.SPCR.BIT.SPEIE = 0U;
 
+    /* Disable idle interrupt */
+    RSPI0.SPCR2.BIT.SPIIE = 0U;
+
     /* Clear error sources */
     err_type = RSPI0.SPSR.BYTE;
     RSPI0.SPSR.BYTE = 0xA0U;
@@ -171,6 +176,29 @@ __interrupt static void r_Config_RSPI0_Shunt_error_interrupt(void)
     {
         r_Config_RSPI0_Shunt_callback_error(err_type);
     }
+}
+
+/***********************************************************************************************************************
+* Function Name: r_Config_RSPI0_Shunt_idle_interrupt
+* Description  : This function is SPII0 interrupt service routine
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+
+#pragma vector = VECT_RSPI0_SPII0
+#if FAST_INTERRUPT_VECTOR == VECT_RSPI0_SPII0
+__fast_interrupt static void r_Config_RSPI0_Shunt_idle_interrupt(void)
+#else
+__interrupt static void r_Config_RSPI0_Shunt_idle_interrupt(void)
+#endif
+{
+    /* Disable RSPI function */
+    RSPI0.SPCR.BIT.SPE = 0U;
+
+    /* Disable idle interrupt */
+    RSPI0.SPCR2.BIT.SPIIE = 0U;
+
+    r_Config_RSPI0_Shunt_callback_transmitend();
 }
 
 /***********************************************************************************************************************
