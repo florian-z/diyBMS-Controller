@@ -150,7 +150,7 @@ float read_dietemp()
     // 7.8125 m°C/LSB
     uint16_t tx_data = { ADDR_DIETEMP | ADDR_READ };
 
-	R_Config_RSPI0_Shunt_Send_Receive(&tx_data, 1, rx_data);
+	R_Config_RSPI0_Shunt_Send_Receive(&tx_data, 3, rx_data);
     float tmp = ((int16_t)rx_data[0])*7.8125e-3;
     log_va("shunt TEMP    %04X        %f degC\n", rx_data[0], tmp);
     return tmp;
