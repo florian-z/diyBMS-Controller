@@ -50,6 +50,8 @@ Macro definitions
 #define TX_BUF_CELLMODULE 20
 #define RX_BUF_DISPLAY 50
 #define TX_BUF_DISPLAY 50
+#define RX_BUF_SHUNT 50
+#define TX_BUF_SHUNT 50
 
 #define MSG_START '!'
 #define MSG_END '\n'

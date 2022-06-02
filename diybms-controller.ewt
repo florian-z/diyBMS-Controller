@@ -3174,6 +3174,9 @@
         <name>$PROJ_DIR$\cellmodule.c</name>
     </file>
     <file>
+        <name>$PROJ_DIR$\cellmodule_message.c</name>
+    </file>
+    <file>
         <name>$PROJ_DIR$\display.c</name>
     </file>
     <file>
@@ -3190,6 +3193,15 @@
     </file>
     <file>
         <name>$PROJ_DIR$\pcf8574_pwr.c</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\shunt.c</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\uart_display.c</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\uart_shunt.c</name>
     </file>
     <file>
         <name>$PROJ_DIR$\uart_usb.c</name>

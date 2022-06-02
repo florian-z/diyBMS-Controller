@@ -11,8 +11,10 @@ static volatile uint8_t send_buf_usb[TX_BUF_USB] = {0};     /* transmit buffer *
 static volatile uint8_t* send_buf_usb_wr = send_buf_usb;    /* write pointer */
 static volatile uint8_t* send_buf_usb_rd = send_buf_usb;    /* read pointer */
 static volatile bool tx_usb_busy = false;                   /* transmit active */
-static volatile uint8_t process_buffer_usb[RX_BUF_USB] = {0};
 void send_message_usb_trigger_send(void);
+
+static volatile uint8_t process_buffer_usb[RX_BUF_USB] = {0};   /* recive buffer */
+
 /* buffer incoming messages */
 void send_message_usb(uint8_t const * const data)
 {
@@ -41,7 +43,7 @@ void send_message_usb(uint8_t const * const data)
     GLOBAL_INT_RESTORE
 }
 
-/* called when transmission done, checks for further pending transmission */
+/* called when ready for next transmission, checks for further pending transmission */
 void send_message_usb_done(void)
 {
     GLOBAL_INT_STORE_AND_DISABLE
