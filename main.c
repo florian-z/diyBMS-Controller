@@ -130,7 +130,7 @@ static bool charger_active_state = false;
             RELAIS_BALANCER_ON
         }
         // check need for heating
-        if (check_temp_should_use_heater())
+        if (check_temp_should_use_heater() && check_age_ticks_u_batt_and_temp_allowed())
         {
             RELAIS_HEAT_ON
             log("HEATER switch ON\n");
@@ -139,7 +139,7 @@ static bool charger_active_state = false;
             log("HEATER switch OFF\n");
         }
         // check if good for charging
-        if (check_temp_charging_allowed() && check_volt_charging_necessary_start())
+        if (check_temp_charging_allowed() && check_volt_charging_necessary_start() && !check_age_ticks_u_batt_and_temp_allowed())
         {
             if (!charger_active_state)
             {
@@ -150,7 +150,7 @@ static bool charger_active_state = false;
             }
         }
         // check under/over-temp and charge-stop-voltage
-        if (!check_temp_charging_allowed() || check_volt_charging_safety_stop())
+        if (!check_temp_charging_allowed() || check_volt_charging_safety_stop() || !check_age_ticks_u_batt_and_temp_allowed())
         {
             OUT_CHARGER_DOOR_OFF
             if (charger_active_state)

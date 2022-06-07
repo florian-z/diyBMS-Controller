@@ -6,7 +6,7 @@
 // measurement of all cell modules
 module_data_t module_data[MODULE_DATA_LEN] = {0};
 // age of measurement data of both cellmodule-chains in ticks
-module_data_age_t module_data_age[CELLMODULE_CHANNELS] = {0};
+module_data_age_t module_data_age[CELLMODULE_CHANNELS] = {{.u_batt=UINT16_MAX, .temp=UINT16_MAX},{.u_batt=UINT16_MAX, .temp=UINT16_MAX}};
 // min, max, mean, etc. values of module_data
 module_data_statistics_t module_data_stat = {0};
 
@@ -99,6 +99,7 @@ void calc_cellmodule_data()
 }
 
 // use heater until all cells above LOW and none above HIGH
+// true -> heater on
 #define LIMITS_TEMP_HEATER_NEEDED_LOW 20
 #define LIMITS_TEMP_HEATER_SAFETY_HIGH 30
 bool check_temp_should_use_heater()
@@ -112,6 +113,7 @@ bool check_temp_should_use_heater()
 }
 
 // charge only if all cells above LOW and none above HIGH
+// true -> charging on
 #define LIMITS_TEMP_CHARGING_NEEDED_LOW 15
 #define LIMITS_TEMP_CHARGING_SAFETY_HIGH 45
 bool check_temp_charging_allowed()
@@ -125,6 +127,7 @@ bool check_temp_charging_allowed()
 }
 
 // start charging only if all cells below LOW and none above HIGH
+// true -> charging on
 #define LIMITS_VOLT_CHARGING_NECESSARY_LOW 3400
 #define LIMITS_VOLT_CHARGING_NECESSARY_HIGH 3450
 bool check_volt_charging_necessary_start()
@@ -138,6 +141,7 @@ bool check_volt_charging_necessary_start()
 }
 
 // stop charging if one cell above HIGH
+// true -> stop/end charging
 #define LIMITS_VOLT_CHARGING_SAFETY_HIGH 3500
 bool check_volt_charging_safety_stop()
 {
@@ -157,8 +161,14 @@ void tick_cellmodule()
     /* maintain cellmodule data age */
     for(uint8_t chain_id = 0; chain_id < CELLMODULE_CHANNELS; chain_id++)
     {
-        module_data_age[chain_id].u_batt++;
-        module_data_age[chain_id].temp++;
+        if (module_data_age[chain_id].u_batt < UINT16_MAX) // prevent rollover
+        {
+            module_data_age[chain_id].u_batt++;
+        }
+        if (module_data_age[chain_id].temp < UINT16_MAX) // prevent rollover
+        {
+            module_data_age[chain_id].temp++;
+        }
     }
 }
 
@@ -176,6 +186,22 @@ uint16_t get_age_ticks_temp()
         module_data_age[CELL_MODULE_CHAIN_1].temp : module_data_age[CELL_MODULE_CHAIN_2].temp);
 }
 
+// charge only if measurement data is not too old
+// true -> charging allowed
+#define LIMITS_TICKS_U_BATT_MAX_AGE 20
+#define LIMITS_TICKS_TEMP_MAX_AGE 100
+bool check_age_ticks_u_batt_and_temp_allowed()
+{
+    if (get_age_ticks_u_batt() < LIMITS_TICKS_U_BATT_MAX_AGE || get_age_ticks_temp() < LIMITS_TICKS_TEMP_MAX_AGE)
+    {
+        return true;
+    }
+    return false;
+}
+
+
+
+/// debug log
 /* print all cellmodule data values and ages */
 void print_cellmodule_full_debug()
 {

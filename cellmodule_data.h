@@ -51,6 +51,7 @@ bool check_volt_charging_safety_stop();
 void tick_cellmodule();
 uint16_t get_age_ticks_u_batt();
 uint16_t get_age_ticks_temp();
+bool check_age_ticks_u_batt_and_temp_allowed();
 
 void print_cellmodule_full_debug();
 
