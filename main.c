@@ -9,12 +9,15 @@
 #include "pcf8574_pwr.h"
 #include "shunt.h"
 
+void charger_logic(void);
 void led_test(void);
 void config_communication(void);
 void register_nmi_interrupt_handler(void);
 
 #define MAINTAIN_WATCHDOG //R_Config_IWDT_Restart();
 static volatile bool timer_tick = false;
+
+#define CHARGER_LOAD_DELAY 2
 
 int main(void)
 {
@@ -32,8 +35,10 @@ int main(void)
     R_Config_TMR0_TMR1_Start(); // start timer tick
     shunt_init();
 
+/// main loop
     uint8_t count_10ms = 0;
     log("Main Loop\n");
+    bool toggle = false;
     for(;;)
     {
         MAINTAIN_WATCHDOG
@@ -41,28 +46,6 @@ int main(void)
         {
             timer_tick = false;
             count_10ms++;
-
-/// GPIO tests done
-            if (IN_SIGNAL_LINE_PWR)
-            {
-                // line power on
-            } else {
-                // no line power
-            }
-
-            if (IN_SIGNAL_KL15_PWR)
-            {
-                // KL15 on
-            } else {
-                // no KL15
-            }
-
-//            OUT_CHARGER_LOAD_ON
-//            OUT_CHARGER_LOAD_OFF
-//            OUT_CHARGER_DOOR_ON
-//            OUT_CHARGER_DOOR_OFF
-/// GPIO tests done END
-
             if (!(count_10ms % 10))
             {
                 /* 10 Hz */
@@ -83,7 +66,10 @@ int main(void)
                     count_10ms = 0;
                     LED_GE2_TGL
 
-                    shunt_tick();
+                    calc_cellmodule_data();
+                    charger_logic();
+
+                    //shunt_tick();
 
                     /// SPI shunt tests
                     //OUT_SPI_nMSS_ON
@@ -91,13 +77,24 @@ int main(void)
                     /// SPI shunt tests END
 
 
+
                     send_message_display("disp uart test\n");
 
-                    //send_message_cellmodule("!0000*00\n");
-//                    send_message_cellmodule("!0200*02\n");
 
+                    if(toggle)
+                    {
+                        toggle=false;
+                        //RELAIS_HEAT_ON
+                        send_message_cellmodule("!0000*00\n");
+                    }
+                    else
+                    {
+                        toggle=true;
+                        //RELAIS_HEAT_OFF
+                        send_message_cellmodule("!0100*01\n");
+                    }
 
-                    //print_cellmodule_full_debug();
+                    print_cellmodule_full_debug();
 
                     //send_message_display();
                 }
@@ -112,6 +109,93 @@ int main(void)
         process_message_usb();
         process_message_cellmodule();
         process_message_display();
+    }
+}
+
+void charger_logic()
+{
+static bool kl15_pwr_state = false;
+static bool line_pwr_state = false;
+static bool charger_active_state = false;
+/// check line power active
+    if (IN_SIGNAL_LINE_PWR)
+    {
+        // line power on
+        if (!line_pwr_state)
+        {
+            // line power on latch
+            line_pwr_state = true;
+            log("LINE LATCH ON\n");
+            // ensure balancer is on, when car is on
+            RELAIS_BALANCER_ON
+        }
+        // check need for heating
+        if (check_temp_should_use_heater())
+        {
+            RELAIS_HEAT_ON
+            log("HEATER switch ON\n");
+        } else {
+            RELAIS_HEAT_OFF
+            log("HEATER switch OFF\n");
+        }
+        // check if good for charging
+        if (check_temp_charging_allowed() && check_volt_charging_necessary_start())
+        {
+            if (!charger_active_state)
+            {
+                log("CHARGE LATCH ON\n");
+                OUT_CHARGER_LOAD_ON
+                OUT_CHARGER_DOOR_ON
+                charger_active_state = true;
+            }
+        }
+        // check under/over-temp and charge-stop-voltage
+        if (!check_temp_charging_allowed() || check_volt_charging_safety_stop())
+        {
+            OUT_CHARGER_DOOR_OFF
+            if (charger_active_state)
+            {
+                log("CHARGE LATCH OFF\n");
+                charger_active_state = false;
+            } else {
+                OUT_CHARGER_LOAD_OFF
+            }
+        }
+
+    } else {
+        // no line power
+        if (line_pwr_state)
+        {
+            // line power off latch
+            line_pwr_state = false;
+            log("LINE LATCH OFF\n");
+            charger_active_state = false;
+            RELAIS_HEAT_OFF
+            OUT_CHARGER_LOAD_OFF
+            OUT_CHARGER_DOOR_OFF
+        }
+    }
+
+/// check KL15 power active
+    if (IN_SIGNAL_KL15_PWR)
+    {
+        // KL15 on
+        if (!kl15_pwr_state)
+        {
+            // KL15 on latch
+            log("KL15 LATCH ON\n");
+            kl15_pwr_state = true;
+            // ensure balancer is on, when car is on
+            RELAIS_BALANCER_ON
+        }
+    } else {
+        // no KL15
+        if (kl15_pwr_state)
+        {
+            // KL15 off latch
+            log("KL15 LATCH OFF\n");
+            kl15_pwr_state = false;
+        }
     }
 }
 
