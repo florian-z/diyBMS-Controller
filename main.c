@@ -1,13 +1,12 @@
 #include "main.h"
+#include <string.h>
 #include "log_util.h"
 
-#include "display.h"
+#include "uart_display.h"
 #include "uart_usb.h"
 #include "cellmodule.h"
 #include "pcf8574_pwr.h"
 #include "shunt.h"
-
-#include "string.h"
 
 void led_test(void);
 void config_communication(void);
@@ -91,6 +90,7 @@ int main(void)
                     /// SPI shunt tests END
 
 
+                    send_message_display("disp uart test\n");
 
                     //send_message_cellmodule("!0000*00\n");
 //                    send_message_cellmodule("!0200*02\n");
@@ -154,7 +154,7 @@ void config_communication(void)
     //R_Config_SCI9_CellModule_Start();
 
 //    R_Config_SCI1_Display_Serial_Receive((uint8_t*)rx_buf_sci1_display, RX_BUF_DISPLAY);
-//    R_Config_SCI1_Display_Start();
+    R_Config_SCI1_Display_Start();
 
     R_Config_RSPI0_Shunt_Start();
 }

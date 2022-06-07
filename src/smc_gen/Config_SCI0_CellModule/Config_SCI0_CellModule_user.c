@@ -37,7 +37,7 @@ Includes
 #include "Config_SCI0_CellModule.h"
 /* Start user code for include. Do not edit comment generated here */
 #include "cellmodule.h"
-#include "string.h"
+#include <string.h>
 #include "log_util.h"
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"

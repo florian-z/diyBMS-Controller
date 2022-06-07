@@ -1,6 +1,6 @@
 #include "uart_display.h"
-#include "string.h"
-#include "stdlib.h"
+#include <string.h>
+#include <stdlib.h>
 
 #include "log_util.h"
 

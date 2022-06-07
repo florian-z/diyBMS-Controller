@@ -1,6 +1,6 @@
 #include "uart_usb.h"
-#include "string.h"
-#include "stdlib.h"
+#include <string.h>
+#include <stdlib.h>
 
 #include "messages.h"
 #include "cellmodule.h"

@@ -1,6 +1,6 @@
 #include "uart_shunt.h"
-#include "string.h"
-#include "stdlib.h"
+#include <string.h>
+#include <stdlib.h>
 
 #include "log_util.h"
 
@@ -63,7 +63,7 @@ void send_message_shunt_trigger_send(void)
 {
     tx_shunt_busy = true;
     const uint8_t SEND_LEN = strlen((char*)send_buf_shunt_rd);
-    abc-todo-R_Config_SCI1_Display_Serial_Send((uint8_t*)send_buf_shunt_rd, SEND_LEN);
+    // TODO flo abc-todo-R_Config_SCI1_Display_Serial_Send((uint8_t*)send_buf_shunt_rd, SEND_LEN);
     send_buf_shunt_rd += SEND_LEN;
     /* read pointer roll over */
     if(send_buf_shunt_rd >= send_buf_shunt + TX_BUF_SHUNT - 1)

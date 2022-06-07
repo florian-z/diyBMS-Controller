@@ -36,6 +36,9 @@ Includes
 #include "r_cg_macrodriver.h"
 #include "Config_SCI1_Display.h"
 /* Start user code for include. Do not edit comment generated here */
+#include <string.h>
+#include "uart_display.h"
+#include "log_util.h"
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
 
@@ -48,6 +51,8 @@ extern volatile uint8_t * gp_sci1_rx_address;                /* SCI1 receive buf
 extern volatile uint16_t  g_sci1_rx_count;                   /* SCI1 receive data number */
 extern volatile uint16_t  g_sci1_rx_length;                  /* SCI1 receive data length */
 /* Start user code for global. Do not edit comment generated here */
+static volatile uint8_t g_sci1_rx_buf[RX_BUF_DISPLAY] = {0}; /* SCI1 internal receive buffer */
+void r_Config_SCI1_Display_restart_receiver(void);
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
@@ -60,6 +65,7 @@ extern volatile uint16_t  g_sci1_rx_length;                  /* SCI1 receive dat
 void R_Config_SCI1_Display_Create_UserInit(void)
 {
     /* Start user code for user init. Do not edit comment generated here */
+    R_Config_SCI1_Display_Serial_Receive((uint8_t*)g_sci1_rx_buf, RX_BUF_DISPLAY);
     /* End user code. Do not edit comment generated here */
 }
 
@@ -80,6 +86,7 @@ __interrupt static void r_Config_SCI1_Display_transmit_interrupt(void)
     if (0U < g_sci1_tx_count)
     {
         SCI1.TDR = *gp_sci1_tx_address;
+        *gp_sci1_tx_address = '\0'; // mark as done / free
         gp_sci1_tx_address++;
         g_sci1_tx_count--;
     }
@@ -131,18 +138,32 @@ __interrupt static void r_Config_SCI1_Display_receive_interrupt(void)
     #pragma diag_suppress=Pa082
     if (g_sci1_rx_length > g_sci1_rx_count)
     {
-        *gp_sci1_rx_address = SCI1.RDR;
+        /* rx buffer has space */
+        uint8_t buf = SCI1.RDR;
+        if (buf == MSG_START)
+        {
+            /* message start detected -> reset incoming buffer */
+            memset((uint8_t*)g_sci1_rx_buf, '\0', RX_BUF_DISPLAY);
+            g_sci1_rx_count = 0U;
+            g_sci1_rx_length = RX_BUF_DISPLAY;
+            gp_sci1_rx_address = g_sci1_rx_buf;
+        }
+        /* append received byte to buffer */
+        *gp_sci1_rx_address = buf;
         gp_sci1_rx_address++;
         g_sci1_rx_count++;
+        if(buf == MSG_END)
+        {
+            /* message end detected -> forward received message */
+            r_Config_SCI1_Display_callback_receiveend();
+        }
     }
-
-    #pragma diag_suppress=Pa082
-    if (g_sci1_rx_length <= g_sci1_rx_count)
+    else
     {
-        /* All data received */
+        /* rx buffer full, but no end character -> restart receiver */
         SCI1.SCR.BIT.RIE = 0U;
         SCI1.SCR.BIT.RE = 0U;
-        r_Config_SCI1_Display_callback_receiveend();
+        r_Config_SCI1_Display_restart_receiver();
     }
 }
 
@@ -169,6 +190,8 @@ __interrupt static void r_Config_SCI1_Display_receiveerror_interrupt(void)
     err_type &= 0xC7U;
     err_type |= 0xC0U;
     SCI1.SSR.BYTE = err_type;
+
+    r_Config_SCI1_Display_restart_receiver();
 }
 
 /***********************************************************************************************************************
@@ -181,6 +204,7 @@ __interrupt static void r_Config_SCI1_Display_receiveerror_interrupt(void)
 static void r_Config_SCI1_Display_callback_transmitend(void)
 {
     /* Start user code for r_Config_SCI1_Display_callback_transmitend. Do not edit comment generated here */
+    send_message_display_done();
     /* End user code. Do not edit comment generated here */
 }
 
@@ -194,6 +218,8 @@ static void r_Config_SCI1_Display_callback_transmitend(void)
 static void r_Config_SCI1_Display_callback_receiveend(void)
 {
     /* Start user code for r_Config_SCI1_Display_callback_receiveend. Do not edit comment generated here */
+    pass_message_display((uint8_t*)g_sci1_rx_buf, g_sci1_rx_count);
+    r_Config_SCI1_Display_restart_receiver();
     /* End user code. Do not edit comment generated here */
 }
 
@@ -207,8 +233,14 @@ static void r_Config_SCI1_Display_callback_receiveend(void)
 static void r_Config_SCI1_Display_callback_receiveerror(void)
 {
     /* Start user code for r_Config_SCI1_Display_callback_receiveerror. Do not edit comment generated here */
+    //log_va("sci1dire%02X\n", SCI1.SSR.BYTE);
     /* End user code. Do not edit comment generated here */
 }
 
 /* Start user code for adding. Do not edit comment generated here */
+void r_Config_SCI1_Display_restart_receiver(void)
+{
+    memset((uint8_t*)g_sci1_rx_buf, '\0', RX_BUF_DISPLAY);
+    R_Config_SCI1_Display_Serial_Receive((uint8_t*)g_sci1_rx_buf, RX_BUF_DISPLAY);
+}
 /* End user code. Do not edit comment generated here */
