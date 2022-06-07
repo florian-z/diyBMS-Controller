@@ -18,5 +18,6 @@ void shunt_init();
 void shunt_tick();
 
 void log_shunt();
+void print_shunt_full_debug();
 
 #endif /* __shunt_h__ */

@@ -38,10 +38,10 @@ int main(void)
 /// main loop
     uint8_t count_10ms = 0;
     log("Main Loop\n");
-    bool toggle = false;
     for(;;)
     {
         MAINTAIN_WATCHDOG
+        // todo flo powersave / sleep
         if (timer_tick)
         {
             timer_tick = false;
@@ -79,21 +79,9 @@ int main(void)
 
                     send_message_display("disp uart test\n");
 
-
-                    if(toggle)
-                    {
-                        toggle=false;
-
-                    }
-                    else
-                    {
-                        toggle=true;
-
-                    }
-
                     print_cellmodule_full_debug();
+                    print_shunt_full_debug();
 
-                    //send_message_display();
 
 
 

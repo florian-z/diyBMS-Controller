@@ -126,18 +126,20 @@ void log_shunt()
 
 float read_vshunt()
 {
+    // returns mV
     // 312.5 nV/LSB when ADCRANGE = 0
     // 78.125 nV/LSB when ADCRANGE = 1
     uint16_t tx_data = { ADDR_VSHUNT | ADDR_READ };
     uint16_t rx_data[2] = {0};
 	R_Config_RSPI0_Shunt_Send_Receive(&tx_data, 1, rx_data);
-    shunt_data.vshunt = ((int32_t)((rx_data[0]<<16 | rx_data[1])>>3))*78.125e-9;
+    shunt_data.vshunt = ((int32_t)((rx_data[0]<<16 | rx_data[1])>>3))*78.125e-6;
     log_va("shunt VSHUNT  %04X %04X   %fV\n", rx_data[0], rx_data[1], shunt_data.vshunt);
     return shunt_data.vshunt;
 }
 
 float read_vbus()
 {
+    // returns V
     // 195.3125 μV/LSB
     // 2.13 correction factor for VBUS resistor-devider
     uint16_t tx_data = { ADDR_VBUS | ADDR_READ };
@@ -150,6 +152,7 @@ float read_vbus()
 
 float read_dietemp()
 {
+    // returns °C
     // 7.8125 m°C/LSB
     uint16_t tx_data = { ADDR_DIETEMP | ADDR_READ };
 
@@ -161,6 +164,7 @@ float read_dietemp()
 
 float read_current()
 {
+    // returns A
     // CURRENT_LSB
 	uint16_t tx_data = { ADDR_CURRENT | ADDR_READ };
     uint16_t rx_data[2] = {0};
@@ -172,6 +176,7 @@ float read_current()
 
 float read_power()
 {
+    // returns W
     // CURRENT_LSB * 3.2
     // 2.13 correction factor for VBUS resistor-devider
 	uint16_t tx_data = { ADDR_POWER | ADDR_READ };
@@ -184,6 +189,7 @@ float read_power()
 
 float read_energy()
 {
+    // returns Wh
     // CURRENT_LSB * 3.2 * 16
     // 2.13 correction factor for VBUS resistor-devider
 	uint16_t tx_data = { ADDR_ENERGY | ADDR_READ };
@@ -196,6 +202,7 @@ float read_energy()
 
 float read_charge()
 {
+    // returns Ah
     // CURRENT_LSB
 	uint16_t tx_data = { ADDR_CHARGE | ADDR_READ };
     uint16_t rx_data[3] = {0};
@@ -205,3 +212,9 @@ float read_charge()
     return shunt_data.charge;
 }
 
+void print_shunt_full_debug()
+{
+    log_va("[SHUNT %.3fmV %.2fV %.1f°C %.2fA %.2fW %.2fWh %.2fAh]\n",
+        shunt_data.vshunt, shunt_data.vbus, shunt_data.dietemp,
+        shunt_data.current, shunt_data.power, shunt_data.energy, shunt_data.charge);
+}
