@@ -59,7 +59,6 @@ int main(void)
                 send_message_pwr();
 
 
-
                 if (count_10ms >= 100)
                 {
                     /* 1 Hz */
@@ -84,23 +83,26 @@ int main(void)
                     if(toggle)
                     {
                         toggle=false;
-                        //RELAIS_HEAT_ON
-                        send_message_cellmodule("!0000*00\n");
+
                     }
                     else
                     {
                         toggle=true;
-                        //RELAIS_HEAT_OFF
-                        send_message_cellmodule("!0100*01\n");
+
                     }
 
                     print_cellmodule_full_debug();
 
                     //send_message_display();
+
+
+
+                    send_message_cellmodule("!0100*01\n"); // temp_c 1Hz
                 }
                 else
                 {
                     /* 4 Hz, but only triggers if 1 Hz part is not executed */
+                    send_message_cellmodule("!0000*00\n"); // u_batt_mv ca. 3Hz
                 }
             }
 
@@ -246,8 +248,6 @@ void led_test(void)
 }
 
 
-static volatile uint8_t rx_buf_sci1_display[RX_BUF_DISPLAY] = {0};
-static volatile uint8_t tx_buf_sci1_display[TX_BUF_DISPLAY] = {0};
 void config_communication(void)
 {
     R_Config_SCI6_USB_Start();
@@ -259,7 +259,6 @@ void config_communication(void)
     //R_Config_SCI8_CellModule_Start();
     //R_Config_SCI9_CellModule_Start();
 
-//    R_Config_SCI1_Display_Serial_Receive((uint8_t*)rx_buf_sci1_display, RX_BUF_DISPLAY);
     R_Config_SCI1_Display_Start();
 
     R_Config_RSPI0_Shunt_Start();
