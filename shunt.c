@@ -1,4 +1,5 @@
 #include "shunt.h"
+
 #include <string.h>
 #include "log_util.h"
 #include "messages.h"
@@ -50,6 +51,8 @@
 // power[W] = 3.2 * CURRENT_LSB * POWER
 // energy[J][Ws] = 16* 3.2 * CURRENT_LSB * ENERGY
 // charge[C][As] = CURRENT_LSB * CHARGE
+
+static shunt_t shunt_data = {0};
 
 void shunt_init()
 {
@@ -128,9 +131,9 @@ float read_vshunt()
     uint16_t tx_data = { ADDR_VSHUNT | ADDR_READ };
     uint16_t rx_data[2] = {0};
 	R_Config_RSPI0_Shunt_Send_Receive(&tx_data, 1, rx_data);
-    float tmp = ((int32_t)((rx_data[0]<<16 | rx_data[1])>>3))*78.125e-9;
-    log_va("shunt VSHUNT  %04X %04X   %fV\n", rx_data[0], rx_data[1], tmp);
-    return tmp;
+    shunt_data.vshunt = ((int32_t)((rx_data[0]<<16 | rx_data[1])>>3))*78.125e-9;
+    log_va("shunt VSHUNT  %04X %04X   %fV\n", rx_data[0], rx_data[1], shunt_data.vshunt);
+    return shunt_data.vshunt;
 }
 
 float read_vbus()
@@ -140,9 +143,9 @@ float read_vbus()
     uint16_t tx_data = { ADDR_VBUS | ADDR_READ };
     uint16_t rx_data[2] = {0};
 	R_Config_RSPI0_Shunt_Send_Receive(&tx_data, 1, rx_data);
-    float tmp = ((int32_t)((rx_data[0]<<16 | rx_data[1])>>3))*195.3125e-6*2.13;
-    log_va("shunt VBUS    %04X %04X   %fV\n", rx_data[0], rx_data[1], tmp);
-    return tmp;
+    shunt_data.vbus = ((int32_t)((rx_data[0]<<16 | rx_data[1])>>3))*195.3125e-6*2.13;
+    log_va("shunt VBUS    %04X %04X   %fV\n", rx_data[0], rx_data[1], shunt_data.vbus);
+    return shunt_data.vbus;
 }
 
 float read_dietemp()
@@ -151,9 +154,9 @@ float read_dietemp()
     uint16_t tx_data = { ADDR_DIETEMP | ADDR_READ };
 
 	R_Config_RSPI0_Shunt_Send_Receive(&tx_data, 3, rx_data);
-    float tmp = ((int16_t)rx_data[0])*7.8125e-3;
-    log_va("shunt TEMP    %04X        %f degC\n", rx_data[0], tmp);
-    return tmp;
+    shunt_data.dietemp = ((int16_t)rx_data[0])*7.8125e-3;
+    log_va("shunt TEMP    %04X        %f degC\n", rx_data[0], shunt_data.dietemp);
+    return shunt_data.dietemp;
 }
 
 float read_current()
@@ -162,9 +165,9 @@ float read_current()
 	uint16_t tx_data = { ADDR_CURRENT | ADDR_READ };
     uint16_t rx_data[2] = {0};
 	R_Config_RSPI0_Shunt_Send_Receive(&tx_data, 1, rx_data);
-    float tmp = ((int32_t)((rx_data[0]<<16 | rx_data[1])>>3))*CURRENT_LSB;
-    log_va("shunt CURRENT %04X %04X   %fA\n", rx_data[0], rx_data[1], tmp);
-    return tmp;
+    shunt_data.current = ((int32_t)((rx_data[0]<<16 | rx_data[1])>>3))*CURRENT_LSB;
+    log_va("shunt CURRENT %04X %04X   %fA\n", rx_data[0], rx_data[1], shunt_data.current);
+    return shunt_data.current;
 }
 
 float read_power()
@@ -174,9 +177,9 @@ float read_power()
 	uint16_t tx_data = { ADDR_POWER | ADDR_READ };
     uint16_t rx_data[2] = {0};
 	R_Config_RSPI0_Shunt_Send_Receive(&tx_data, 1, rx_data);
-    float tmp = ((uint32_t)(rx_data[0]<<16 | rx_data[1]))*CURRENT_LSB*3.2*2.13;
-    log_va("shunt POWER   %04X %04X   %fW\n", rx_data[0], rx_data[1], tmp);
-    return tmp;
+    shunt_data.power = ((uint32_t)(rx_data[0]<<16 | rx_data[1]))*CURRENT_LSB*3.2*2.13;
+    log_va("shunt POWER   %04X %04X   %fW\n", rx_data[0], rx_data[1], shunt_data.power);
+    return shunt_data.power;
 }
 
 float read_energy()
@@ -186,9 +189,9 @@ float read_energy()
 	uint16_t tx_data = { ADDR_ENERGY | ADDR_READ };
     uint16_t rx_data[3] = {0};
 	R_Config_RSPI0_Shunt_Send_Receive(&tx_data, 1, rx_data);
-    float tmp = ((uint32_t)(rx_data[0]<<32 | rx_data[1]<<16 | rx_data[2]))*CURRENT_LSB*3.2*16*2.13;
-    log_va("shunt ENERGY  %04X %04X %04X  %fWs\n", rx_data[0], rx_data[1], rx_data[2], tmp);
-    return tmp;
+    shunt_data.energy = (((rx_data[0]*65536 + rx_data[1])*65536) + rx_data[2])*CURRENT_LSB*3.2*16*2.13;
+    log_va("shunt ENERGY  %04X %04X %04X  %fWs\n", rx_data[0], rx_data[1], rx_data[2], shunt_data.energy);
+    return shunt_data.energy;
 }
 
 float read_charge()
@@ -197,8 +200,8 @@ float read_charge()
 	uint16_t tx_data = { ADDR_CHARGE | ADDR_READ };
     uint16_t rx_data[3] = {0};
 	R_Config_RSPI0_Shunt_Send_Receive(&tx_data, 1, rx_data);
-    float tmp = ((int32_t)(rx_data[0]<<32 | rx_data[1]<<16 | rx_data[2]))*CURRENT_LSB;
-    log_va("shunt CHARGE  %04X %04X %04X  %fAs\n", rx_data[0], rx_data[1], rx_data[2], tmp);
-    return tmp;
+    shunt_data.charge = (((rx_data[0]*65536 + rx_data[1])*65536) + rx_data[2])*CURRENT_LSB;
+    log_va("shunt CHARGE  %04X %04X %04X  %fAs\n", rx_data[0], rx_data[1], rx_data[2], shunt_data.charge);
+    return shunt_data.charge;
 }
 
