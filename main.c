@@ -215,10 +215,18 @@ void charger_logic()
     if (kl15_pwr_state || line_pwr_state)
     {
         // car active (KL15 ON and / or LINE DETECT)
-        car_active = true;
+        if (!car_active)
+        {
+            log("CAR ACTIVE LATCH ON\n");
+            car_active = true;
+        }
     } else {
         // car sleeping
-        car_active = false;
+        if (car_active)
+        {
+            log("CAR ACTIVE LATCH OFF\n");
+            car_active = false;
+        }
     }
 }
 
