@@ -8,5 +8,6 @@
 void shunt_init();
 void shunt_tick();
 
+void log_shunt();
 
 #endif /* __shunt_h__ */

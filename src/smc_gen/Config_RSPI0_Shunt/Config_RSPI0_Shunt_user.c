@@ -36,6 +36,8 @@ Includes
 #include "r_cg_macrodriver.h"
 #include "Config_RSPI0_Shunt.h"
 /* Start user code for include. Do not edit comment generated here */
+#include "shunt.h"
+#include "log_util.h"
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
 
