@@ -5,7 +5,7 @@
 #include "log_util.h"
 
 
-/*** Display UART ***/
+/*** Display / BT UART ***/
 static volatile uint8_t send_buf_display[TX_BUF_DISPLAY] = {0};     /* transmit buffer */
 static volatile uint8_t* send_buf_display_wr = send_buf_display;    /* write pointer */
 static volatile uint8_t* send_buf_display_rd = send_buf_display;    /* read pointer */

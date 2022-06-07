@@ -3,10 +3,11 @@
 #include <stdlib.h>
 
 #include "messages.h"
-#include "cellmodule.h"
+#include "uart_cellmodule.h"
+#include "cellmodule_data.h"
 #include "log_util.h"
 
-/*** USB UART ***/
+/*** USB / Debug UART ***/
 static volatile uint8_t send_buf_usb[TX_BUF_USB] = {0};     /* transmit buffer */
 static volatile uint8_t* send_buf_usb_wr = send_buf_usb;    /* write pointer */
 static volatile uint8_t* send_buf_usb_rd = send_buf_usb;    /* read pointer */

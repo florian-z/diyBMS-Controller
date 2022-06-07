@@ -2500,13 +2500,10 @@
         </group>
     </group>
     <file>
-        <name>$PROJ_DIR$\cellmodule.c</name>
+        <name>$PROJ_DIR$\bluetooth.c</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\cellmodule_message.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\display.c</name>
+        <name>$PROJ_DIR$\cellmodule_data.c</name>
     </file>
     <file>
         <name>$PROJ_DIR$\diybms-controller.ipcf</name>
@@ -2527,10 +2524,13 @@
         <name>$PROJ_DIR$\shunt.c</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\uart_display.c</name>
+        <name>$PROJ_DIR$\spi_shunt.c</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\uart_shunt.c</name>
+        <name>$PROJ_DIR$\uart_cellmodule.c</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\uart_display.c</name>
     </file>
     <file>
         <name>$PROJ_DIR$\uart_usb.c</name>

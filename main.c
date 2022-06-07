@@ -4,7 +4,8 @@
 
 #include "uart_display.h"
 #include "uart_usb.h"
-#include "cellmodule.h"
+#include "uart_cellmodule.h"
+#include "cellmodule_data.h"
 #include "pcf8574_pwr.h"
 #include "shunt.h"
 
