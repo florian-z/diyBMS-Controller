@@ -1,7 +1,8 @@
-#include "cellmodule.h"
-#include "string.h"
+#include "uart_cellmodule.h"
+#include <string.h>
 #include "log_util.h"
 #include "messages.h"
+#include "cellmodule_data.h"
 
 //#define CELLMODULE_CHANNELS 2
 //static const uint8_t CELLMODULES_PER_CHAIN[CELLMODULE_CHANNELS] = { 24, 23 };
@@ -9,7 +10,7 @@
 //#define CELLMODULES_TOTAL 47
 
 static const uint8_t CELLMODULES_PER_CHAIN[CELLMODULE_CHANNELS] = { CELLMODULES_CHANNEL_1, CELLMODULES_CHANNEL_2 };
-static const uint8_t START_OF_CHAIN[CELLMODULE_CHANNELS] = { 1, 1+CELLMODULES_CHANNEL_1 };
+static const uint8_t START_OF_CHAIN[CELLMODULE_CHANNELS] = { CELLMODULES_FIRST, CELLMODULES_FIRST+CELLMODULES_CHANNEL_1 };
 
 
 /*** CellModules UART ***/
@@ -18,8 +19,8 @@ static volatile uint8_t cellmodule_tx_buf[CELLMODULE_CHANNELS][TX_BUF_CELLMODULE
 static volatile uint8_t cellmodule_tx_busy = 0;
 static volatile uint8_t cellmodule_rx_waiting_for_response = 0;
 
-static module_data_t module_data[CELLMODULES_TOTAL+1] = {0};
-static module_data_age_t module_data_age[CELLMODULE_CHANNELS] = {0};
+extern module_data_t module_data[MODULE_DATA_LEN];
+extern module_data_age_t module_data_age[CELLMODULE_CHANNELS];
 
 /* generate and send messages */
 /* send message to all channels */
@@ -134,7 +135,7 @@ void process_message_cellmodule()
         if (cellmodule_process_buf[chain_no][0] != '\0')
         {
             /* buffer is not empty -> process message */
-            log_va("cell %d: %s", chain_no, (uint8_t*)cellmodule_process_buf[chain_no]);  // TODO flo: debug remove
+            //log_va("cell %d: %s", chain_no, (uint8_t*)cellmodule_process_buf[chain_no]);  // TODO flo: debug remove
             /* check message crc */
             if (!is_nmea_checksum_good((uint8_t*)cellmodule_process_buf[chain_no]))
             {
@@ -186,7 +187,7 @@ void process_message_cellmodule_int(uint8_t const chain_no)
         //log_va("modulecnt cell %d: %s [cmd:%d]\n", chain_no, msg_ptr, msg_cmd);
         //return;
     }
-    log_va("log cell %d: %s [cmd:%d mcnt:%d]\n", chain_no, msg_ptr, msg_cmd, module_cnt);
+    //log_va("log cell %d: %s [cmd:%d mcnt:%d]\n", chain_no, msg_ptr, msg_cmd, module_cnt);
 
     switch(msg_cmd)
     {
@@ -197,7 +198,7 @@ void process_message_cellmodule_int(uint8_t const chain_no)
                 module_data[mod_id].u_batt_mv = parse_chars_to_word(msg_data_ptr);
                 msg_data_ptr += 4; // advance by one word
             }
-            log_va("log cell %d: UBATT %s\n", chain_no, msg_ptr);
+            //log_va("log cell %d: UBATT %s\n", chain_no, msg_ptr);
             module_data_age[chain_no].u_batt = 0;
             break;
 
@@ -210,7 +211,7 @@ void process_message_cellmodule_int(uint8_t const chain_no)
                 module_data[mod_id].temp_aux_c = parse_chars_to_byte(msg_data_ptr);
                 msg_data_ptr += 2; // advance by one byte
             }
-            log_va("log cell %d: TEMP %s\n", chain_no, msg_ptr);
+            //log_va("log cell %d: TEMP %s\n", chain_no, msg_ptr);
             module_data_age[chain_no].temp = 0;
             break;
 
@@ -274,41 +275,3 @@ void process_message_cellmodule_int(uint8_t const chain_no)
     }
 }
 
-/* cellmodule tick */
-void tick_cellmodule()
-{
-    /* maintain cellmodule data age */
-    for(uint8_t chain_id = 0; chain_id < CELLMODULE_CHANNELS; chain_id++)
-    {
-        module_data_age[chain_id].u_batt++;
-        module_data_age[chain_id].temp++;
-    }
-}
-
-/* get highest/oldest cellmodule u_batt-value age */
-uint16_t get_age_ticks_u_batt()
-{
-    return ((module_data_age[CELL_MODULE_CHAIN_1].u_batt > module_data_age[CELL_MODULE_CHAIN_2].u_batt) ?
-        module_data_age[CELL_MODULE_CHAIN_1].u_batt : module_data_age[CELL_MODULE_CHAIN_2].u_batt);
-}
-
-/* get highest/oldest cellmodule temp-value age */
-uint16_t get_age_ticks_temp()
-{
-    return ((module_data_age[CELL_MODULE_CHAIN_1].temp > module_data_age[CELL_MODULE_CHAIN_2].temp) ?
-        module_data_age[CELL_MODULE_CHAIN_1].temp : module_data_age[CELL_MODULE_CHAIN_2].temp);
-}
-
-void print_cellmodule_full_debug()
-{
-//    for(uint8_t i=0; i<CELLMODULE_CHANNELS; i++)
-//    {
-//        log_va("debug cell age: chain %d ubatt %u temp %u\n", i, module_data_age[i].u_batt, module_data_age[i].temp);
-//    }
-    log_va("debug cell age: ubatt %u temp %u\n", get_age_ticks_u_batt(), get_age_ticks_temp());
-    for(uint8_t i=0; i<=CELLMODULES_TOTAL; i++)
-    {
-        log_va("[%d: %dmV: %dC: %dC] ", i, module_data[i].u_batt_mv, module_data[i].temp_batt_c, module_data[i].temp_aux_c);
-    }
-    log_va("\n");
-}

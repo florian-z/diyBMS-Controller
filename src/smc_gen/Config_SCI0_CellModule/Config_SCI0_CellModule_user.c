@@ -36,7 +36,7 @@ Includes
 #include "r_cg_macrodriver.h"
 #include "Config_SCI0_CellModule.h"
 /* Start user code for include. Do not edit comment generated here */
-#include "cellmodule.h"
+#include "uart_cellmodule.h"
 #include <string.h>
 #include "log_util.h"
 /* End user code. Do not edit comment generated here */
