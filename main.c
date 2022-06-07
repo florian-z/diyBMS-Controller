@@ -112,11 +112,14 @@ int main(void)
     }
 }
 
+// true if charging (LINE DETECT) or key-on (KL15 ON)
+static bool car_active = false;
 void charger_logic()
 {
-static bool kl15_pwr_state = false;
-static bool line_pwr_state = false;
-static bool charger_active_state = false;
+    static bool kl15_pwr_state = false;
+    static bool line_pwr_state = false;
+    static bool heater_active_state = false;
+    static bool charger_active_state = false;
 /// check line power active
     if (IN_SIGNAL_LINE_PWR)
     {
@@ -124,19 +127,27 @@ static bool charger_active_state = false;
         if (!line_pwr_state)
         {
             // line power on latch
+            log("LINE DETECT LATCH ON\n");
             line_pwr_state = true;
-            log("LINE LATCH ON\n");
             // ensure balancer is on, when car is on
             RELAIS_BALANCER_ON
         }
         // check need for heating
         if (check_temp_should_use_heater() && check_age_ticks_u_batt_and_temp_allowed())
         {
-            RELAIS_HEAT_ON
-            log("HEATER switch ON\n");
+            if (!heater_active_state)
+            {
+                log("HEATER LATCH ON\n");
+                RELAIS_HEAT_ON
+                heater_active_state = true;
+            }
         } else {
-            RELAIS_HEAT_OFF
-            log("HEATER switch OFF\n");
+            if (heater_active_state)
+            {
+                log("HEATER LATCH OFF\n");
+                RELAIS_HEAT_OFF
+                heater_active_state = false;
+            }
         }
         // check if good for charging
         if (check_temp_charging_allowed() && check_volt_charging_necessary_start() && !check_age_ticks_u_batt_and_temp_allowed())
@@ -168,7 +179,7 @@ static bool charger_active_state = false;
         {
             // line power off latch
             line_pwr_state = false;
-            log("LINE LATCH OFF\n");
+            log("LINE DETECT LATCH OFF\n");
             charger_active_state = false;
             RELAIS_HEAT_OFF
             OUT_CHARGER_LOAD_OFF
@@ -183,7 +194,7 @@ static bool charger_active_state = false;
         if (!kl15_pwr_state)
         {
             // KL15 on latch
-            log("KL15 LATCH ON\n");
+            log("KL15 DETECT LATCH ON\n");
             kl15_pwr_state = true;
             // ensure balancer is on, when car is on
             RELAIS_BALANCER_ON
@@ -193,9 +204,19 @@ static bool charger_active_state = false;
         if (kl15_pwr_state)
         {
             // KL15 off latch
-            log("KL15 LATCH OFF\n");
+            log("KL15 DETECT LATCH OFF\n");
             kl15_pwr_state = false;
         }
+    }
+
+/// check if car is sleeping or not
+    if (kl15_pwr_state || line_pwr_state)
+    {
+        // car active (KL15 ON and / or LINE DETECT)
+        car_active = true;
+    } else {
+        // car sleeping
+        car_active = false;
     }
 }
 
