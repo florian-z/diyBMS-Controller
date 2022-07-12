@@ -1,0 +1,16 @@
+M48
+METRIC
+; #@! TF.GenerationSoftware,Ing.-Buero FRIEDRICH,TARGET 3001! professional,V31.4.0.46
+; #@! TF.CreationDate,2022-06-26T14:35:39+01:00
+; #@! TF.FileFunction,NonPlated,1,2,NPTH
+; #@! TA.AperFunction,ViaDrill,NonPlated,NPTH
+T14F00S00C4.000
+%
+M71
+G05
+T14
+X188.5950Y185.5800
+X196.2150Y185.5800
+X188.5950Y176.6900
+X196.2150Y176.6900
+M30
