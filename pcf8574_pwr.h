@@ -18,14 +18,9 @@
 #define RELAIS_HEAT_OFF         config_message_pwr(PCA8574_P1_HEAT_OFF);
 #define RELAIS_BALANCER_ON      config_message_pwr(PCA8574_P2_BAL_ON);
 #define RELAIS_BALANCER_OFF     config_message_pwr(PCA8574_P3_BAL_OFF);
-#define RELAIS_PWR_SHUNT_ON     config_message_pwr(PCA8574_P4_PWR_SHUNT_ON);
-#define RELAIS_PWR_SHUNT_OFF    config_message_pwr(PCA8574_P5_PWR_SHUNT_OFF);
-#define RELAIS_PWR_MCU_ON       config_message_pwr(PCA8574_P6_PWR_MCU_ON);
-#define RELAIS_PWR_MCU_OFF      config_message_pwr(PCA8574_P7_PWR_MCU_OFF);
+
 
 void config_message_pwr(uint8_t const flags);
-void send_message_pwr();
-void callback_pwr_transfer_success();
-void callback_pwr_transfer_error();
+void send_message_pwr_tick();
 
 #endif /* __pcf8574_pwr_h__ */

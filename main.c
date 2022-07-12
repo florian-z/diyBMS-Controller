@@ -2,12 +2,13 @@
 #include <string.h>
 #include "log_util.h"
 
-#include "uart_display.h"
+#include "uart_ble.h"
 #include "uart_usb.h"
 #include "uart_cellmodule.h"
 #include "cellmodule_data.h"
-#include "pcf8574_pwr.h"
+#include "bluetooth.h"
 #include "shunt.h"
+#include "pcf8574_pwr.h"
 
 void charger_logic(void);
 void led_test(void);
@@ -28,12 +29,11 @@ int main(void)
     // set safe defaults for relais
     RELAIS_BALANCER_ON
     RELAIS_HEAT_OFF
-    RELAIS_PWR_MCU_ON
-    RELAIS_PWR_SHUNT_ON
 
     register_nmi_interrupt_handler();
     R_Config_TMR0_TMR1_Start(); // start timer tick
     shunt_init();
+    bluetooth_init();
 
 /// main loop
     uint8_t count_10ms = 0;
@@ -56,7 +56,7 @@ int main(void)
             {
                 /* 4 Hz */
                 LED_GE1_TGL
-                send_message_pwr();
+                send_message_pwr_tick();
 
 
                 if (count_10ms >= 100)
@@ -77,7 +77,7 @@ int main(void)
 
 
 
-                    send_message_display("disp uart test\n");
+                    send_message_ble("disp uart test\n");
 
                     print_cellmodule_full_debug();
                     print_shunt_full_debug();
@@ -98,7 +98,7 @@ int main(void)
 
         process_message_usb();
         process_message_cellmodule();
-        process_message_display();
+        process_message_ble();
     }
 }
 
@@ -248,14 +248,14 @@ void config_communication(void)
 {
     R_Config_SCI6_USB_Start();
 
-    R_Config_RIIC0_PWR_Start();
+    R_Config_RIIC0_Start();
 
     R_Config_SCI0_CellModule_Start();
     R_Config_SCI5_CellModule_Start();
     //R_Config_SCI8_CellModule_Start();
     //R_Config_SCI9_CellModule_Start();
 
-    R_Config_SCI1_Display_Start();
+    R_Config_SCI1_BLE_Start();
 
     R_Config_RSPI0_Shunt_Start();
 }

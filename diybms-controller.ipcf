@@ -4,10 +4,10 @@
     <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_ICU</path>
     <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_IWDT</path>
     <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_PORT</path>
-    <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_RIIC0_PWR</path>
+    <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_RIIC0</path>
     <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_RSPI0_Shunt</path>
     <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_SCI0_CellModule</path>
-    <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_SCI1_Display</path>
+    <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_SCI1_BLE</path>
     <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_SCI5_CellModule</path>
     <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_SCI6_USB</path>
     <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_SCI8_CellModule</path>
@@ -66,18 +66,18 @@
         </group>
     </group>
     <group name ="">
-        <group name ="Config_RIIC0_PWR">
-            <path>.\src\smc_gen\Config_RIIC0_PWR\Config_RIIC0_PWR.c</path>
+        <group name ="Config_RIIC0">
+            <path>.\src\smc_gen\Config_RIIC0\Config_RIIC0.c</path>
         </group>
     </group>
     <group name ="">
-        <group name ="Config_RIIC0_PWR">
-            <path>.\src\smc_gen\Config_RIIC0_PWR\Config_RIIC0_PWR.h</path>
+        <group name ="Config_RIIC0">
+            <path>.\src\smc_gen\Config_RIIC0\Config_RIIC0.h</path>
         </group>
     </group>
     <group name ="">
-        <group name ="Config_RIIC0_PWR">
-            <path>.\src\smc_gen\Config_RIIC0_PWR\Config_RIIC0_PWR_user.c</path>
+        <group name ="Config_RIIC0">
+            <path>.\src\smc_gen\Config_RIIC0\Config_RIIC0_user.c</path>
         </group>
     </group>
     <group name ="">
@@ -111,18 +111,18 @@
         </group>
     </group>
     <group name ="">
-        <group name ="Config_SCI1_Display">
-            <path>.\src\smc_gen\Config_SCI1_Display\Config_SCI1_Display.c</path>
+        <group name ="Config_SCI1_BLE">
+            <path>.\src\smc_gen\Config_SCI1_BLE\Config_SCI1_BLE.c</path>
         </group>
     </group>
     <group name ="">
-        <group name ="Config_SCI1_Display">
-            <path>.\src\smc_gen\Config_SCI1_Display\Config_SCI1_Display.h</path>
+        <group name ="Config_SCI1_BLE">
+            <path>.\src\smc_gen\Config_SCI1_BLE\Config_SCI1_BLE.h</path>
         </group>
     </group>
     <group name ="">
-        <group name ="Config_SCI1_Display">
-            <path>.\src\smc_gen\Config_SCI1_Display\Config_SCI1_Display_user.c</path>
+        <group name ="Config_SCI1_BLE">
+            <path>.\src\smc_gen\Config_SCI1_BLE\Config_SCI1_BLE_user.c</path>
         </group>
     </group>
     <group name ="">

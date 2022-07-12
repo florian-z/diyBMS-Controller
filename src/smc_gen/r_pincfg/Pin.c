@@ -101,6 +101,10 @@ void R_Pins_Create(void)
     MPC.PB6PFS.BYTE = 0x0AU;
     PORTB.PMR.BYTE |= 0x40U;
 
+    /* Set RXD12 pin */
+    MPC.PE2PFS.BYTE = 0x0CU;
+    PORTE.PMR.BYTE |= 0x04U;
+
     /* Set SCL pin */
     MPC.P12PFS.BYTE = 0x0FU;
     PORT1.PMR.BYTE |= 0x04U;
@@ -144,6 +148,12 @@ void R_Pins_Create(void)
     MPC.PB7PFS.BYTE = 0x0AU;
     PORTB.PDR.BYTE |= 0x80U;
     // PORTB.PMR.BIT.B7 = 1U; // Please set the PMR bit after TE bit is set to 1.
+
+    /* Set TXD12 pin */
+    PORTE.PODR.BYTE |= 0x02U;
+    MPC.PE1PFS.BYTE = 0x0CU;
+    PORTE.PDR.BYTE |= 0x02U;
+    // PORTE.PMR.BIT.B1 = 1U; // Please set the PMR bit after TE bit is set to 1.
 
     R_BSP_RegisterProtectEnable(BSP_REG_PROTECT_MPC);
 }

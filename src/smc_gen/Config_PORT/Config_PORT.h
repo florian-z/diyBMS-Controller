@@ -2,15 +2,15 @@
 * DISCLAIMER
 * This software is supplied by Renesas Electronics Corporation and is only intended for use with Renesas products.
 * No other uses are authorized. This software is owned by Renesas Electronics Corporation and is protected under all
-* applicable laws, including copyright laws. 
+* applicable laws, including copyright laws.
 * THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING THIS SOFTWARE, WHETHER EXPRESS, IMPLIED
 * OR STATUTORY, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
 * NON-INFRINGEMENT.  ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAIMED.TO THE MAXIMUM EXTENT PERMITTED NOT PROHIBITED BY
 * LAW, NEITHER RENESAS ELECTRONICS CORPORATION NOR ANY OF ITS AFFILIATED COMPANIES SHALL BE LIABLE FOR ANY DIRECT,
 * INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR ANY REASON RELATED TO THIS SOFTWARE, EVEN IF RENESAS OR
 * ITS AFFILIATES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
-* Renesas reserves the right, without notice, to make changes to this software and to discontinue the availability 
-* of this software. By using this software, you agree to the additional terms and conditions found by accessing the 
+* Renesas reserves the right, without notice, to make changes to this software and to discontinue the availability
+* of this software. By using this software, you agree to the additional terms and conditions found by accessing the
 * following link:
 * http://www.renesas.com/disclaimer
 *
@@ -76,15 +76,26 @@ void R_Config_PORT_Create_UserInit(void);
 #define LED_BL2_OFF     PORT4.PODR.BYTE &= ~(1<<7);
 #define LED_BL2_TGL     PORT4.PODR.BYTE ^= (1<<7);
 
-#define OUT_CHARGER_LOAD_ON     PORTD.PODR.BYTE |= (1<<4);
-#define OUT_CHARGER_LOAD_OFF    PORTD.PODR.BYTE &= ~(1<<4);
-#define OUT_CHARGER_DOOR_ON     PORTD.PODR.BYTE |= (1<<5);
-#define OUT_CHARGER_DOOR_OFF    PORTD.PODR.BYTE &= ~(1<<5);
+
+#define OUT_HEATER_LATCH_ON_CURR      PORTD.PODR.BYTE |= (1<<2);
+#define OUT_HEATER_LATCH_ON_IDLE      PORTD.PODR.BYTE &= ~(1<<2);
+#define OUT_HEATER_LATCH_OFF_CURR     PORTD.PODR.BYTE |= (1<<3);
+#define OUT_HEATER_LATCH_OFF_IDLE     PORTD.PODR.BYTE &= ~(1<<3);
+
+#define OUT_CHARGER_LOAD_ON         PORTD.PODR.BYTE |= (1<<4);
+#define OUT_CHARGER_LOAD_OFF        PORTD.PODR.BYTE &= ~(1<<4);
+#define OUT_CHARGER_DOOR_ON         PORTD.PODR.BYTE |= (1<<5);
+#define OUT_CHARGER_DOOR_OFF        PORTD.PODR.BYTE &= ~(1<<5);
+
+#define OUT_BAL_LATCH_ON_CURR      PORTD.PODR.BYTE |= (1<<6);
+#define OUT_BAL_LATCH_ON_IDLE      PORTD.PODR.BYTE &= ~(1<<6);
+#define OUT_BAL_LATCH_OFF_CURR     PORTD.PODR.BYTE |= (1<<7);
+#define OUT_BAL_LATCH_OFF_IDLE     PORTD.PODR.BYTE &= ~(1<<7);
 
 #define IN_SIGNAL_LINE_PWR      (PORT3.PIDR.BIT.B1)
 #define IN_SIGNAL_KL15_PWR      (PORT3.PIDR.BIT.B2)
 
-#define OUT_SPI_nMSS_ON         PORTC.PODR.BYTE |= (1<<4);
-#define OUT_SPI_nMSS_OFF        PORTC.PODR.BYTE &= ~(1<<4);
+#define OUT_BLE_RESET_RUN       PORT5.PODR.BYTE |= (1<<2);
+#define OUT_BLE_RESET_RESET     PORT5.PODR.BYTE &= ~(1<<2);
 /* End user code. Do not edit comment generated here */
 #endif

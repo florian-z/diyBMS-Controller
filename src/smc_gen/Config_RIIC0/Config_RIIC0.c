@@ -18,10 +18,10 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name        : Config_RIIC0_PWR.c
+* File Name        : Config_RIIC0.c
 * Component Version: 1.11.0
 * Device(s)        : R5F51308AxFP
-* Description      : This file implements device driver for Config_RIIC0_PWR.
+* Description      : This file implements device driver for Config_RIIC0.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -34,9 +34,8 @@ Pragma directive
 Includes
 ***********************************************************************************************************************/
 #include "r_cg_macrodriver.h"
-#include "Config_RIIC0_PWR.h"
+#include "Config_RIIC0.h"
 /* Start user code for include. Do not edit comment generated here */
-#include "Config_PORT.h"
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
 
@@ -57,13 +56,13 @@ volatile uint8_t  g_riic0_stop_generation;         /* RIIC0 stop condition gener
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
-* Function Name: R_Config_RIIC0_PWR_Create
+* Function Name: R_Config_RIIC0_Create
 * Description  : This function initializes the RIIC0 channel
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
 
-void R_Config_RIIC0_PWR_Create(void)
+void R_Config_RIIC0_Create(void)
 {
     /* Cancel RIIC stop state */
     MSTP(RIIC0) = 0U;
@@ -107,17 +106,17 @@ void R_Config_RIIC0_PWR_Create(void)
     MPC.P13PFS.BYTE = 0x0FU;
     PORT1.PMR.BYTE |= 0x08U;
 
-    R_Config_RIIC0_PWR_Create_UserInit();
+    R_Config_RIIC0_Create_UserInit();
 }
 
 /***********************************************************************************************************************
-* Function Name: R_Config_RIIC0_PWR_Start
+* Function Name: R_Config_RIIC0_Start
 * Description  : This function starts the RIIC0 channel
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
 
-void R_Config_RIIC0_PWR_Start(void)
+void R_Config_RIIC0_Start(void)
 {
     /* Clear interrupt flag */
     IR(RIIC0, TXI0) = 0U;
@@ -131,13 +130,13 @@ void R_Config_RIIC0_PWR_Start(void)
 }
 
 /***********************************************************************************************************************
-* Function Name: R_Config_RIIC0_PWR_Stop
+* Function Name: R_Config_RIIC0_Stop
 * Description  : This function stops the RIIC0 channel
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
 
-void R_Config_RIIC0_PWR_Stop(void)
+void R_Config_RIIC0_Stop(void)
 {
     /* Clear interrupt flag */
     IR(RIIC0, TXI0) = 0U;
@@ -151,31 +150,31 @@ void R_Config_RIIC0_PWR_Stop(void)
 }
 
 /***********************************************************************************************************************
-* Function Name: R_Config_RIIC0_PWR_IIC_StartCondition
+* Function Name: R_Config_RIIC0_IIC_StartCondition
 * Description  : This function generates I2C start condition
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
 
-void R_Config_RIIC0_PWR_IIC_StartCondition(void)
+void R_Config_RIIC0_IIC_StartCondition(void)
 {
     RIIC0.ICCR2.BIT.ST = 1U;    /* Set start condition flag */
 }
 
 /***********************************************************************************************************************
-* Function Name: R_Config_RIIC0_PWR_IIC_StopCondition
+* Function Name: R_Config_RIIC0_IIC_StopCondition
 * Description  : This function generates I2C stop condition
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
 
-void R_Config_RIIC0_PWR_IIC_StopCondition(void)
+void R_Config_RIIC0_IIC_StopCondition(void)
 {
     RIIC0.ICCR2.BIT.SP = 1U;    /* Set stop condition flag */
 }
 
 /***********************************************************************************************************************
-* Function Name: R_Config_RIIC0_PWR_Master_Send
+* Function Name: R_Config_RIIC0_Master_Send
 * Description  : This function sends RIIC0 data to slave device and generates stop condition when transmission finishes
 * Arguments    : adr -
 *                    address of slave device
@@ -187,7 +186,7 @@ void R_Config_RIIC0_PWR_IIC_StopCondition(void)
 *                    MD_OK or MD_ERROR1 or MD_ERROR2
 ***********************************************************************************************************************/
 
-MD_STATUS R_Config_RIIC0_PWR_Master_Send(uint16_t adr, uint8_t * const tx_buf, uint16_t tx_num)
+MD_STATUS R_Config_RIIC0_Master_Send(uint16_t adr, uint8_t * const tx_buf, uint16_t tx_num)
 {
     MD_STATUS status = MD_OK;
 
@@ -217,7 +216,7 @@ MD_STATUS R_Config_RIIC0_PWR_Master_Send(uint16_t adr, uint8_t * const tx_buf, u
         }
 
         /* Issue a start condition */
-        R_Config_RIIC0_PWR_IIC_StartCondition();
+        R_Config_RIIC0_IIC_StartCondition();
 
         /* Set flag for generating stop condition when transmission finishes */
         g_riic0_stop_generation = 1;
@@ -227,7 +226,7 @@ MD_STATUS R_Config_RIIC0_PWR_Master_Send(uint16_t adr, uint8_t * const tx_buf, u
 }
 
 /***********************************************************************************************************************
-* Function Name: R_Config_RIIC0_PWR_Master_Send_Without_Stop
+* Function Name: R_Config_RIIC0_Master_Send_Without_Stop
 * Description  : This function sends RIIC0 data to slave device, not generate stop condition when transmission finishes
 * Arguments    : adr -
 *                    address of slave device
@@ -239,7 +238,7 @@ MD_STATUS R_Config_RIIC0_PWR_Master_Send(uint16_t adr, uint8_t * const tx_buf, u
 *                    MD_OK or MD_ERROR1 or MD_ERROR2
 ***********************************************************************************************************************/
 
-MD_STATUS R_Config_RIIC0_PWR_Master_Send_Without_Stop(uint16_t adr, uint8_t * const tx_buf, uint16_t tx_num)
+MD_STATUS R_Config_RIIC0_Master_Send_Without_Stop(uint16_t adr, uint8_t * const tx_buf, uint16_t tx_num)
 {
     MD_STATUS status = MD_OK;
 
@@ -269,7 +268,7 @@ MD_STATUS R_Config_RIIC0_PWR_Master_Send_Without_Stop(uint16_t adr, uint8_t * co
         }
 
         /* Issue a start condition */
-        R_Config_RIIC0_PWR_IIC_StartCondition();
+        R_Config_RIIC0_IIC_StartCondition();
 
         /* Set flag for not generating stop condition when transmission finishes */
         g_riic0_stop_generation = 0;
@@ -279,7 +278,7 @@ MD_STATUS R_Config_RIIC0_PWR_Master_Send_Without_Stop(uint16_t adr, uint8_t * co
 }
 
 /***********************************************************************************************************************
-* Function Name: R_Config_RIIC0_PWR_Master_Receive
+* Function Name: R_Config_RIIC0_Master_Receive
 * Description  : This function receives RIIC0 data from slave device
 * Arguments    : adr -
 *                    address of slave device
@@ -291,7 +290,7 @@ MD_STATUS R_Config_RIIC0_PWR_Master_Send_Without_Stop(uint16_t adr, uint8_t * co
 *                    MD_OK or MD_ERROR2 or MD_ERROR4 or MD_ERROR5
 ***********************************************************************************************************************/
 
-MD_STATUS R_Config_RIIC0_PWR_Master_Receive(uint16_t adr, uint8_t * const rx_buf, uint16_t rx_num)
+MD_STATUS R_Config_RIIC0_Master_Receive(uint16_t adr, uint8_t * const rx_buf, uint16_t rx_num)
 {
     MD_STATUS status = MD_OK;
 
@@ -333,7 +332,7 @@ MD_STATUS R_Config_RIIC0_PWR_Master_Receive(uint16_t adr, uint8_t * const rx_buf
                 } while (1U == RIIC0.ICCR2.BIT.BBSY);
 
                 /* Issue a start condition */
-                R_Config_RIIC0_PWR_IIC_StartCondition();
+                R_Config_RIIC0_IIC_StartCondition();
             }
             /* Bus is busy and it is master mode (MST = 1) */
             else if (1U == RIIC0.ICCR2.BIT.MST)
@@ -352,7 +351,7 @@ MD_STATUS R_Config_RIIC0_PWR_Master_Receive(uint16_t adr, uint8_t * const rx_buf
         else
         {
             /* Issue a start condition */
-            R_Config_RIIC0_PWR_IIC_StartCondition();
+            R_Config_RIIC0_IIC_StartCondition();
         }
     }
 

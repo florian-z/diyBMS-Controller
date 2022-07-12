@@ -18,19 +18,19 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name        : Config_SCI1_Display.h
+* File Name        : Config_RIIC0.h
 * Component Version: 1.11.0
 * Device(s)        : R5F51308AxFP
-* Description      : This file implements device driver for Config_SCI1_Display.
+* Description      : This file implements device driver for Config_RIIC0.
 ***********************************************************************************************************************/
 
-#ifndef CFG_Config_SCI1_Display_H
-#define CFG_Config_SCI1_Display_H
+#ifndef CFG_Config_RIIC0_H
+#define CFG_Config_RIIC0_H
 
 /***********************************************************************************************************************
 Includes
 ***********************************************************************************************************************/
-#include "r_cg_sci.h"
+#include "r_cg_riic.h"
 
 /***********************************************************************************************************************
 Macro definitions (Register bit)
@@ -39,6 +39,8 @@ Macro definitions (Register bit)
 /***********************************************************************************************************************
 Macro definitions
 ***********************************************************************************************************************/
+#define _F0_IIC0_SCL_LOW_LEVEL_PERIOD                          (0xF0U) /* SCL clock low-level period setting */
+#define _F1_IIC0_SCL_HIGH_LEVEL_PERIOD                         (0xF1U) /* SCL clock high-level period setting */
 
 /***********************************************************************************************************************
 Typedef definitions
@@ -47,15 +49,18 @@ Typedef definitions
 /***********************************************************************************************************************
 Global functions
 ***********************************************************************************************************************/
-void R_Config_SCI1_Display_Create(void);
-void R_Config_SCI1_Display_Create_UserInit(void);
-void R_Config_SCI1_Display_Start(void);
-void R_Config_SCI1_Display_Stop(void);
-MD_STATUS R_Config_SCI1_Display_Serial_Send(uint8_t * const tx_buf, uint16_t tx_num);
-MD_STATUS R_Config_SCI1_Display_Serial_Receive(uint8_t * const rx_buf, uint16_t rx_num);
-static void r_Config_SCI1_Display_callback_transmitend(void);
-static void r_Config_SCI1_Display_callback_receiveend(void);
-static void r_Config_SCI1_Display_callback_receiveerror(void);
+void R_Config_RIIC0_Create(void);
+void R_Config_RIIC0_Create_UserInit(void);
+void R_Config_RIIC0_Start(void);
+void R_Config_RIIC0_Stop(void);
+MD_STATUS R_Config_RIIC0_Master_Send(uint16_t adr, uint8_t * const tx_buf, uint16_t tx_num);
+MD_STATUS R_Config_RIIC0_Master_Send_Without_Stop(uint16_t adr, uint8_t * const tx_buf, uint16_t tx_num);
+MD_STATUS R_Config_RIIC0_Master_Receive(uint16_t adr, uint8_t * const rx_buf, uint16_t rx_num);
+void R_Config_RIIC0_IIC_StartCondition(void);
+void R_Config_RIIC0_IIC_StopCondition(void);
+static void r_Config_RIIC0_callback_transmitend(void);
+static void r_Config_RIIC0_callback_receiveend(void);
+static void r_Config_RIIC0_callback_receiveerror(MD_STATUS status);
 /* Start user code for function. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
 #endif

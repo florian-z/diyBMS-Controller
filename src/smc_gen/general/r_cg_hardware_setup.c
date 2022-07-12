@@ -42,10 +42,10 @@ Includes
 #include "Config_SCI8_CellModule.h"
 #include "Config_SCI5_CellModule.h"
 #include "Config_SCI0_CellModule.h"
-#include "Config_SCI1_Display.h"
 #include "Config_RSPI0_Shunt.h"
-#include "Config_RIIC0_PWR.h"
 #include "Config_SCI6_USB.h"
+#include "Config_SCI1_BLE.h"
+#include "Config_RIIC0.h"
 #include "r_smc_cgc.h"
 #include "r_smc_interrupt.h"
 /* Start user code for include. Do not edit comment generated here */
@@ -102,10 +102,10 @@ void R_Systeminit(void)
     R_Config_SCI8_CellModule_Create();
     R_Config_SCI5_CellModule_Create();
     R_Config_SCI0_CellModule_Create();
-    R_Config_SCI1_Display_Create();
     R_Config_RSPI0_Shunt_Create();
-    R_Config_RIIC0_PWR_Create();
     R_Config_SCI6_USB_Create();
+    R_Config_SCI1_BLE_Create();
+    R_Config_RIIC0_Create();
 
     /* Register undefined interrupt */
     R_BSP_InterruptWrite(BSP_INT_SRC_UNDEFINED_INTERRUPT,(bsp_int_cb_t)r_undefined_exception);

@@ -50,36 +50,36 @@ void config_message_pwr(uint8_t const flags)
 }
 
 /* send commands */
-void send_message_pwr()
+void send_message_pwr_tick()
 {
     GLOBAL_INT_STORE_AND_DISABLE
     pca8574_outputs_waiting &= pca8574_outputs;
     pca8574_outputs = PCA8574_ALL_OUTPUTS_INACTIVE;
     GLOBAL_INT_RESTORE
-    PCA8574_DEBUG_VA("HEAT:%u%u BAL:%u%u SHUNT:%u%u MCU:%u%u %02X\n",
+    PCA8574_DEBUG_VA("HEAT:%u%u BAL:%u%u %02X\n",
         (pca8574_outputs_waiting&PCA8574_P1_HEAT_OFF)?0:1, (pca8574_outputs_waiting&PCA8574_P0_HEAT_ON)?0:1,
-        (pca8574_outputs_waiting&PCA8574_P3_BAL_OFF)?0:1, (pca8574_outputs_waiting&PCA8574_P2_BAL_ON)?0:1,
-        pca8574_outputs_waiting&PCA8574_P5_PWR_SHUNT_OFF?0:1, pca8574_outputs_waiting&PCA8574_P4_PWR_SHUNT_ON?0:1,
-        pca8574_outputs_waiting&PCA8574_P7_PWR_MCU_OFF?0:1, pca8574_outputs_waiting&PCA8574_P6_PWR_MCU_ON?0:1,
+        (pca8574_outputs_waiting&PCA8574_P3_BAL_OFF)?0:1, (pca8574_outputs_waiting&PCA8574_P2_BAL_ON)?0:1
         pca8574_outputs_waiting);
-    R_Config_RIIC0_PWR_Master_Send(PCA8574_ADR, &pca8574_outputs_waiting, 1);
-}
-
-/* callback on transfer success */
-void callback_pwr_transfer_success()
-{
-    GLOBAL_INT_STORE_AND_DISABLE
-    pca8574_outputs_waiting = PCA8574_ALL_OUTPUTS_INACTIVE; // reset for next transfer
-    GLOBAL_INT_RESTORE
-    PCA8574_DEBUG_VA("I2C slave - success\n");
-    // TODO flo GLOBAL_STATUS_HANDLER(I2C, REPORT_GOOD)
-}
-
-/* callback on transfer error */
-void callback_pwr_transfer_error()
-{
-    log("I2C slave - transfer error\n");
-    // TODO flo GLOBAL_STATUS_HANDLER(I2C, REPORT_ERROR)
+    if(pca8574_outputs_waiting&PCA8574_P1_HEAT_OFF) {
+        OUT_HEATER_LATCH_OFF_IDLE
+    } else {
+        OUT_HEATER_LATCH_OFF_CURR
+    }
+    if(pca8574_outputs_waiting&PCA8574_P0_HEAT_ON) {
+        OUT_HEATER_LATCH_ON_IDLE
+    } else {
+        OUT_HEATER_LATCH_ON_CURR
+    }
+    if(pca8574_outputs_waiting&PCA8574_P3_BAL_OFF) {
+        OUT_BAL_LATCH_OFF_IDLE
+    } else {
+        OUT_BAL_LATCH_OFF_CURR
+    }
+    if(pca8574_outputs_waiting&PCA8574_P2_BAL_ON) {
+        OUT_BAL_LATCH_ON_IDLE
+    } else {
+        OUT_BAL_LATCH_ON_CURR
+    }
 }
 
 /* test - circle all outputs */
@@ -91,9 +91,5 @@ void callback_pwr_transfer_error()
 //    if(cnt==3) RELAIS_HEAT_OFF
 //    if(cnt==5) RELAIS_BALANCER_ON
 //    if(cnt==6) RELAIS_BALANCER_OFF
-//    if(cnt==8) RELAIS_PWR_MCU_ON
-//    if(cnt==9) RELAIS_PWR_MCU_OFF
-//    if(cnt==11) RELAIS_PWR_SHUNT_ON
-//    if(cnt==12) RELAIS_PWR_SHUNT_OFF
-//    if(cnt==20) cnt=0;
+//    if(cnt==10) cnt=0;
 //}

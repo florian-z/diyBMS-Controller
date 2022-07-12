@@ -1,4 +1,4 @@
-/***********************************************************************************************************************
+ /***********************************************************************************************************************
 * DISCLAIMER
 * This software is supplied by Renesas Electronics Corporation and is only intended for use with Renesas products.
 * No other uses are authorized. This software is owned by Renesas Electronics Corporation and is protected under all
@@ -18,10 +18,10 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name        : Config_RIIC0_PWR_user.c
+* File Name        : Config_RIIC0_user.c
 * Component Version: 1.11.0
 * Device(s)        : R5F51308AxFP
-* Description      : This file implements device driver for Config_RIIC0_PWR.
+* Description      : This file implements device driver for Config_RIIC0.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -34,9 +34,8 @@ Pragma directive
 Includes
 ***********************************************************************************************************************/
 #include "r_cg_macrodriver.h"
-#include "Config_RIIC0_PWR.h"
+#include "Config_RIIC0.h"
 /* Start user code for include. Do not edit comment generated here */
-#include "pcf8574_pwr.h"
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
 
@@ -53,23 +52,24 @@ extern volatile uint16_t   g_riic0_rx_count;                /* RIIC0 receive dat
 extern volatile uint16_t   g_riic0_rx_length;               /* RIIC0 receive data length */
 extern volatile uint8_t    g_riic0_stop_generation;         /* RIIC0 stop condition generation flag */
 /* Start user code for global. Do not edit comment generated here */
+static void r_Config_RIIC0_callback_transmiterror(MD_STATUS status);
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
-* Function Name: R_Config_RIIC0_PWR_Create_UserInit
+* Function Name: R_Config_RIIC0_Create_UserInit
 * Description  : This function adds user code after initializing the RIIC0 channel
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
 
-void R_Config_RIIC0_PWR_Create_UserInit(void)
+void R_Config_RIIC0_Create_UserInit(void)
 {
     /* Start user code for user init. Do not edit comment generated here */
     /* End user code. Do not edit comment generated here */
 }
 
 /***********************************************************************************************************************
-* Function Name: r_Config_RIIC0_PWR_transmit_interrupt
+* Function Name: r_Config_RIIC0_transmit_interrupt
 * Description  : This function is TXI0 interrupt service routine
 * Arguments    : None
 * Return Value : None
@@ -77,9 +77,9 @@ void R_Config_RIIC0_PWR_Create_UserInit(void)
 
 #pragma vector = VECT_RIIC0_TXI0
 #if FAST_INTERRUPT_VECTOR == VECT_RIIC0_TXI0
-__fast_interrupt static void r_Config_RIIC0_PWR_transmit_interrupt(void)
+__fast_interrupt static void r_Config_RIIC0_transmit_interrupt(void)
 #else
-__interrupt static void r_Config_RIIC0_PWR_transmit_interrupt(void)
+__interrupt static void r_Config_RIIC0_transmit_interrupt(void)
 #endif
 {
     if (_0D_IIC_MASTER_TRANSMIT == g_riic0_mode_flag)
@@ -151,7 +151,7 @@ __interrupt static void r_Config_RIIC0_PWR_transmit_interrupt(void)
 }
 
 /***********************************************************************************************************************
-* Function Name: r_Config_RIIC0_PWR_transmitend_interrupt
+* Function Name: r_Config_RIIC0_transmitend_interrupt
 * Description  : This function is TEI0 interrupt service routine
 * Arguments    : None
 * Return Value : None
@@ -159,9 +159,9 @@ __interrupt static void r_Config_RIIC0_PWR_transmit_interrupt(void)
 
 #pragma vector = VECT_RIIC0_TEI0
 #if FAST_INTERRUPT_VECTOR == VECT_RIIC0_TEI0
-__fast_interrupt static void r_Config_RIIC0_PWR_transmitend_interrupt(void)
+__fast_interrupt static void r_Config_RIIC0_transmitend_interrupt(void)
 #else
-__interrupt static void r_Config_RIIC0_PWR_transmitend_interrupt(void)
+__interrupt static void r_Config_RIIC0_transmitend_interrupt(void)
 #endif
 {
     if (_06_IIC_MASTER_SENDS_END == g_riic0_state)
@@ -176,7 +176,7 @@ __interrupt static void r_Config_RIIC0_PWR_transmitend_interrupt(void)
         else
         {
             RIIC0.ICSR2.BIT.TEND = 0U;
-            r_Config_RIIC0_PWR_callback_transmitend();
+            r_Config_RIIC0_callback_transmitend();
         }
     }
     else if (_0E_IIC_MASTER_RECEIVES_RESTART == g_riic0_state)
@@ -193,7 +193,7 @@ __interrupt static void r_Config_RIIC0_PWR_transmitend_interrupt(void)
 }
 
 /***********************************************************************************************************************
-* Function Name: r_Config_RIIC0_PWR_receive_interrupt
+* Function Name: r_Config_RIIC0_receive_interrupt
 * Description  : This function is RXI0 interrupt service routine
 * Arguments    : None
 * Return Value : None
@@ -201,9 +201,9 @@ __interrupt static void r_Config_RIIC0_PWR_transmitend_interrupt(void)
 
 #pragma vector = VECT_RIIC0_RXI0
 #if FAST_INTERRUPT_VECTOR == VECT_RIIC0_RXI0
-__fast_interrupt static void r_Config_RIIC0_PWR_receive_interrupt(void)
+__fast_interrupt static void r_Config_RIIC0_receive_interrupt(void)
 #else
-__interrupt static void r_Config_RIIC0_PWR_receive_interrupt(void)
+__interrupt static void r_Config_RIIC0_receive_interrupt(void)
 #endif
 {
     volatile uint8_t dummy;
@@ -289,7 +289,7 @@ __interrupt static void r_Config_RIIC0_PWR_receive_interrupt(void)
 }
 
 /***********************************************************************************************************************
-* Function Name: r_Config_RIIC0_PWR_error_interrupt
+* Function Name: r_Config_RIIC0_error_interrupt
 * Description  : This function is EEI0 interrupt service routine
 * Arguments    : None
 * Return Value : None
@@ -297,20 +297,20 @@ __interrupt static void r_Config_RIIC0_PWR_receive_interrupt(void)
 
 #pragma vector = VECT_RIIC0_EEI0
 #if FAST_INTERRUPT_VECTOR == VECT_RIIC0_EEI0
-__fast_interrupt static void r_Config_RIIC0_PWR_error_interrupt(void)
+__fast_interrupt static void r_Config_RIIC0_error_interrupt(void)
 #else
-__interrupt static void r_Config_RIIC0_PWR_error_interrupt(void)
+__interrupt static void r_Config_RIIC0_error_interrupt(void)
 #endif
 {
     volatile uint8_t dummy;
 
     if ((1U == RIIC0.ICIER.BIT.ALIE) && (1U == RIIC0.ICSR2.BIT.AL))
     {
-        r_Config_RIIC0_PWR_callback_receiveerror(MD_ERROR1);
+        r_Config_RIIC0_callback_receiveerror(MD_ERROR1);
     }
     else if ((1U == RIIC0.ICIER.BIT.TMOIE) && (1U == RIIC0.ICSR2.BIT.TMOF))
     {
-        r_Config_RIIC0_PWR_callback_receiveerror(MD_ERROR2);
+        r_Config_RIIC0_callback_receiveerror(MD_ERROR2);
     }
     else if ((1U == RIIC0.ICIER.BIT.NAKIE) && (1U == RIIC0.ICSR2.BIT.NACKF))
     {
@@ -324,7 +324,7 @@ __interrupt static void r_Config_RIIC0_PWR_error_interrupt(void)
             }
             RIIC0.ICSR2.BIT.NACKF = 0U;
             RIIC0.ICSR2.BIT.STOP = 0U;
-            r_Config_RIIC0_PWR_callback_transmiterror(MD_ERROR1); // I2C slave not responding
+            r_Config_RIIC0_callback_transmiterror(MD_ERROR1); // I2C slave not responding
         }
         else if (_0C_IIC_MASTER_RECEIVE == g_riic0_mode_flag)
         {
@@ -345,7 +345,7 @@ __interrupt static void r_Config_RIIC0_PWR_error_interrupt(void)
              /* Do nothing */
         }
 
-        r_Config_RIIC0_PWR_callback_receiveerror(MD_ERROR3);
+        r_Config_RIIC0_callback_receiveerror(MD_ERROR3);
     }
     else if (_0D_IIC_MASTER_TRANSMIT == g_riic0_mode_flag)
     {
@@ -362,7 +362,7 @@ __interrupt static void r_Config_RIIC0_PWR_error_interrupt(void)
             RIIC0.ICIER.BIT.SPIE = 0U;
             RIIC0.ICIER.BIT.STIE = 1U;
 
-            r_Config_RIIC0_PWR_callback_transmitend();
+            r_Config_RIIC0_callback_transmitend();
         }
         else
         {
@@ -393,7 +393,7 @@ __interrupt static void r_Config_RIIC0_PWR_error_interrupt(void)
             RIIC0.ICIER.BIT.SPIE = 0U;
             RIIC0.ICIER.BIT.STIE = 1U;
 
-            r_Config_RIIC0_PWR_callback_receiveend();
+            r_Config_RIIC0_callback_receiveend();
         }
         else
         {
@@ -407,43 +407,42 @@ __interrupt static void r_Config_RIIC0_PWR_error_interrupt(void)
 }
 
 /***********************************************************************************************************************
-* Function Name: r_Config_RIIC0_PWR_callback_transmitend
+* Function Name: r_Config_RIIC0_callback_transmitend
 * Description  : This function is a callback function when RIIC0 finishes transmission
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
 
-static void r_Config_RIIC0_PWR_callback_transmitend(void)
+static void r_Config_RIIC0_callback_transmitend(void)
 {
-    /* Start user code for r_Config_RIIC0_PWR_callback_transmitend. Do not edit comment generated here */
-    callback_pwr_transfer_success();
+    /* Start user code for r_Config_RIIC0_callback_transmitend. Do not edit comment generated here */
     /* End user code. Do not edit comment generated here */
 }
 
 /***********************************************************************************************************************
-* Function Name: r_Config_RIIC0_PWR_callback_receiveend
+* Function Name: r_Config_RIIC0_callback_receiveend
 * Description  : This function is a callback function when RIIC0 finishes reception
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
 
-static void r_Config_RIIC0_PWR_callback_receiveend(void)
+static void r_Config_RIIC0_callback_receiveend(void)
 {
-    /* Start user code for r_Config_RIIC0_PWR_callback_receiveend. Do not edit comment generated here */
+    /* Start user code for r_Config_RIIC0_callback_receiveend. Do not edit comment generated here */
     /* End user code. Do not edit comment generated here */
 }
 
 /***********************************************************************************************************************
-* Function Name: r_Config_RIIC0_PWR_callback_receiveerror
+* Function Name: r_Config_RIIC0_callback_receiveerror
 * Description  : This function is a callback function when RIIC0 encounters error while receiving
 * Arguments    : status -
 *                    MD_OK or MD_ARGERROR
 * Return Value : None
 ***********************************************************************************************************************/
 
-static void r_Config_RIIC0_PWR_callback_receiveerror(MD_STATUS status)
+static void r_Config_RIIC0_callback_receiveerror(MD_STATUS status)
 {
-    /* Start user code for r_Config_RIIC0_PWR_callback_receiveerror. Do not edit comment generated here */
+    /* Start user code for r_Config_RIIC0_callback_receiveerror. Do not edit comment generated here */
     /* End user code. Do not edit comment generated here */
 }
 
@@ -456,9 +455,9 @@ static void r_Config_RIIC0_PWR_callback_receiveerror(MD_STATUS status)
 * Return Value : None
 ***********************************************************************************************************************/
 
-static void r_Config_RIIC0_PWR_callback_transmiterror(MD_STATUS status)
+static void r_Config_RIIC0_callback_transmiterror(MD_STATUS status)
 {
     // MD_ERROR1 - I2C slave not responding
-    callback_pwr_transfer_error();
+    //callback_pwr_transfer_error();
 }
 /* End user code. Do not edit comment generated here */

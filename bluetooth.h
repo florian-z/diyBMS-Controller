@@ -4,6 +4,7 @@
 #include "main.h"
 #include "r_cg_userdefine.h"
 
+void bluetooth_init();
 
 
 #endif /* __bluetooth_h__ */

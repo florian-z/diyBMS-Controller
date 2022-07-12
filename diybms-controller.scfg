@@ -307,9 +307,13 @@
 <pinItem allocation="33" comments="" direction="None" id="SDA" isUsedBySoftware="true" locked="false" status="0"/>
 <pinItem allocation="63" comments="" direction="None" id="MISOA" isUsedBySoftware="true" locked="false" status="0"/>
 <pinItem allocation="7" comments="" direction="None" id="FINED" isUsedBySoftware="true" locked="false" status="0"/>
-<pinItem allocation="48" comments="" direction="O" id="PC4" isUsedBySoftware="true" locked="false" status="0"/>
+<pinItem allocation="77" comments="" direction="None" id="TXD12" isUsedBySoftware="false" locked="false" status="4"/>
+<pinItem allocation="83" comments="" direction="O" id="PD3" isUsedBySoftware="true" locked="false" status="0"/>
+<pinItem allocation="84" comments="" direction="O" id="PD2" isUsedBySoftware="true" locked="false" status="0"/>
 <pinItem allocation="81" comments="" direction="O" id="PD5" isUsedBySoftware="true" locked="false" status="0"/>
 <pinItem allocation="82" comments="" direction="O" id="PD4" isUsedBySoftware="true" locked="false" status="0"/>
+<pinItem allocation="79" comments="" direction="O" id="PD7" isUsedBySoftware="true" locked="false" status="0"/>
+<pinItem allocation="80" comments="" direction="O" id="PD6" isUsedBySoftware="true" locked="false" status="0"/>
 <pinItem allocation="18" comments="" direction="None" id="IRQ2" isUsedBySoftware="true" locked="false" status="0"/>
 <pinItem allocation="19" comments="" direction="None" id="IRQ1" isUsedBySoftware="true" locked="false" status="0"/>
 <pinItem allocation="93" comments="" direction="O" id="P41" isUsedBySoftware="true" locked="false" status="0"/>
@@ -320,6 +324,7 @@
 <pinItem allocation="90" comments="" direction="O" id="P44" isUsedBySoftware="true" locked="false" status="0"/>
 <pinItem allocation="87" comments="" direction="O" id="P47" isUsedBySoftware="true" locked="false" status="0"/>
 <pinItem allocation="88" comments="" direction="O" id="P46" isUsedBySoftware="true" locked="false" status="0"/>
+<pinItem allocation="42" comments="" direction="O" id="P52" isUsedBySoftware="true" locked="false" status="0"/>
 <pinItem allocation="65" comments="" direction="None" id="RSPCKA" isUsedBySoftware="true" locked="false" status="0"/>
 <pinItem allocation="50" comments="" direction="None" id="RXD5" isUsedBySoftware="true" locked="false" status="0"/>
 <pinItem allocation="27" comments="" direction="None" id="RXD0" isUsedBySoftware="true" locked="false" status="0"/>
@@ -327,6 +332,7 @@
 <pinItem allocation="46" comments="" direction="None" id="RXD8" isUsedBySoftware="true" locked="false" status="0"/>
 <pinItem allocation="54" comments="" direction="None" id="RXD9" isUsedBySoftware="true" locked="false" status="0"/>
 <pinItem allocation="85" comments="" direction="None" id="RXD6" isUsedBySoftware="true" locked="false" status="0"/>
+<pinItem allocation="10" comments="" direction="None" id="RES#" isUsedBySoftware="false" locked="false" status="0"/>
 <pinItem allocation="64" comments="" direction="None" id="MOSIA" isUsedBySoftware="true" locked="false" status="0"/>
 <pinItem allocation="86" comments="" direction="None" id="TXD6" isUsedBySoftware="true" locked="false" status="0"/>
 <pinItem allocation="49" comments="" direction="None" id="TXD5" isUsedBySoftware="true" locked="false" status="0"/>
@@ -334,6 +340,7 @@
 <pinItem allocation="28" comments="" direction="None" id="TXD0" isUsedBySoftware="true" locked="false" status="0"/>
 <pinItem allocation="53" comments="" direction="None" id="TXD9" isUsedBySoftware="true" locked="false" status="0"/>
 <pinItem allocation="45" comments="" direction="None" id="TXD8" isUsedBySoftware="true" locked="false" status="0"/>
+<pinItem allocation="76" comments="" direction="None" id="RXD12" isUsedBySoftware="false" locked="false" status="4"/>
 <pinItem allocation="34" comments="" direction="None" id="SCL" isUsedBySoftware="true" locked="false" status="0"/>
 </tool>
 <tool id="Summary" version="1.0.0.0">
@@ -796,25 +803,7 @@
 <item id="Disable" input="" vlaue="0"/>
 </option>
 </allocatable>
-<allocatable id="PORT5_Check">
-<option enabled="true" id="PortnEnable" selection="Disable">
-<item id="Enable" input="" vlaue="0"/>
-<item id="Disable" input="" vlaue="0"/>
-</option>
-</allocatable>
-<allocatable id="PORTA_Check">
-<option enabled="true" id="PortnEnable" selection="Disable">
-<item id="Enable" input="" vlaue="0"/>
-<item id="Disable" input="" vlaue="0"/>
-</option>
-</allocatable>
-<allocatable id="PORTB_Check">
-<option enabled="true" id="PortnEnable" selection="Disable">
-<item id="Enable" input="" vlaue="0"/>
-<item id="Disable" input="" vlaue="0"/>
-</option>
-</allocatable>
-<allocatable id="PORTC_Chan">
+<allocatable id="PORT5_Chan">
 <allocatable id="PORTx0_Item">
 <option enabled="true" id="UseStatus" selection="Unuse">
 <item id="Unuse" input="" vlaue="0"/>
@@ -831,7 +820,7 @@
 <item id="PullupUnuse" input="" vlaue="0"/>
 <item id="Pullupdisable" input="" vlaue="0"/>
 </option>
-<option enabled="true" id="Opendrain" selection="CMOS">
+<option enabled="true" id="Opendrain" selection="Opendraindisable">
 <item id="CMOS" input="" vlaue="0"/>
 <item id="NChanel" input="" vlaue="0"/>
 <item id="PChanel" input="" vlaue="0"/>
@@ -861,7 +850,7 @@
 <item id="PullupUnuse" input="" vlaue="0"/>
 <item id="Pullupdisable" input="" vlaue="0"/>
 </option>
-<option enabled="true" id="Opendrain" selection="CMOS">
+<option enabled="true" id="Opendrain" selection="Opendraindisable">
 <item id="CMOS" input="" vlaue="0"/>
 <item id="NChanel" input="" vlaue="0"/>
 <item id="PChanel" input="" vlaue="0"/>
@@ -876,7 +865,7 @@
 </option>
 </allocatable>
 <allocatable id="PORTx2_Item">
-<option enabled="true" id="UseStatus" selection="Unuse">
+<option enabled="true" id="UseStatus" selection="Out">
 <item id="Unuse" input="" vlaue="0"/>
 <item id="In" input="" vlaue="0"/>
 <item id="Out" input="" vlaue="0"/>
@@ -891,7 +880,7 @@
 <item id="PullupUnuse" input="" vlaue="0"/>
 <item id="Pullupdisable" input="" vlaue="0"/>
 </option>
-<option enabled="true" id="Opendrain" selection="CMOS">
+<option enabled="true" id="Opendrain" selection="Opendraindisable">
 <item id="CMOS" input="" vlaue="0"/>
 <item id="NChanel" input="" vlaue="0"/>
 <item id="PChanel" input="" vlaue="0"/>
@@ -921,7 +910,7 @@
 <item id="PullupUnuse" input="" vlaue="0"/>
 <item id="Pullupdisable" input="" vlaue="0"/>
 </option>
-<option enabled="true" id="Opendrain" selection="CMOS">
+<option enabled="true" id="Opendrain" selection="Opendraindisable">
 <item id="CMOS" input="" vlaue="0"/>
 <item id="NChanel" input="" vlaue="0"/>
 <item id="PChanel" input="" vlaue="0"/>
@@ -936,7 +925,7 @@
 </option>
 </allocatable>
 <allocatable id="PORTx4_Item">
-<option enabled="true" id="UseStatus" selection="Out">
+<option enabled="true" id="UseStatus" selection="Unuse">
 <item id="Unuse" input="" vlaue="0"/>
 <item id="In" input="" vlaue="0"/>
 <item id="Out" input="" vlaue="0"/>
@@ -951,7 +940,7 @@
 <item id="PullupUnuse" input="" vlaue="0"/>
 <item id="Pullupdisable" input="" vlaue="0"/>
 </option>
-<option enabled="true" id="Opendrain" selection="CMOS">
+<option enabled="true" id="Opendrain" selection="Opendraindisable">
 <item id="CMOS" input="" vlaue="0"/>
 <item id="NChanel" input="" vlaue="0"/>
 <item id="PChanel" input="" vlaue="0"/>
@@ -981,67 +970,7 @@
 <item id="PullupUnuse" input="" vlaue="0"/>
 <item id="Pullupdisable" input="" vlaue="0"/>
 </option>
-<option enabled="true" id="Opendrain" selection="CMOS">
-<item id="CMOS" input="" vlaue="0"/>
-<item id="NChanel" input="" vlaue="0"/>
-<item id="PChanel" input="" vlaue="0"/>
-<item id="HiZ" input="" vlaue="0"/>
-<item id="Opendraindisable" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="Highdrive" selection="HighdriveUnuse">
-<item id="HighdriveUse" input="" vlaue="0"/>
-<item id="HighdriveUnuse" input="" vlaue="0"/>
-<item id="FixHighdrive" input="" vlaue="0"/>
-<item id="HighdriveDisable" input="" vlaue="0"/>
-</option>
-</allocatable>
-<allocatable id="PORTx6_Item">
-<option enabled="true" id="UseStatus" selection="Unuse">
-<item id="Unuse" input="" vlaue="0"/>
-<item id="In" input="" vlaue="0"/>
-<item id="Out" input="" vlaue="0"/>
-</option>
-<option enabled="false" id="Output1" selection="Output1Unuse">
-<item id="Output1Unuse" input="" vlaue="0"/>
-<item id="Output1Use" input="" vlaue="0"/>
-<item id="Output1disable" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="Pullup" selection="PullupUnuse">
-<item id="PullupUse" input="" vlaue="0"/>
-<item id="PullupUnuse" input="" vlaue="0"/>
-<item id="Pullupdisable" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="Opendrain" selection="CMOS">
-<item id="CMOS" input="" vlaue="0"/>
-<item id="NChanel" input="" vlaue="0"/>
-<item id="PChanel" input="" vlaue="0"/>
-<item id="HiZ" input="" vlaue="0"/>
-<item id="Opendraindisable" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="Highdrive" selection="HighdriveUnuse">
-<item id="HighdriveUse" input="" vlaue="0"/>
-<item id="HighdriveUnuse" input="" vlaue="0"/>
-<item id="FixHighdrive" input="" vlaue="0"/>
-<item id="HighdriveDisable" input="" vlaue="0"/>
-</option>
-</allocatable>
-<allocatable id="PORTx7_Item">
-<option enabled="true" id="UseStatus" selection="Unuse">
-<item id="Unuse" input="" vlaue="0"/>
-<item id="In" input="" vlaue="0"/>
-<item id="Out" input="" vlaue="0"/>
-</option>
-<option enabled="false" id="Output1" selection="Output1Unuse">
-<item id="Output1Unuse" input="" vlaue="0"/>
-<item id="Output1Use" input="" vlaue="0"/>
-<item id="Output1disable" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="Pullup" selection="PullupUnuse">
-<item id="PullupUse" input="" vlaue="0"/>
-<item id="PullupUnuse" input="" vlaue="0"/>
-<item id="Pullupdisable" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="Opendrain" selection="CMOS">
+<option enabled="true" id="Opendrain" selection="Opendraindisable">
 <item id="CMOS" input="" vlaue="0"/>
 <item id="NChanel" input="" vlaue="0"/>
 <item id="PChanel" input="" vlaue="0"/>
@@ -1090,8 +1019,26 @@
 <item id="HighdriveAlldisable" input="" vlaue="0"/>
 </option>
 </allocatable>
-<allocatable id="PORTC_Check">
+<allocatable id="PORT5_Check">
 <option enabled="true" id="PortnEnable" selection="Enable">
+<item id="Enable" input="" vlaue="0"/>
+<item id="Disable" input="" vlaue="0"/>
+</option>
+</allocatable>
+<allocatable id="PORTA_Check">
+<option enabled="true" id="PortnEnable" selection="Disable">
+<item id="Enable" input="" vlaue="0"/>
+<item id="Disable" input="" vlaue="0"/>
+</option>
+</allocatable>
+<allocatable id="PORTB_Check">
+<option enabled="true" id="PortnEnable" selection="Disable">
+<item id="Enable" input="" vlaue="0"/>
+<item id="Disable" input="" vlaue="0"/>
+</option>
+</allocatable>
+<allocatable id="PORTC_Check">
+<option enabled="true" id="PortnEnable" selection="Disable">
 <item id="Enable" input="" vlaue="0"/>
 <item id="Disable" input="" vlaue="0"/>
 </option>
@@ -1158,7 +1105,7 @@
 </option>
 </allocatable>
 <allocatable id="PORTx2_Item">
-<option enabled="true" id="UseStatus" selection="Unuse">
+<option enabled="true" id="UseStatus" selection="Out">
 <item id="Unuse" input="" vlaue="0"/>
 <item id="In" input="" vlaue="0"/>
 <item id="Out" input="" vlaue="0"/>
@@ -1188,7 +1135,7 @@
 </option>
 </allocatable>
 <allocatable id="PORTx3_Item">
-<option enabled="true" id="UseStatus" selection="Unuse">
+<option enabled="true" id="UseStatus" selection="Out">
 <item id="Unuse" input="" vlaue="0"/>
 <item id="In" input="" vlaue="0"/>
 <item id="Out" input="" vlaue="0"/>
@@ -1278,7 +1225,7 @@
 </option>
 </allocatable>
 <allocatable id="PORTx6_Item">
-<option enabled="true" id="UseStatus" selection="Unuse">
+<option enabled="true" id="UseStatus" selection="Out">
 <item id="Unuse" input="" vlaue="0"/>
 <item id="In" input="" vlaue="0"/>
 <item id="Out" input="" vlaue="0"/>
@@ -1308,7 +1255,7 @@
 </option>
 </allocatable>
 <allocatable id="PORTx7_Item">
-<option enabled="true" id="UseStatus" selection="Unuse">
+<option enabled="true" id="UseStatus" selection="Out">
 <item id="Unuse" input="" vlaue="0"/>
 <item id="In" input="" vlaue="0"/>
 <item id="Out" input="" vlaue="0"/>
@@ -1396,7 +1343,7 @@
 <item id="Disable" input="" vlaue="0"/>
 </option>
 </allocatable>
-<osocket id="PORTINFO" value=";P40_O;P41_O;P42_O;P43_O;P44_O;P45_O;P46_O;P47_O;PC4_O;PD4_O;PD5_O;"/>
+<osocket id="PORTINFO" value=";P40_O;P41_O;P42_O;P43_O;P44_O;P45_O;P46_O;P47_O;PD4_O;PD5_O;PD6_O;PD7_O;PD3_O;PD2_O;P52_O;"/>
 </allocatable>
 <component description="This software component provides configurations for General Purpose Input/Output. Common features such as reading, writing, and setting the direction of ports and pins can be configured. Enabling features such as open-drain outputs and internal pull-ups are also supported. " detailDescription="" display="Ports" id="com.renesas.smc.tools.swcomponent.codegenerator.port" version="2.3.0"/>
 <allocator channelLevel0="" channelLevel1="" channelLevel2="" channelLevel3="" channelLevel4="" channelLevel5="" description="Input output configuration of PORT" display="PORT" id="com.renesas.smc.tools.swcomponent.codegenerator.port.rx130.PORT" type="">
@@ -2265,128 +2212,6 @@
 </allocator>
 <source description="Code generator components provide peripheral drivers with customized generated source geared towards small code size" display="Code Generator" id="com.renesas.smc.tools.swcomponent.codegenerator.source"/>
 </configuration>
-<configuration id="57e4d049-737c-47fb-b5dd-a6af558bb3c4" inuse="true" name="Config_SCI1_Display">
-<allocatable id="SCI1">
-<isocket id="CountingClockB" selection="Clock.tool_clock_pclkb" value="3.2E7"/>
-<option enabled="true" id="BitEdge" selection="FallEdge">
-<item id="LowLevel" input="" vlaue="0"/>
-<item id="FallEdge" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="DataLength" selection="8Bits">
-<item id="9Bits" input="" vlaue="0"/>
-<item id="8Bits" input="" vlaue="0"/>
-<item id="7Bits" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="Parity" selection="Even">
-<item id="None" input="" vlaue="0"/>
-<item id="Even" input="" vlaue="0"/>
-<item id="Odd" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="StopBit" selection="1Bit">
-<item id="1Bit" input="" vlaue="0"/>
-<item id="2Bits" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="TransDir" selection="LSB">
-<item id="LSB" input="" vlaue="0"/>
-<item id="MSB" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="TransClock" selection="Internal">
-<item id="Internal" input="" vlaue="0"/>
-<item id="External" input="" vlaue="0"/>
-</option>
-<option enabled="false" id="BaseClk" selection="16Cyl">
-<item id="16Cyl" input="" vlaue="0"/>
-<item id="8Cyl" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="Bitrate" selection="FreeValue">
-<item id="FreeValue" input="115200" vlaue="9600"/>
-<item id="9600" input="9600" vlaue="0"/>
-<item id="19200" input="19200" vlaue="0"/>
-<item id="31250" input="31250" vlaue="0"/>
-<item id="38400" input="38400" vlaue="0"/>
-<item id="75000" input="75000" vlaue="0"/>
-<item id="150000" input="150000" vlaue="0"/>
-<item id="325000" input="325000" vlaue="0"/>
-<item id="375000" input="375000" vlaue="0"/>
-</option>
-<option enabled="true" id="DutyCorrection" selection="Enable">
-<item id="Enable" input="" vlaue="0"/>
-<item id="Disable" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="SCKPinFun" selection="SckUnuse">
-<item id="SckUnuse" input="" vlaue="0"/>
-<item id="ClkOut" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="NoiseFilt" selection="Disable">
-<item id="Enable" input="" vlaue="0"/>
-<item id="Disable" input="" vlaue="0"/>
-</option>
-<option enabled="false" id="FiltClk" selection="Div1">
-<item id="Div1" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="FlowControl" selection="None">
-<item id="None" input="" vlaue="0"/>
-<item id="CTS" input="" vlaue="0"/>
-<item id="RTS" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="TransDataHandle" selection="ISR">
-<item id="ISR" input="" vlaue="0"/>
-<item id="DTC" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="RecvDataHandle" selection="ISR">
-<item id="ISR" input="" vlaue="0"/>
-<item id="DTC" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="ERIEnable" selection="Enable">
-<item id="Enable" input="" vlaue="0"/>
-<item id="Disable" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="ERIPriority" selection="Level6">
-<item id="Level0" input="" vlaue="0"/>
-<item id="Level1" input="" vlaue="0"/>
-<item id="Level2" input="" vlaue="0"/>
-<item id="Level3" input="" vlaue="0"/>
-<item id="Level4" input="" vlaue="0"/>
-<item id="Level5" input="" vlaue="0"/>
-<item id="Level6" input="" vlaue="0"/>
-<item id="Level7" input="" vlaue="0"/>
-<item id="Level8" input="" vlaue="0"/>
-<item id="Level9" input="" vlaue="0"/>
-<item id="Level10" input="" vlaue="0"/>
-<item id="Level11" input="" vlaue="0"/>
-<item id="Level12" input="" vlaue="0"/>
-<item id="Level13" input="" vlaue="0"/>
-<item id="Level14" input="" vlaue="0"/>
-<item id="Level15" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="TransEnd" selection="Enable">
-<item id="Enable" input="" vlaue="0"/>
-<item id="Disable" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="RecvEnd" selection="Enable">
-<item id="Enable" input="" vlaue="0"/>
-<item id="Disable" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="RecvError" selection="Enable">
-<item id="Enable" input="" vlaue="0"/>
-<item id="Disable" input="" vlaue="0"/>
-</option>
-</allocatable>
-<component description="This software component provides configurations for SCI(SCIF) single(multi-processor) asynchronous mode." detailDescription="" display="SCI/SCIF Asynchronous Mode" id="com.renesas.smc.tools.swcomponent.codegenerator.sciasyncmode" version="1.11.0"/>
-<allocator channelLevel0="1" channelLevel1="" channelLevel2="" channelLevel3="" channelLevel4="" channelLevel5="" description="SCI channel 1" display="SCI1" id="com.renesas.smc.tools.swcomponent.codegenerator.sciasync.rx130.sci1" type="SCI">
-<context>
-<option enabled="true" id="Mode" selection="BothMode">
-<item enabled="true" id="TransMode"/>
-<item enabled="true" id="RecvMode"/>
-<item enabled="true" id="BothMode"/>
-<item enabled="true" id="MultiTransMode"/>
-<item enabled="true" id="MultiRecvMode"/>
-<item enabled="true" id="MultiBothMode"/>
-</option>
-</context>
-</allocator>
-<source description="Code generator components provide peripheral drivers with customized generated source geared towards small code size" display="Code Generator" id="com.renesas.smc.tools.swcomponent.codegenerator.source"/>
-</configuration>
 <configuration id="5a2575e6-cf33-4f9c-b745-195a524be5fd" inuse="true" name="Config_RSPI0_Shunt">
 <allocatable id="RSPI0">
 <allocatable id="RSPI_CMD0">
@@ -2571,7 +2396,291 @@
 </allocator>
 <source description="Code generator components provide peripheral drivers with customized generated source geared towards small code size" display="Code Generator" id="com.renesas.smc.tools.swcomponent.codegenerator.source"/>
 </configuration>
-<configuration id="b519147d-c868-47da-9734-6a408ed72db4" inuse="true" name="Config_RIIC0_PWR">
+<configuration id="912cb49a-90de-4933-8f52-30f5a5fb6b0e" inuse="true" name="Config_SCI6_USB">
+<allocatable id="SCI6">
+<isocket id="CountingClockB" selection="Clock.tool_clock_pclkb" value="3.2E7"/>
+<option enabled="true" id="BitEdge" selection="LowLevel">
+<item id="LowLevel" input="" vlaue="0"/>
+<item id="FallEdge" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="DataLength" selection="8Bits">
+<item id="9Bits" input="" vlaue="0"/>
+<item id="8Bits" input="" vlaue="0"/>
+<item id="7Bits" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="Parity" selection="None">
+<item id="None" input="" vlaue="0"/>
+<item id="Even" input="" vlaue="0"/>
+<item id="Odd" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="StopBit" selection="1Bit">
+<item id="1Bit" input="" vlaue="0"/>
+<item id="2Bits" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="TransDir" selection="LSB">
+<item id="LSB" input="" vlaue="0"/>
+<item id="MSB" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="TransClock" selection="Internal">
+<item id="Internal" input="" vlaue="0"/>
+<item id="External" input="" vlaue="0"/>
+<item id="TMRClk" input="" vlaue="0"/>
+</option>
+<option enabled="false" id="BaseClk" selection="16Cyl">
+<item id="16Cyl" input="" vlaue="0"/>
+<item id="8Cyl" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="Bitrate" selection="FreeValue">
+<item id="FreeValue" input="1500000" vlaue="9600"/>
+<item id="9600" input="9600" vlaue="0"/>
+<item id="19200" input="19200" vlaue="0"/>
+<item id="31250" input="31250" vlaue="0"/>
+<item id="38400" input="38400" vlaue="0"/>
+<item id="75000" input="75000" vlaue="0"/>
+<item id="150000" input="150000" vlaue="0"/>
+<item id="325000" input="325000" vlaue="0"/>
+<item id="375000" input="375000" vlaue="0"/>
+</option>
+<option enabled="true" id="DutyCorrection" selection="Enable">
+<item id="Enable" input="" vlaue="0"/>
+<item id="Disable" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="SCKPinFun" selection="SckUnuse">
+<item id="SckUnuse" input="" vlaue="0"/>
+<item id="ClkOut" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="NoiseFilt" selection="Disable">
+<item id="Enable" input="" vlaue="0"/>
+<item id="Disable" input="" vlaue="0"/>
+</option>
+<option enabled="false" id="FiltClk" selection="Div1">
+<item id="Div1" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="FlowControl" selection="None">
+<item id="None" input="" vlaue="0"/>
+<item id="CTS" input="" vlaue="0"/>
+<item id="RTS" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="TransDataHandle" selection="ISR">
+<item id="ISR" input="" vlaue="0"/>
+<item id="DTC" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="RecvDataHandle" selection="ISR">
+<item id="ISR" input="" vlaue="0"/>
+<item id="DTC" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="ERIEnable" selection="Enable">
+<item id="Enable" input="" vlaue="0"/>
+<item id="Disable" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="ERIPriority" selection="Level5">
+<item id="Level0" input="" vlaue="0"/>
+<item id="Level1" input="" vlaue="0"/>
+<item id="Level2" input="" vlaue="0"/>
+<item id="Level3" input="" vlaue="0"/>
+<item id="Level4" input="" vlaue="0"/>
+<item id="Level5" input="" vlaue="0"/>
+<item id="Level6" input="" vlaue="0"/>
+<item id="Level7" input="" vlaue="0"/>
+<item id="Level8" input="" vlaue="0"/>
+<item id="Level9" input="" vlaue="0"/>
+<item id="Level10" input="" vlaue="0"/>
+<item id="Level11" input="" vlaue="0"/>
+<item id="Level12" input="" vlaue="0"/>
+<item id="Level13" input="" vlaue="0"/>
+<item id="Level14" input="" vlaue="0"/>
+<item id="Level15" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="TransEnd" selection="Enable">
+<item id="Enable" input="" vlaue="0"/>
+<item id="Disable" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="RecvEnd" selection="Enable">
+<item id="Enable" input="" vlaue="0"/>
+<item id="Disable" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="RecvError" selection="Enable">
+<item id="Enable" input="" vlaue="0"/>
+<item id="Disable" input="" vlaue="0"/>
+</option>
+</allocatable>
+<component description="This software component provides configurations for SCI(SCIF) single(multi-processor) asynchronous mode." detailDescription="" display="SCI/SCIF Asynchronous Mode" id="com.renesas.smc.tools.swcomponent.codegenerator.sciasyncmode" version="1.11.0"/>
+<allocator channelLevel0="6" channelLevel1="" channelLevel2="" channelLevel3="" channelLevel4="" channelLevel5="" description="SCI channel 6" display="SCI6" id="com.renesas.smc.tools.swcomponent.codegenerator.sciasync.rx130.sci6" type="SCI">
+<context>
+<option enabled="true" id="Mode" selection="BothMode">
+<item enabled="true" id="TransMode"/>
+<item enabled="true" id="RecvMode"/>
+<item enabled="true" id="BothMode"/>
+<item enabled="true" id="MultiTransMode"/>
+<item enabled="true" id="MultiRecvMode"/>
+<item enabled="true" id="MultiBothMode"/>
+</option>
+</context>
+</allocator>
+<source description="Code generator components provide peripheral drivers with customized generated source geared towards small code size" display="Code Generator" id="com.renesas.smc.tools.swcomponent.codegenerator.source"/>
+</configuration>
+<configuration inuse="true" name="r_bsp">
+<component description="Dependencies : None&#10;The r_bsp package provides a foundation for code to be built on top of. It provides startup code, iodefines, and MCU information for different boards. There are 2 folders that make up the r_bsp package. The 'mcu' folder contains files that are common to a MCU group. These files provide functionality such as easy register access, CPU functions, and a file named 'mcu_info.h' for each MCU group. The 'mcu_info.h' file has information about the MCU on the board and is configured based on the information given in r_bsp_config.h. The information in 'mcu_info.h' is used to help configure Renesas middleware that uses the r_bsp package. The 'board' folder has a folder with startup code for each supported board.  Which MCU and board is chosen is decided by the settings in 'platform.h'. The user can choose which board they are using by uncommenting the include path that applies to their board. For example, if you are using the RSK+RX64M then you would uncomment the #include &quot;./board/generic_rx64m/r_bsp.h&quot; include path. Users are encouraged to add their own boards to the 'board' directory. BSPs are configured by using the r_bsp_config.h file. Each board will have a reference configuration file named r_bsp_config_reference.h. The user should copy this file to their project, rename it to r_bsp_config.h, and use the options inside the file to configure the BSP for their project." detailDescription="Board Support Packages." display="r_bsp" id="r_bsp6.20" version="6.20">
+<gridItem id="BSP_CFG_USER_STACK_ENABLE" selectedIndex="1"/>
+<gridItem id="BSP_CFG_USTACK_BYTES" selectedIndex="0x400"/>
+<gridItem id="BSP_CFG_ISTACK_BYTES" selectedIndex="0x200"/>
+<gridItem id="BSP_CFG_HEAP_BYTES" selectedIndex="0x400"/>
+<gridItem id="BSP_CFG_IO_LIB_ENABLE" selectedIndex="0"/>
+<gridItem id="BSP_CFG_USER_CHARGET_ENABLED" selectedIndex="0"/>
+<gridItem id="BSP_CFG_USER_CHARGET_FUNCTION" selectedIndex="my_sw_charget_function"/>
+<gridItem id="BSP_CFG_USER_CHARPUT_ENABLED" selectedIndex="0"/>
+<gridItem id="BSP_CFG_USER_CHARPUT_FUNCTION" selectedIndex="my_sw_charput_function"/>
+<gridItem id="BSP_CFG_RUN_IN_USER_MODE" selectedIndex="0"/>
+<gridItem id="BSP_CFG_ID_CODE_LONG_1" selectedIndex="0xFFFFFFFF"/>
+<gridItem id="BSP_CFG_ID_CODE_LONG_2" selectedIndex="0xFFFFFFFF"/>
+<gridItem id="BSP_CFG_ID_CODE_LONG_3" selectedIndex="0xFFFFFFFF"/>
+<gridItem id="BSP_CFG_ID_CODE_LONG_4" selectedIndex="0xFFFFFFFF"/>
+<gridItem id="BSP_CFG_USER_LOCKING_ENABLED" selectedIndex="0"/>
+<gridItem id="BSP_CFG_USER_LOCKING_TYPE" selectedIndex="bsp_lock_t"/>
+<gridItem id="BSP_CFG_USER_LOCKING_HW_LOCK_FUNCTION" selectedIndex="my_hw_locking_function"/>
+<gridItem id="BSP_CFG_USER_LOCKING_HW_UNLOCK_FUNCTION" selectedIndex="my_hw_unlocking_function"/>
+<gridItem id="BSP_CFG_USER_LOCKING_SW_LOCK_FUNCTION" selectedIndex="my_sw_locking_function"/>
+<gridItem id="BSP_CFG_USER_LOCKING_SW_UNLOCK_FUNCTION" selectedIndex="my_sw_unlocking_function"/>
+<gridItem id="BSP_CFG_USER_WARM_START_CALLBACK_PRE_INITC_ENABLED" selectedIndex="0"/>
+<gridItem id="BSP_CFG_USER_WARM_START_PRE_C_FUNCTION" selectedIndex="my_sw_warmstart_prec_function"/>
+<gridItem id="BSP_CFG_USER_WARM_START_CALLBACK_POST_INITC_ENABLED" selectedIndex="0"/>
+<gridItem id="BSP_CFG_USER_WARM_START_POST_C_FUNCTION" selectedIndex="my_sw_warmstart_postc_function"/>
+<gridItem id="BSP_CFG_PARAM_CHECKING_ENABLE" selectedIndex="1"/>
+<gridItem id="BSP_CFG_FIT_IPL_MAX" selectedIndex="15"/>
+<gridItem id="BSP_CFG_SWINT_UNIT1_ENABLE" selectedIndex="0"/>
+<gridItem id="BSP_CFG_SWINT_TASK_BUFFER_NUMBER" selectedIndex="8"/>
+<gridItem id="BSP_CFG_SWINT_IPR_INITIAL_VALUE" selectedIndex="1"/>
+<gridItem id="BSP_CFG_SCI_UART_TERMINAL_ENABLE" selectedIndex="0"/>
+<gridItem id="BSP_CFG_SCI_UART_TERMINAL_CHANNEL" selectedIndex="1"/>
+<gridItem id="BSP_CFG_SCI_UART_TERMINAL_BITRATE" selectedIndex="115200"/>
+<gridItem id="BSP_CFG_SCI_UART_TERMINAL_INTERRUPT_PRIORITY" selectedIndex="15"/>
+</component>
+<source description="Components supporting Firmware Integration Technology" display="Firmware Integration Technology" id="com.renesas.smc.tools.swcomponent.fit.source"/>
+<source description="Components supporting Firmware Integration Technology" display="Firmware Integration Technology" id="com.renesas.smc.tools.swcomponent.fit.source"/>
+</configuration>
+<configuration id="57e4d049-737c-47fb-b5dd-a6af558bb3c4" inuse="true" name="Config_SCI1_BLE">
+<allocatable id="SCI1">
+<isocket id="CountingClockB" selection="Clock.tool_clock_pclkb" value="3.2E7"/>
+<option enabled="true" id="BitEdge" selection="FallEdge">
+<item id="LowLevel" input="" vlaue="0"/>
+<item id="FallEdge" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="DataLength" selection="8Bits">
+<item id="9Bits" input="" vlaue="0"/>
+<item id="8Bits" input="" vlaue="0"/>
+<item id="7Bits" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="Parity" selection="Even">
+<item id="None" input="" vlaue="0"/>
+<item id="Even" input="" vlaue="0"/>
+<item id="Odd" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="StopBit" selection="1Bit">
+<item id="1Bit" input="" vlaue="0"/>
+<item id="2Bits" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="TransDir" selection="LSB">
+<item id="LSB" input="" vlaue="0"/>
+<item id="MSB" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="TransClock" selection="Internal">
+<item id="Internal" input="" vlaue="0"/>
+<item id="External" input="" vlaue="0"/>
+</option>
+<option enabled="false" id="BaseClk" selection="16Cyl">
+<item id="16Cyl" input="" vlaue="0"/>
+<item id="8Cyl" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="Bitrate" selection="FreeValue">
+<item id="FreeValue" input="9600" vlaue="9600"/>
+<item id="9600" input="9600" vlaue="0"/>
+<item id="19200" input="19200" vlaue="0"/>
+<item id="31250" input="31250" vlaue="0"/>
+<item id="38400" input="38400" vlaue="0"/>
+<item id="75000" input="75000" vlaue="0"/>
+<item id="150000" input="150000" vlaue="0"/>
+<item id="325000" input="325000" vlaue="0"/>
+<item id="375000" input="375000" vlaue="0"/>
+</option>
+<option enabled="true" id="DutyCorrection" selection="Enable">
+<item id="Enable" input="" vlaue="0"/>
+<item id="Disable" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="SCKPinFun" selection="SckUnuse">
+<item id="SckUnuse" input="" vlaue="0"/>
+<item id="ClkOut" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="NoiseFilt" selection="Disable">
+<item id="Enable" input="" vlaue="0"/>
+<item id="Disable" input="" vlaue="0"/>
+</option>
+<option enabled="false" id="FiltClk" selection="Div1">
+<item id="Div1" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="FlowControl" selection="None">
+<item id="None" input="" vlaue="0"/>
+<item id="CTS" input="" vlaue="0"/>
+<item id="RTS" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="TransDataHandle" selection="ISR">
+<item id="ISR" input="" vlaue="0"/>
+<item id="DTC" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="RecvDataHandle" selection="ISR">
+<item id="ISR" input="" vlaue="0"/>
+<item id="DTC" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="ERIEnable" selection="Enable">
+<item id="Enable" input="" vlaue="0"/>
+<item id="Disable" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="ERIPriority" selection="Level6">
+<item id="Level0" input="" vlaue="0"/>
+<item id="Level1" input="" vlaue="0"/>
+<item id="Level2" input="" vlaue="0"/>
+<item id="Level3" input="" vlaue="0"/>
+<item id="Level4" input="" vlaue="0"/>
+<item id="Level5" input="" vlaue="0"/>
+<item id="Level6" input="" vlaue="0"/>
+<item id="Level7" input="" vlaue="0"/>
+<item id="Level8" input="" vlaue="0"/>
+<item id="Level9" input="" vlaue="0"/>
+<item id="Level10" input="" vlaue="0"/>
+<item id="Level11" input="" vlaue="0"/>
+<item id="Level12" input="" vlaue="0"/>
+<item id="Level13" input="" vlaue="0"/>
+<item id="Level14" input="" vlaue="0"/>
+<item id="Level15" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="TransEnd" selection="Enable">
+<item id="Enable" input="" vlaue="0"/>
+<item id="Disable" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="RecvEnd" selection="Enable">
+<item id="Enable" input="" vlaue="0"/>
+<item id="Disable" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="RecvError" selection="Enable">
+<item id="Enable" input="" vlaue="0"/>
+<item id="Disable" input="" vlaue="0"/>
+</option>
+</allocatable>
+<component description="This software component provides configurations for SCI(SCIF) single(multi-processor) asynchronous mode." detailDescription="" display="SCI/SCIF Asynchronous Mode" id="com.renesas.smc.tools.swcomponent.codegenerator.sciasyncmode" version="1.11.0"/>
+<allocator channelLevel0="1" channelLevel1="" channelLevel2="" channelLevel3="" channelLevel4="" channelLevel5="" description="SCI channel 1" display="SCI1" id="com.renesas.smc.tools.swcomponent.codegenerator.sciasync.rx130.sci1" type="SCI">
+<context>
+<option enabled="true" id="Mode" selection="BothMode">
+<item enabled="true" id="TransMode"/>
+<item enabled="true" id="RecvMode"/>
+<item enabled="true" id="BothMode"/>
+<item enabled="true" id="MultiTransMode"/>
+<item enabled="true" id="MultiRecvMode"/>
+<item enabled="true" id="MultiBothMode"/>
+</option>
+</context>
+</allocator>
+<source description="Code generator components provide peripheral drivers with customized generated source geared towards small code size" display="Code Generator" id="com.renesas.smc.tools.swcomponent.codegenerator.source"/>
+</configuration>
+<configuration id="b519147d-c868-47da-9734-6a408ed72db4" inuse="true" name="Config_RIIC0">
 <allocatable id="RIIC0">
 <isocket id="CountingClock" selection="Clock.tool_clock_pclkb" value="3.2E7"/>
 <option enabled="true" id="Bitrate" selection="FreeValue">
@@ -2759,168 +2868,6 @@
 </context>
 </allocator>
 <source description="Code generator components provide peripheral drivers with customized generated source geared towards small code size" display="Code Generator" id="com.renesas.smc.tools.swcomponent.codegenerator.source"/>
-</configuration>
-<configuration id="912cb49a-90de-4933-8f52-30f5a5fb6b0e" inuse="true" name="Config_SCI6_USB">
-<allocatable id="SCI6">
-<isocket id="CountingClockB" selection="Clock.tool_clock_pclkb" value="3.2E7"/>
-<option enabled="true" id="BitEdge" selection="LowLevel">
-<item id="LowLevel" input="" vlaue="0"/>
-<item id="FallEdge" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="DataLength" selection="8Bits">
-<item id="9Bits" input="" vlaue="0"/>
-<item id="8Bits" input="" vlaue="0"/>
-<item id="7Bits" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="Parity" selection="None">
-<item id="None" input="" vlaue="0"/>
-<item id="Even" input="" vlaue="0"/>
-<item id="Odd" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="StopBit" selection="1Bit">
-<item id="1Bit" input="" vlaue="0"/>
-<item id="2Bits" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="TransDir" selection="LSB">
-<item id="LSB" input="" vlaue="0"/>
-<item id="MSB" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="TransClock" selection="Internal">
-<item id="Internal" input="" vlaue="0"/>
-<item id="External" input="" vlaue="0"/>
-<item id="TMRClk" input="" vlaue="0"/>
-</option>
-<option enabled="false" id="BaseClk" selection="16Cyl">
-<item id="16Cyl" input="" vlaue="0"/>
-<item id="8Cyl" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="Bitrate" selection="FreeValue">
-<item id="FreeValue" input="1500000" vlaue="9600"/>
-<item id="9600" input="9600" vlaue="0"/>
-<item id="19200" input="19200" vlaue="0"/>
-<item id="31250" input="31250" vlaue="0"/>
-<item id="38400" input="38400" vlaue="0"/>
-<item id="75000" input="75000" vlaue="0"/>
-<item id="150000" input="150000" vlaue="0"/>
-<item id="325000" input="325000" vlaue="0"/>
-<item id="375000" input="375000" vlaue="0"/>
-</option>
-<option enabled="true" id="DutyCorrection" selection="Enable">
-<item id="Enable" input="" vlaue="0"/>
-<item id="Disable" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="SCKPinFun" selection="SckUnuse">
-<item id="SckUnuse" input="" vlaue="0"/>
-<item id="ClkOut" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="NoiseFilt" selection="Disable">
-<item id="Enable" input="" vlaue="0"/>
-<item id="Disable" input="" vlaue="0"/>
-</option>
-<option enabled="false" id="FiltClk" selection="Div1">
-<item id="Div1" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="FlowControl" selection="None">
-<item id="None" input="" vlaue="0"/>
-<item id="CTS" input="" vlaue="0"/>
-<item id="RTS" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="TransDataHandle" selection="ISR">
-<item id="ISR" input="" vlaue="0"/>
-<item id="DTC" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="RecvDataHandle" selection="ISR">
-<item id="ISR" input="" vlaue="0"/>
-<item id="DTC" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="ERIEnable" selection="Enable">
-<item id="Enable" input="" vlaue="0"/>
-<item id="Disable" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="ERIPriority" selection="Level5">
-<item id="Level0" input="" vlaue="0"/>
-<item id="Level1" input="" vlaue="0"/>
-<item id="Level2" input="" vlaue="0"/>
-<item id="Level3" input="" vlaue="0"/>
-<item id="Level4" input="" vlaue="0"/>
-<item id="Level5" input="" vlaue="0"/>
-<item id="Level6" input="" vlaue="0"/>
-<item id="Level7" input="" vlaue="0"/>
-<item id="Level8" input="" vlaue="0"/>
-<item id="Level9" input="" vlaue="0"/>
-<item id="Level10" input="" vlaue="0"/>
-<item id="Level11" input="" vlaue="0"/>
-<item id="Level12" input="" vlaue="0"/>
-<item id="Level13" input="" vlaue="0"/>
-<item id="Level14" input="" vlaue="0"/>
-<item id="Level15" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="TransEnd" selection="Enable">
-<item id="Enable" input="" vlaue="0"/>
-<item id="Disable" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="RecvEnd" selection="Enable">
-<item id="Enable" input="" vlaue="0"/>
-<item id="Disable" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="RecvError" selection="Enable">
-<item id="Enable" input="" vlaue="0"/>
-<item id="Disable" input="" vlaue="0"/>
-</option>
-</allocatable>
-<component description="This software component provides configurations for SCI(SCIF) single(multi-processor) asynchronous mode." detailDescription="" display="SCI/SCIF Asynchronous Mode" id="com.renesas.smc.tools.swcomponent.codegenerator.sciasyncmode" version="1.11.0"/>
-<allocator channelLevel0="6" channelLevel1="" channelLevel2="" channelLevel3="" channelLevel4="" channelLevel5="" description="SCI channel 6" display="SCI6" id="com.renesas.smc.tools.swcomponent.codegenerator.sciasync.rx130.sci6" type="SCI">
-<context>
-<option enabled="true" id="Mode" selection="BothMode">
-<item enabled="true" id="TransMode"/>
-<item enabled="true" id="RecvMode"/>
-<item enabled="true" id="BothMode"/>
-<item enabled="true" id="MultiTransMode"/>
-<item enabled="true" id="MultiRecvMode"/>
-<item enabled="true" id="MultiBothMode"/>
-</option>
-</context>
-</allocator>
-<source description="Code generator components provide peripheral drivers with customized generated source geared towards small code size" display="Code Generator" id="com.renesas.smc.tools.swcomponent.codegenerator.source"/>
-</configuration>
-<configuration inuse="true" name="r_bsp">
-<component description="Dependencies : None&#10;The r_bsp package provides a foundation for code to be built on top of. It provides startup code, iodefines, and MCU information for different boards. There are 2 folders that make up the r_bsp package. The 'mcu' folder contains files that are common to a MCU group. These files provide functionality such as easy register access, CPU functions, and a file named 'mcu_info.h' for each MCU group. The 'mcu_info.h' file has information about the MCU on the board and is configured based on the information given in r_bsp_config.h. The information in 'mcu_info.h' is used to help configure Renesas middleware that uses the r_bsp package. The 'board' folder has a folder with startup code for each supported board.  Which MCU and board is chosen is decided by the settings in 'platform.h'. The user can choose which board they are using by uncommenting the include path that applies to their board. For example, if you are using the RSK+RX64M then you would uncomment the #include &quot;./board/generic_rx64m/r_bsp.h&quot; include path. Users are encouraged to add their own boards to the 'board' directory. BSPs are configured by using the r_bsp_config.h file. Each board will have a reference configuration file named r_bsp_config_reference.h. The user should copy this file to their project, rename it to r_bsp_config.h, and use the options inside the file to configure the BSP for their project." detailDescription="Board Support Packages." display="r_bsp" id="r_bsp6.20" version="6.20">
-<gridItem id="BSP_CFG_USER_STACK_ENABLE" selectedIndex="1"/>
-<gridItem id="BSP_CFG_USTACK_BYTES" selectedIndex="0x400"/>
-<gridItem id="BSP_CFG_ISTACK_BYTES" selectedIndex="0x200"/>
-<gridItem id="BSP_CFG_HEAP_BYTES" selectedIndex="0x400"/>
-<gridItem id="BSP_CFG_IO_LIB_ENABLE" selectedIndex="0"/>
-<gridItem id="BSP_CFG_USER_CHARGET_ENABLED" selectedIndex="0"/>
-<gridItem id="BSP_CFG_USER_CHARGET_FUNCTION" selectedIndex="my_sw_charget_function"/>
-<gridItem id="BSP_CFG_USER_CHARPUT_ENABLED" selectedIndex="0"/>
-<gridItem id="BSP_CFG_USER_CHARPUT_FUNCTION" selectedIndex="my_sw_charput_function"/>
-<gridItem id="BSP_CFG_RUN_IN_USER_MODE" selectedIndex="0"/>
-<gridItem id="BSP_CFG_ID_CODE_LONG_1" selectedIndex="0xFFFFFFFF"/>
-<gridItem id="BSP_CFG_ID_CODE_LONG_2" selectedIndex="0xFFFFFFFF"/>
-<gridItem id="BSP_CFG_ID_CODE_LONG_3" selectedIndex="0xFFFFFFFF"/>
-<gridItem id="BSP_CFG_ID_CODE_LONG_4" selectedIndex="0xFFFFFFFF"/>
-<gridItem id="BSP_CFG_USER_LOCKING_ENABLED" selectedIndex="0"/>
-<gridItem id="BSP_CFG_USER_LOCKING_TYPE" selectedIndex="bsp_lock_t"/>
-<gridItem id="BSP_CFG_USER_LOCKING_HW_LOCK_FUNCTION" selectedIndex="my_hw_locking_function"/>
-<gridItem id="BSP_CFG_USER_LOCKING_HW_UNLOCK_FUNCTION" selectedIndex="my_hw_unlocking_function"/>
-<gridItem id="BSP_CFG_USER_LOCKING_SW_LOCK_FUNCTION" selectedIndex="my_sw_locking_function"/>
-<gridItem id="BSP_CFG_USER_LOCKING_SW_UNLOCK_FUNCTION" selectedIndex="my_sw_unlocking_function"/>
-<gridItem id="BSP_CFG_USER_WARM_START_CALLBACK_PRE_INITC_ENABLED" selectedIndex="0"/>
-<gridItem id="BSP_CFG_USER_WARM_START_PRE_C_FUNCTION" selectedIndex="my_sw_warmstart_prec_function"/>
-<gridItem id="BSP_CFG_USER_WARM_START_CALLBACK_POST_INITC_ENABLED" selectedIndex="0"/>
-<gridItem id="BSP_CFG_USER_WARM_START_POST_C_FUNCTION" selectedIndex="my_sw_warmstart_postc_function"/>
-<gridItem id="BSP_CFG_PARAM_CHECKING_ENABLE" selectedIndex="1"/>
-<gridItem id="BSP_CFG_FIT_IPL_MAX" selectedIndex="15"/>
-<gridItem id="BSP_CFG_SWINT_UNIT1_ENABLE" selectedIndex="0"/>
-<gridItem id="BSP_CFG_SWINT_TASK_BUFFER_NUMBER" selectedIndex="8"/>
-<gridItem id="BSP_CFG_SWINT_IPR_INITIAL_VALUE" selectedIndex="1"/>
-<gridItem id="BSP_CFG_SCI_UART_TERMINAL_ENABLE" selectedIndex="0"/>
-<gridItem id="BSP_CFG_SCI_UART_TERMINAL_CHANNEL" selectedIndex="1"/>
-<gridItem id="BSP_CFG_SCI_UART_TERMINAL_BITRATE" selectedIndex="115200"/>
-<gridItem id="BSP_CFG_SCI_UART_TERMINAL_INTERRUPT_PRIORITY" selectedIndex="15"/>
-</component>
-<source description="Components supporting Firmware Integration Technology" display="Firmware Integration Technology" id="com.renesas.smc.tools.swcomponent.fit.source"/>
-<source description="Components supporting Firmware Integration Technology" display="Firmware Integration Technology" id="com.renesas.smc.tools.swcomponent.fit.source"/>
 </configuration>
 </tool>
 <tool id="System">

@@ -2818,15 +2818,15 @@
                 </file>
             </group>
             <group>
-                <name>Config_RIIC0_PWR</name>
+                <name>Config_RIIC0</name>
                 <file>
-                    <name>$PROJ_DIR$\src\smc_gen\Config_RIIC0_PWR\Config_RIIC0_PWR.c</name>
+                    <name>$PROJ_DIR$\src\smc_gen\Config_RIIC0\Config_RIIC0.c</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\src\smc_gen\Config_RIIC0_PWR\Config_RIIC0_PWR.h</name>
+                    <name>$PROJ_DIR$\src\smc_gen\Config_RIIC0\Config_RIIC0.h</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\src\smc_gen\Config_RIIC0_PWR\Config_RIIC0_PWR_user.c</name>
+                    <name>$PROJ_DIR$\src\smc_gen\Config_RIIC0\Config_RIIC0_user.c</name>
                 </file>
             </group>
             <group>
@@ -2854,15 +2854,15 @@
                 </file>
             </group>
             <group>
-                <name>Config_SCI1_Display</name>
+                <name>Config_SCI1_BLE</name>
                 <file>
-                    <name>$PROJ_DIR$\src\smc_gen\Config_SCI1_Display\Config_SCI1_Display.c</name>
+                    <name>$PROJ_DIR$\src\smc_gen\Config_SCI1_BLE\Config_SCI1_BLE.c</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\src\smc_gen\Config_SCI1_Display\Config_SCI1_Display.h</name>
+                    <name>$PROJ_DIR$\src\smc_gen\Config_SCI1_BLE\Config_SCI1_BLE.h</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\src\smc_gen\Config_SCI1_Display\Config_SCI1_Display_user.c</name>
+                    <name>$PROJ_DIR$\src\smc_gen\Config_SCI1_BLE\Config_SCI1_BLE_user.c</name>
                 </file>
             </group>
             <group>
@@ -3198,10 +3198,10 @@
         <name>$PROJ_DIR$\spi_shunt.c</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\uart_cellmodule.c</name>
+        <name>$PROJ_DIR$\uart_ble.c</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\uart_display.c</name>
+        <name>$PROJ_DIR$\uart_cellmodule.c</name>
     </file>
     <file>
         <name>$PROJ_DIR$\uart_usb.c</name>

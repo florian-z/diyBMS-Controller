@@ -39,10 +39,10 @@ Includes
 #include "Config_SCI8_CellModule.h"
 #include "Config_SCI5_CellModule.h"
 #include "Config_SCI0_CellModule.h"
-#include "Config_SCI1_Display.h"
 #include "Config_RSPI0_Shunt.h"
-#include "Config_RIIC0_PWR.h"
 #include "Config_SCI6_USB.h"
+#include "Config_SCI1_BLE.h"
+#include "Config_RIIC0.h"
 
 /***********************************************************************************************************************
 Macro definitions (Register bit)

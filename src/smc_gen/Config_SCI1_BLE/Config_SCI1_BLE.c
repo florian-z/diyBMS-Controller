@@ -18,10 +18,10 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name        : Config_SCI1_Display.c
+* File Name        : Config_SCI1_BLE.c
 * Component Version: 1.11.0
 * Device(s)        : R5F51308AxFP
-* Description      : This file implements device driver for Config_SCI1_Display.
+* Description      : This file implements device driver for Config_SCI1_BLE.
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -34,7 +34,7 @@ Pragma directive
 Includes
 ***********************************************************************************************************************/
 #include "r_cg_macrodriver.h"
-#include "Config_SCI1_Display.h"
+#include "Config_SCI1_BLE.h"
 /* Start user code for include. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
@@ -51,13 +51,13 @@ volatile uint16_t  g_sci1_rx_length;                  /* SCI1 receive data lengt
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
-* Function Name: R_Config_SCI1_Display_Create
+* Function Name: R_Config_SCI1_BLE_Create
 * Description  : This function initializes the SCI1 channel
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
 
-void R_Config_SCI1_Display_Create(void)
+void R_Config_SCI1_BLE_Create(void)
 {
     /* Cancel SCI stop state */
     MSTP(SCI1) = 0U;
@@ -76,16 +76,16 @@ void R_Config_SCI1_Display_Create(void)
     SCI1.SPMR.BYTE = _00_SCI_RTS | _00_SCI_CLOCK_NOT_INVERTED | _00_SCI_CLOCK_NOT_DELAYED;
 
     /* Set control registers */
-    SCI1.SMR.BYTE = _01_SCI_CLOCK_PCLK_4 | _00_SCI_MULTI_PROCESSOR_DISABLE | _00_SCI_STOP_1 | _00_SCI_PARITY_EVEN | 
+    SCI1.SMR.BYTE = _00_SCI_CLOCK_PCLK | _00_SCI_MULTI_PROCESSOR_DISABLE | _00_SCI_STOP_1 | _00_SCI_PARITY_EVEN | 
                     _20_SCI_PARITY_ENABLE | _00_SCI_DATA_LENGTH_8 | _00_SCI_ASYNCHRONOUS_OR_I2C_MODE;
     SCI1.SCMR.BYTE = _00_SCI_SERIAL_MODE | _00_SCI_DATA_INVERT_NONE | _00_SCI_DATA_LSB_FIRST | 
                      _10_SCI_DATA_LENGTH_8_OR_7 | _62_SCI_SCMR_DEFAULT;
-    SCI1.SEMR.BYTE = _04_SCI_BIT_MODULATION_ENABLE | _10_SCI_8_BASE_CLOCK | _00_SCI_NOISE_FILTER_DISABLE | 
+    SCI1.SEMR.BYTE = _04_SCI_BIT_MODULATION_ENABLE | _00_SCI_16_BASE_CLOCK | _00_SCI_NOISE_FILTER_DISABLE | 
                      _00_SCI_BAUDRATE_SINGLE | _80_SCI_FALLING_EDGE_START_BIT;
 
     /* Set bit rate */
-    SCI1.BRR = 0x02U;
-    SCI1.MDDR = 0xB1U;
+    SCI1.BRR = 0x3AU;
+    SCI1.MDDR = 0x91U;
 
     /* Set RXD1 pin */
     MPC.P15PFS.BYTE = 0x0AU;
@@ -96,17 +96,17 @@ void R_Config_SCI1_Display_Create(void)
     PORT1.PODR.BYTE |= 0x40U;
     PORT1.PDR.BYTE |= 0x40U;
 
-    R_Config_SCI1_Display_Create_UserInit();
+    R_Config_SCI1_BLE_Create_UserInit();
 }
 
 /***********************************************************************************************************************
-* Function Name: R_Config_SCI1_Display_Start
+* Function Name: R_Config_SCI1_BLE_Start
 * Description  : This function starts the SCI1 channel
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
 
-void R_Config_SCI1_Display_Start(void)
+void R_Config_SCI1_BLE_Start(void)
 {
     /* Clear interrupt flag */
     IR(SCI1, TXI1) = 0U;
@@ -120,13 +120,13 @@ void R_Config_SCI1_Display_Start(void)
 }
 
 /***********************************************************************************************************************
-* Function Name: R_Config_SCI1_Display_Stop
+* Function Name: R_Config_SCI1_BLE_Stop
 * Description  : This function stops the SCI1 channel
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
 
-void R_Config_SCI1_Display_Stop(void)
+void R_Config_SCI1_BLE_Stop(void)
 {
     /* Set TXD1 pin */
     PORT1.PMR.BYTE &= 0xBFU;
@@ -149,7 +149,7 @@ void R_Config_SCI1_Display_Stop(void)
 }
 
 /***********************************************************************************************************************
-* Function Name: R_Config_SCI1_Display_Serial_Receive
+* Function Name: R_Config_SCI1_BLE_Serial_Receive
 * Description  : This function receives SCI1data
 * Arguments    : rx_buf -
 *                    receive buffer pointer (Not used when receive data handled by DTC)
@@ -159,7 +159,7 @@ void R_Config_SCI1_Display_Stop(void)
 *                    MD_OK or MD_ARGERROR
 ***********************************************************************************************************************/
 
-MD_STATUS R_Config_SCI1_Display_Serial_Receive(uint8_t * const rx_buf, uint16_t rx_num)
+MD_STATUS R_Config_SCI1_BLE_Serial_Receive(uint8_t * const rx_buf, uint16_t rx_num)
 {
     MD_STATUS status = MD_OK;
 
@@ -180,7 +180,7 @@ MD_STATUS R_Config_SCI1_Display_Serial_Receive(uint8_t * const rx_buf, uint16_t 
 }
 
 /***********************************************************************************************************************
-* Function Name: R_Config_SCI1_Display_Serial_Send
+* Function Name: R_Config_SCI1_BLE_Serial_Send
 * Description  : This function transmits SCI1data
 * Arguments    : tx_buf -
 *                    transfer buffer pointer (Not used when transmit data handled by DTC)
@@ -190,7 +190,7 @@ MD_STATUS R_Config_SCI1_Display_Serial_Receive(uint8_t * const rx_buf, uint16_t 
 *                    MD_OK or MD_ARGERROR
 ***********************************************************************************************************************/
 
-MD_STATUS R_Config_SCI1_Display_Serial_Send(uint8_t * const tx_buf, uint16_t tx_num)
+MD_STATUS R_Config_SCI1_BLE_Serial_Send(uint8_t * const tx_buf, uint16_t tx_num)
 {
     MD_STATUS status = MD_OK;
 
