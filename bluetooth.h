@@ -4,7 +4,24 @@
 #include "main.h"
 #include "r_cg_userdefine.h"
 
-void bluetooth_init();
+typedef enum
+{
+    Read_Local_Info_0x01,
+    Reset_0x02,
+    Read_Status_0x03
+} ble_cmd_t;
 
+#define BLE_SYNC_WORD   0xAA
+typedef struct
+{
+    uint8_t start;          // static sync word
+    uint16_t len;           // only op_code + params
+    uint8_t op_code;
+    uint8_t* params;
+    uint8_t crc;            // sum of bytes (len + op_code + params) -> &0xff -> -1 -> bit inverse
+} ble_gmf_t;
+
+void bluetooth_init();
+void send_cmd(ble_cmd_t ble_cmd);
 
 #endif /* __bluetooth_h__ */

@@ -81,8 +81,8 @@ int main(void)
                     /// SPI shunt tests END
 
 
-
-                    send_message_ble("disp uart test\n");
+                    send_ble_cmd(Read_Local_Info_0x01);
+                    //send_message_ble("disp uart test\n");
 
                     //print_cellmodule_full_debug();
                     //print_shunt_full_debug();
