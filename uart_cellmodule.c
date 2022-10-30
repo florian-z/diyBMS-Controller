@@ -168,6 +168,10 @@ void process_message_cellmodule()
             /* last step: free buffer */
             memset((uint8_t*)cellmodule_process_buf[chain_no], '\0', RX_BUF_CELLMODULE);
         }
+        else
+        {
+            /* buffer is empty -> nothing to do here */
+        }
     }
 }
 

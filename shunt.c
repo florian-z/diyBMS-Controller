@@ -56,7 +56,7 @@ static shunt_t shunt_data = {0};
 
 void shunt_init()
 {
-    //OUT_SPI_nMSS_OFF; // set CS off
+    // CS on shunt-IC always on (nCS always low)
 
 //    // set CONFIG
 //    {
