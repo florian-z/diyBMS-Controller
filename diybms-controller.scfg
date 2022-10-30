@@ -2138,7 +2138,7 @@
 <item id="8Bits" input="" vlaue="0"/>
 <item id="7Bits" input="" vlaue="0"/>
 </option>
-<option enabled="true" id="Parity" selection="Even">
+<option enabled="true" id="Parity" selection="None">
 <item id="None" input="" vlaue="0"/>
 <item id="Even" input="" vlaue="0"/>
 <item id="Odd" input="" vlaue="0"/>
@@ -2160,7 +2160,7 @@
 <item id="8Cyl" input="" vlaue="0"/>
 </option>
 <option enabled="true" id="Bitrate" selection="FreeValue">
-<item id="FreeValue" input="9600" vlaue="9600"/>
+<item id="FreeValue" input="115200" vlaue="9600"/>
 <item id="9600" input="9600" vlaue="0"/>
 <item id="19200" input="19200" vlaue="0"/>
 <item id="31250" input="31250" vlaue="0"/>
