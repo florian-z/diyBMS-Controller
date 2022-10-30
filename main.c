@@ -8,7 +8,6 @@
 #include "cellmodule_data.h"
 #include "bluetooth.h"
 #include "shunt.h"
-#include "pcf8574_pwr.h"
 
 void charger_logic(void);
 void led_test(void);
@@ -27,8 +26,14 @@ int main(void)
     log("Booting... :)\n");
 
     // set safe defaults for relais
-    RELAIS_BALANCER_ON
-    RELAIS_HEAT_OFF
+    OUT_CHARGER_DOOR_OFF
+    OUT_CHARGER_LOAD_OFF
+    OUT_HEATER_LATCH_OFF_CURR
+    OUT_BAL_LATCH_OFF_CURR
+    MAINTAIN_WATCHDOG
+    R_BSP_SoftwareDelay(50, BSP_DELAY_MILLISECS);
+    OUT_HEATER_LATCH_OFF_IDLE
+    OUT_BAL_LATCH_OFF_IDLE
 
     register_nmi_interrupt_handler();
     R_Config_TMR0_TMR1_Start(); // start timer tick
@@ -56,7 +61,7 @@ int main(void)
             {
                 /* 4 Hz */
                 LED_GE1_TGL
-                send_message_pwr_tick();
+                //send_message_pwr_tick();
 
 
                 if (count_10ms >= 100)
@@ -68,7 +73,7 @@ int main(void)
                     calc_cellmodule_data();
                     charger_logic();
 
-                    //shunt_tick();
+                    shunt_tick();
 
                     /// SPI shunt tests
                     //OUT_SPI_nMSS_ON
@@ -79,18 +84,18 @@ int main(void)
 
                     send_message_ble("disp uart test\n");
 
-                    print_cellmodule_full_debug();
-                    print_shunt_full_debug();
+                    //print_cellmodule_full_debug();
+                    //print_shunt_full_debug();
 
 
 
 
-                    send_message_cellmodule("!0100*01\n"); // temp_c 1Hz
+                    //send_message_cellmodule("!0100*01\n"); // temp_c 1Hz
                 }
                 else
                 {
                     /* 4 Hz, but only triggers if 1 Hz part is not executed */
-                    send_message_cellmodule("!0000*00\n"); // u_batt_mv ca. 3Hz
+                    //send_message_cellmodule("!0000*00\n"); // u_batt_mv ca. 3Hz
                 }
             }
 
@@ -99,6 +104,7 @@ int main(void)
         process_message_usb();
         process_message_cellmodule();
         process_message_ble();
+        process_message_shunt();
     }
 }
 
@@ -110,6 +116,11 @@ void charger_logic()
     static bool line_pwr_state = false;
     static bool heater_active_state = false;
     static bool charger_active_state = false;
+/// ensure relais IDLE is reached
+    OUT_BAL_LATCH_OFF_IDLE
+    OUT_BAL_LATCH_ON_IDLE
+    OUT_HEATER_LATCH_OFF_IDLE
+    OUT_HEATER_LATCH_ON_IDLE
 /// check line power active
     if (IN_SIGNAL_LINE_PWR)
     {
@@ -120,7 +131,8 @@ void charger_logic()
             log("LINE DETECT LATCH ON\n");
             line_pwr_state = true;
             // ensure balancer is on, when car is on
-            RELAIS_BALANCER_ON
+            OUT_BAL_LATCH_OFF_IDLE
+            OUT_BAL_LATCH_ON_CURR
         }
         // check need for heating
         if (check_temp_should_use_heater() && check_age_ticks_u_batt_and_temp_allowed())
@@ -128,14 +140,16 @@ void charger_logic()
             if (!heater_active_state)
             {
                 log("HEATER LATCH ON\n");
-                RELAIS_HEAT_ON
+                OUT_HEATER_LATCH_OFF_IDLE
+                OUT_HEATER_LATCH_ON_CURR
                 heater_active_state = true;
             }
         } else {
             if (heater_active_state)
             {
                 log("HEATER LATCH OFF\n");
-                RELAIS_HEAT_OFF
+                OUT_HEATER_LATCH_ON_IDLE
+                OUT_HEATER_LATCH_OFF_CURR
                 heater_active_state = false;
             }
         }
@@ -171,7 +185,8 @@ void charger_logic()
             line_pwr_state = false;
             log("LINE DETECT LATCH OFF\n");
             charger_active_state = false;
-            RELAIS_HEAT_OFF
+            OUT_HEATER_LATCH_ON_IDLE
+            OUT_HEATER_LATCH_OFF_CURR
             OUT_CHARGER_LOAD_OFF
             OUT_CHARGER_DOOR_OFF
         }
@@ -187,7 +202,8 @@ void charger_logic()
             log("KL15 DETECT LATCH ON\n");
             kl15_pwr_state = true;
             // ensure balancer is on, when car is on
-            RELAIS_BALANCER_ON
+            OUT_BAL_LATCH_OFF_IDLE
+            OUT_BAL_LATCH_ON_CURR // TODO ensure IDLE is reached
         }
     } else {
         // no KL15

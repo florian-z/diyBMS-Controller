@@ -63,7 +63,7 @@ void R_Config_SCI6_USB_Create(void)
     MSTP(SCI6) = 0U;
 
     /* Set interrupt priority */
-    IPR(SCI6, TXI6) = _05_SCI_PRIORITY_LEVEL5;
+    IPR(SCI6, TXI6) = _0E_SCI_PRIORITY_LEVEL14;
 
     /* Clear the control register */
     SCI6.SCR.BYTE = 0x00U;

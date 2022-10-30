@@ -454,7 +454,7 @@ Configuration Options
 
 /* This macro is used to define the voltage that is supplied to the MCU (Vcc). This macro is defined in millivolts. This
    macro does not actually change anything on the MCU. Some FIT modules need this information so it is defined here. */
-#define BSP_CFG_MCU_VCC_MV                          (3300) /* Generated value. Do not edit this manually */
+#define BSP_CFG_MCU_VCC_MV                          (5000) /* Generated value. Do not edit this manually */
 
 /* Allow initialization of auto-generated peripheral initialization code by Smart Configurator tool.
    When not using the Smart Configurator, set the value of BSP_CFG_CONFIGURATOR_SELECT to 0.

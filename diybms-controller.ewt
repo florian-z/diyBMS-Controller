@@ -2890,30 +2890,6 @@
                 </file>
             </group>
             <group>
-                <name>Config_SCI8_CellModule</name>
-                <file>
-                    <name>$PROJ_DIR$\src\smc_gen\Config_SCI8_CellModule\Config_SCI8_CellModule.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\src\smc_gen\Config_SCI8_CellModule\Config_SCI8_CellModule.h</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\src\smc_gen\Config_SCI8_CellModule\Config_SCI8_CellModule_user.c</name>
-                </file>
-            </group>
-            <group>
-                <name>Config_SCI9_CellModule</name>
-                <file>
-                    <name>$PROJ_DIR$\src\smc_gen\Config_SCI9_CellModule\Config_SCI9_CellModule.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\src\smc_gen\Config_SCI9_CellModule\Config_SCI9_CellModule.h</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\src\smc_gen\Config_SCI9_CellModule\Config_SCI9_CellModule_user.c</name>
-                </file>
-            </group>
-            <group>
                 <name>Config_TMR0_TMR1</name>
                 <file>
                     <name>$PROJ_DIR$\src\smc_gen\Config_TMR0_TMR1\Config_TMR0_TMR1.c</name>
@@ -3189,13 +3165,7 @@
         <name>$PROJ_DIR$\messages.c</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\pcf8574_pwr.c</name>
-    </file>
-    <file>
         <name>$PROJ_DIR$\shunt.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\spi_shunt.c</name>
     </file>
     <file>
         <name>$PROJ_DIR$\uart_ble.c</name>

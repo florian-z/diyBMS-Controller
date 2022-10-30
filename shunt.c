@@ -54,9 +54,16 @@
 
 static shunt_t shunt_data = {0};
 
+
+uint16_t rx_data[SHUNT_LEN] = {0};
+uint16_t tx_data[SHUNT_LEN] = {0};
+static volatile bool ready_for_transmit = false;
+static volatile bool ready_for_process = false;
+
 void shunt_init()
 {
     // CS on shunt-IC always on (nCS always low)
+    ready_for_transmit = true;
 
 //    // set CONFIG
 //    {
@@ -97,7 +104,6 @@ void shunt_init()
 //    }
 }
 
-
 float read_vshunt();
 float read_vbus();
 float read_dietemp();
@@ -107,6 +113,22 @@ float read_energy();
 float read_charge();
 void shunt_tick()
 {
+    GLOBAL_INT_STORE_AND_DISABLE
+    if (!ready_for_transmit)
+    {
+        GLOBAL_INT_RESTORE
+        return;
+    }
+    else
+    {
+        ready_for_transmit = false;
+        GLOBAL_INT_RESTORE
+    }
+
+    memset(tx_data, 0x00, SHUNT_LEN);
+    memset(rx_data, 0x00, SHUNT_LEN);
+
+// TODO impl. round robin
 //    read_vshunt();
 //    read_vbus();
     read_dietemp();
@@ -116,11 +138,11 @@ void shunt_tick()
 //    read_charge();
 }
 
-static uint16_t rx_data[3] = {0};
+
 void log_shunt()
 {
-    float tmp = ((int16_t)rx_data[0])*7.8125e-3;
-    log_va("shunt RESULT TEMP    %04X        %f degC\n", rx_data[0], tmp);
+    float tmp = ((int16_t)(((rx_data[1]&0xff)<<8)|rx_data[2]&0xff))*7.8125e-3;
+    log_va("shunt RESULT TEMP    %04X %04X %04X       %f degC\n", rx_data[0], rx_data[1], rx_data[2], tmp);
 }
 
 
@@ -129,9 +151,8 @@ float read_vshunt()
     // returns mV
     // 312.5 nV/LSB when ADCRANGE = 0
     // 78.125 nV/LSB when ADCRANGE = 1
-    uint16_t tx_data = { ADDR_VSHUNT | ADDR_READ };
-    uint16_t rx_data[2] = {0};
-	R_Config_RSPI0_Shunt_Send_Receive(&tx_data, 1, rx_data);
+    tx_data[0] = ADDR_VSHUNT | ADDR_READ;
+	R_Config_RSPI0_Shunt_Send_Receive(tx_data, 1, rx_data);
     shunt_data.vshunt = ((int32_t)((rx_data[0]<<16 | rx_data[1])>>3))*78.125e-6;
     log_va("shunt VSHUNT  %04X %04X   %fV\n", rx_data[0], rx_data[1], shunt_data.vshunt);
     return shunt_data.vshunt;
@@ -142,9 +163,8 @@ float read_vbus()
     // returns V
     // 195.3125 μV/LSB
     // 2.13 correction factor for VBUS resistor-devider
-    uint16_t tx_data = { ADDR_VBUS | ADDR_READ };
-    uint16_t rx_data[2] = {0};
-	R_Config_RSPI0_Shunt_Send_Receive(&tx_data, 1, rx_data);
+    tx_data[0] = ADDR_VBUS | ADDR_READ;
+	R_Config_RSPI0_Shunt_Send_Receive(tx_data, 1, rx_data);
     shunt_data.vbus = ((int32_t)((rx_data[0]<<16 | rx_data[1])>>3))*195.3125e-6*2.13;
     log_va("shunt VBUS    %04X %04X   %fV\n", rx_data[0], rx_data[1], shunt_data.vbus);
     return shunt_data.vbus;
@@ -154,11 +174,15 @@ float read_dietemp()
 {
     // returns °C
     // 7.8125 m°C/LSB
-    uint16_t tx_data = { ADDR_DIETEMP | ADDR_READ };
+    //tx_data[0] = ADDR_DIETEMP | ADDR_READ;
+    tx_data[0] = 0x0019;
 
-	R_Config_RSPI0_Shunt_Send_Receive(&tx_data, 3, rx_data);
-    shunt_data.dietemp = ((int16_t)rx_data[0])*7.8125e-3;
-    log_va("shunt TEMP    %04X        %f degC\n", rx_data[0], shunt_data.dietemp);
+
+	R_Config_RSPI0_Shunt_Send_Receive(tx_data, 3, rx_data);
+
+
+    //shunt_data.dietemp = ((int16_t)rx_data[0])*7.8125e-3;
+    //log_va("shunt TEMP    %04X %04X %04X       %f degC\n", rx_data[0], rx_data[1], rx_data[2], shunt_data.dietemp);
     return shunt_data.dietemp;
 }
 
@@ -166,9 +190,8 @@ float read_current()
 {
     // returns A
     // CURRENT_LSB
-	uint16_t tx_data = { ADDR_CURRENT | ADDR_READ };
-    uint16_t rx_data[2] = {0};
-	R_Config_RSPI0_Shunt_Send_Receive(&tx_data, 1, rx_data);
+	tx_data[0] = ADDR_CURRENT | ADDR_READ;
+	R_Config_RSPI0_Shunt_Send_Receive(tx_data, 1, rx_data);
     shunt_data.current = ((int32_t)((rx_data[0]<<16 | rx_data[1])>>3))*CURRENT_LSB;
     log_va("shunt CURRENT %04X %04X   %fA\n", rx_data[0], rx_data[1], shunt_data.current);
     return shunt_data.current;
@@ -179,9 +202,8 @@ float read_power()
     // returns W
     // CURRENT_LSB * 3.2
     // 2.13 correction factor for VBUS resistor-devider
-	uint16_t tx_data = { ADDR_POWER | ADDR_READ };
-    uint16_t rx_data[2] = {0};
-	R_Config_RSPI0_Shunt_Send_Receive(&tx_data, 1, rx_data);
+	tx_data[0] = ADDR_POWER | ADDR_READ;
+	R_Config_RSPI0_Shunt_Send_Receive(tx_data, 1, rx_data);
     shunt_data.power = ((uint32_t)(rx_data[0]<<16 | rx_data[1]))*CURRENT_LSB*3.2*2.13;
     log_va("shunt POWER   %04X %04X   %fW\n", rx_data[0], rx_data[1], shunt_data.power);
     return shunt_data.power;
@@ -192,9 +214,8 @@ float read_energy()
     // returns Wh
     // CURRENT_LSB * 3.2 * 16
     // 2.13 correction factor for VBUS resistor-devider
-	uint16_t tx_data = { ADDR_ENERGY | ADDR_READ };
-    uint16_t rx_data[3] = {0};
-	R_Config_RSPI0_Shunt_Send_Receive(&tx_data, 1, rx_data);
+	tx_data[0] = ADDR_ENERGY | ADDR_READ;
+	R_Config_RSPI0_Shunt_Send_Receive(tx_data, 1, rx_data);
     shunt_data.energy = (((rx_data[0]*65536 + rx_data[1])*65536) + rx_data[2])*CURRENT_LSB*3.2*16*2.13;
     log_va("shunt ENERGY  %04X %04X %04X  %fWs\n", rx_data[0], rx_data[1], rx_data[2], shunt_data.energy);
     return shunt_data.energy;
@@ -204,13 +225,36 @@ float read_charge()
 {
     // returns Ah
     // CURRENT_LSB
-	uint16_t tx_data = { ADDR_CHARGE | ADDR_READ };
-    uint16_t rx_data[3] = {0};
-	R_Config_RSPI0_Shunt_Send_Receive(&tx_data, 1, rx_data);
+	tx_data[0] = ADDR_CHARGE | ADDR_READ;
+	R_Config_RSPI0_Shunt_Send_Receive(tx_data, 1, rx_data);
     shunt_data.charge = (((rx_data[0]*65536 + rx_data[1])*65536) + rx_data[2])*CURRENT_LSB;
     log_va("shunt CHARGE  %04X %04X %04X  %fAs\n", rx_data[0], rx_data[1], rx_data[2], shunt_data.charge);
     return shunt_data.charge;
 }
+
+
+void pass_message_shunt()
+{
+    ready_for_process = true;
+}
+
+void process_message_shunt()
+{
+    if (ready_for_process)
+    {
+        switch(rx_data[0]&~0x03) // ignore lowest two bits (b1 always zero, b0 r/w flag)
+        {
+            case ADDR_DIETEMP:
+                log("SHUNT recv DIETEMP\n");
+                log_va("shunt TEMP    %04X %04X %04X       %f degC\n", rx_data[0], rx_data[1], rx_data[2], shunt_data.dietemp);
+                break;
+        }
+
+        ready_for_transmit = true;
+        ready_for_process = false;
+    }
+}
+
 
 void print_shunt_full_debug()
 {

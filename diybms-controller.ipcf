@@ -10,8 +10,6 @@
     <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_SCI1_BLE</path>
     <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_SCI5_CellModule</path>
     <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_SCI6_USB</path>
-    <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_SCI8_CellModule</path>
-    <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_SCI9_CellModule</path>
     <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_TMR0_TMR1</path>
     <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\general</path>
     <path>C:\Projekte\Forschung\diybms-controller\src\smc_gen\r_bsp</path>
@@ -153,36 +151,6 @@
     <group name ="">
         <group name ="Config_SCI6_USB">
             <path>.\src\smc_gen\Config_SCI6_USB\Config_SCI6_USB_user.c</path>
-        </group>
-    </group>
-    <group name ="">
-        <group name ="Config_SCI8_CellModule">
-            <path>.\src\smc_gen\Config_SCI8_CellModule\Config_SCI8_CellModule.c</path>
-        </group>
-    </group>
-    <group name ="">
-        <group name ="Config_SCI8_CellModule">
-            <path>.\src\smc_gen\Config_SCI8_CellModule\Config_SCI8_CellModule.h</path>
-        </group>
-    </group>
-    <group name ="">
-        <group name ="Config_SCI8_CellModule">
-            <path>.\src\smc_gen\Config_SCI8_CellModule\Config_SCI8_CellModule_user.c</path>
-        </group>
-    </group>
-    <group name ="">
-        <group name ="Config_SCI9_CellModule">
-            <path>.\src\smc_gen\Config_SCI9_CellModule\Config_SCI9_CellModule.c</path>
-        </group>
-    </group>
-    <group name ="">
-        <group name ="Config_SCI9_CellModule">
-            <path>.\src\smc_gen\Config_SCI9_CellModule\Config_SCI9_CellModule.h</path>
-        </group>
-    </group>
-    <group name ="">
-        <group name ="Config_SCI9_CellModule">
-            <path>.\src\smc_gen\Config_SCI9_CellModule\Config_SCI9_CellModule_user.c</path>
         </group>
     </group>
     <group name ="">

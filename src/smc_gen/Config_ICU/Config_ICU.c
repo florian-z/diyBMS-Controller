@@ -87,10 +87,10 @@ void R_Config_ICU_Create(void)
     ICU.IRQFLTE0.BYTE |= (_02_ICU_IRQ1_FILTER_ENABLE | _04_ICU_IRQ2_FILTER_ENABLE);
 
     /* Set IRQ1 priority level */
-    IPR(ICU,IRQ1) = _0F_ICU_PRIORITY_LEVEL15;
+    IPR(ICU,IRQ1) = _08_ICU_PRIORITY_LEVEL8;
 
     /* Set IRQ2 priority level */
-    IPR(ICU,IRQ2) = _0F_ICU_PRIORITY_LEVEL15;
+    IPR(ICU,IRQ2) = _08_ICU_PRIORITY_LEVEL8;
 
     R_Config_ICU_Create_UserInit();
 }

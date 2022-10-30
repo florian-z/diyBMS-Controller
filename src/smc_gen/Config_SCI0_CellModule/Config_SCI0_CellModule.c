@@ -63,7 +63,7 @@ void R_Config_SCI0_CellModule_Create(void)
     MSTP(SCI0) = 0U;
 
     /* Set interrupt priority */
-    IPR(SCI0, TXI0) = _0E_SCI_PRIORITY_LEVEL14;
+    IPR(SCI0, TXI0) = _0D_SCI_PRIORITY_LEVEL13;
 
     /* Clear the control register */
     SCI0.SCR.BYTE = 0x00U;

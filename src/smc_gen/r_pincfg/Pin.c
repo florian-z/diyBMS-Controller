@@ -93,14 +93,6 @@ void R_Pins_Create(void)
     MPC.PD1PFS.BYTE = 0x0BU;
     PORTD.PMR.BYTE |= 0x02U;
 
-    /* Set RXD8 pin */
-    MPC.PC6PFS.BYTE = 0x0AU;
-    PORTC.PMR.BYTE |= 0x40U;
-
-    /* Set RXD9 pin */
-    MPC.PB6PFS.BYTE = 0x0AU;
-    PORTB.PMR.BYTE |= 0x40U;
-
     /* Set RXD12 pin */
     MPC.PE2PFS.BYTE = 0x0CU;
     PORTE.PMR.BYTE |= 0x04U;
@@ -136,18 +128,6 @@ void R_Pins_Create(void)
     MPC.PD0PFS.BYTE = 0x0BU;
     PORTD.PDR.BYTE |= 0x01U;
     // PORTD.PMR.BIT.B0 = 1U; // Please set the PMR bit after TE bit is set to 1.
-
-    /* Set TXD8 pin */
-    PORTC.PODR.BYTE |= 0x80U;
-    MPC.PC7PFS.BYTE = 0x0AU;
-    PORTC.PDR.BYTE |= 0x80U;
-    // PORTC.PMR.BIT.B7 = 1U; // Please set the PMR bit after TE bit is set to 1.
-
-    /* Set TXD9 pin */
-    PORTB.PODR.BYTE |= 0x80U;
-    MPC.PB7PFS.BYTE = 0x0AU;
-    PORTB.PDR.BYTE |= 0x80U;
-    // PORTB.PMR.BIT.B7 = 1U; // Please set the PMR bit after TE bit is set to 1.
 
     /* Set TXD12 pin */
     PORTE.PODR.BYTE |= 0x02U;

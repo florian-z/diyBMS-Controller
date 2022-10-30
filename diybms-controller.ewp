@@ -359,6 +359,9 @@
                     <state>$PROJ_DIR$</state>
                     <state>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_RIIC0</state>
                     <state>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_SCI1_BLE</state>
+                    <state>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_SCI9_Shunt</state>
+                    <state>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_DTC_SCI_RXI9</state>
+                    <state>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_DTC_SCI_TXI9</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -1412,6 +1415,9 @@
                     <state>C:\Projekte\forschung\diybms-controller\src\smc_gen\r_pincfg</state>
                     <state>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_RIIC0</state>
                     <state>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_SCI1_BLE</state>
+                    <state>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_SCI9_Shunt</state>
+                    <state>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_DTC_SCI_RXI9</state>
+                    <state>C:\Projekte\Forschung\diybms-controller\src\smc_gen\Config_DTC_SCI_TXI9</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -2223,30 +2229,6 @@
                 </file>
             </group>
             <group>
-                <name>Config_SCI8_CellModule</name>
-                <file>
-                    <name>$PROJ_DIR$\src\smc_gen\Config_SCI8_CellModule\Config_SCI8_CellModule.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\src\smc_gen\Config_SCI8_CellModule\Config_SCI8_CellModule.h</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\src\smc_gen\Config_SCI8_CellModule\Config_SCI8_CellModule_user.c</name>
-                </file>
-            </group>
-            <group>
-                <name>Config_SCI9_CellModule</name>
-                <file>
-                    <name>$PROJ_DIR$\src\smc_gen\Config_SCI9_CellModule\Config_SCI9_CellModule.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\src\smc_gen\Config_SCI9_CellModule\Config_SCI9_CellModule.h</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\src\smc_gen\Config_SCI9_CellModule\Config_SCI9_CellModule_user.c</name>
-                </file>
-            </group>
-            <group>
                 <name>Config_TMR0_TMR1</name>
                 <file>
                     <name>$PROJ_DIR$\src\smc_gen\Config_TMR0_TMR1\Config_TMR0_TMR1.c</name>
@@ -2260,6 +2242,9 @@
             </group>
             <group>
                 <name>general</name>
+                <file>
+                    <name>$PROJ_DIR$\src\smc_gen\general\r_cg_dtc.h</name>
+                </file>
                 <file>
                     <name>$PROJ_DIR$\src\smc_gen\general\r_cg_hardware_setup.c</name>
                 </file>
@@ -2522,13 +2507,7 @@
         <name>$PROJ_DIR$\messages.c</name>
     </file>
     <file>
-        <name>$PROJ_DIR$\pcf8574_pwr.c</name>
-    </file>
-    <file>
         <name>$PROJ_DIR$\shunt.c</name>
-    </file>
-    <file>
-        <name>$PROJ_DIR$\spi_shunt.c</name>
     </file>
     <file>
         <name>$PROJ_DIR$\uart_ble.c</name>

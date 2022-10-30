@@ -38,14 +38,12 @@ Includes
 #include "Config_TMR0_TMR1.h"
 #include "Config_PORT.h"
 #include "Config_ICU.h"
-#include "Config_SCI9_CellModule.h"
-#include "Config_SCI8_CellModule.h"
 #include "Config_SCI5_CellModule.h"
 #include "Config_SCI0_CellModule.h"
-#include "Config_RSPI0_Shunt.h"
 #include "Config_SCI6_USB.h"
 #include "Config_SCI1_BLE.h"
 #include "Config_RIIC0.h"
+#include "Config_RSPI0_Shunt.h"
 #include "r_smc_cgc.h"
 #include "r_smc_interrupt.h"
 /* Start user code for include. Do not edit comment generated here */
@@ -98,14 +96,12 @@ void R_Systeminit(void)
     R_Config_IWDT_Create();
     R_Config_TMR0_TMR1_Create();
     R_Config_ICU_Create();
-    R_Config_SCI9_CellModule_Create();
-    R_Config_SCI8_CellModule_Create();
     R_Config_SCI5_CellModule_Create();
     R_Config_SCI0_CellModule_Create();
-    R_Config_RSPI0_Shunt_Create();
     R_Config_SCI6_USB_Create();
     R_Config_SCI1_BLE_Create();
     R_Config_RIIC0_Create();
+    R_Config_RSPI0_Shunt_Create();
 
     /* Register undefined interrupt */
     R_BSP_InterruptWrite(BSP_INT_SRC_UNDEFINED_INTERRUPT,(bsp_int_cb_t)r_undefined_exception);

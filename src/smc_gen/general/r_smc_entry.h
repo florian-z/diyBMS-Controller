@@ -35,14 +35,12 @@ Includes
 #include "Config_TMR0_TMR1.h"
 #include "Config_PORT.h"
 #include "Config_ICU.h"
-#include "Config_SCI9_CellModule.h"
-#include "Config_SCI8_CellModule.h"
 #include "Config_SCI5_CellModule.h"
 #include "Config_SCI0_CellModule.h"
-#include "Config_RSPI0_Shunt.h"
 #include "Config_SCI6_USB.h"
 #include "Config_SCI1_BLE.h"
 #include "Config_RIIC0.h"
+#include "Config_RSPI0_Shunt.h"
 
 /***********************************************************************************************************************
 Macro definitions (Register bit)

@@ -20,7 +20,7 @@
 </general>
 <tool id="Clock">
 <option enabled="true" id="vccinput" selection="textinputitem">
-<item enabled="true" id="textinputitem" input="3.3" value="3.300"/>
+<item enabled="true" id="textinputitem" input="5" value="5.000"/>
 </option>
 <option enabled="true" id="mainclockenable" selection="uncheck">
 <item enabled="true" id="check"/>
@@ -207,8 +207,8 @@
 <Item currentVect="62" id="CTSU_CTSUFN" priority="15" usedState="Not Use"/>
 <Item currentVect="63" id="RTC_CUP" priority="15" usedState="Not Use"/>
 <Item currentVect="64" id="ICU_IRQ0" priority="15" usedState="Not Use"/>
-<Item currentVect="65" id="ICU_IRQ1" priority="15" usedState="Used"/>
-<Item currentVect="66" id="ICU_IRQ2" priority="15" usedState="Used"/>
+<Item currentVect="65" id="ICU_IRQ1" priority="8" usedState="Used"/>
+<Item currentVect="66" id="ICU_IRQ2" priority="8" usedState="Used"/>
 <Item currentVect="67" id="ICU_IRQ3" priority="15" usedState="Not Use"/>
 <Item currentVect="68" id="ICU_IRQ4" priority="15" usedState="Not Use"/>
 <Item currentVect="69" id="ICU_IRQ5" priority="15" usedState="Not Use"/>
@@ -266,30 +266,30 @@
 <Item currentVect="183" id="TMR3_CMIA3" priority="15" usedState="Not Use"/>
 <Item currentVect="184" id="TMR3_CMIB3" priority="15" usedState="Not Use"/>
 <Item currentVect="185" id="TMR3_OVI3" priority="15" usedState="Not Use"/>
-<Item currentVect="214" id="SCI0_ERI0" priority="14" usedState="Used"/>
-<Item currentVect="215" id="SCI0_RXI0" priority="14" usedState="Used"/>
-<Item currentVect="216" id="SCI0_TXI0" priority="14" usedState="Used"/>
-<Item currentVect="217" id="SCI0_TEI0" priority="14" usedState="Used"/>
+<Item currentVect="214" id="SCI0_ERI0" priority="13" usedState="Used"/>
+<Item currentVect="215" id="SCI0_RXI0" priority="13" usedState="Used"/>
+<Item currentVect="216" id="SCI0_TXI0" priority="13" usedState="Used"/>
+<Item currentVect="217" id="SCI0_TEI0" priority="13" usedState="Used"/>
 <Item currentVect="218" id="SCI1_ERI1" priority="6" usedState="Used"/>
 <Item currentVect="219" id="SCI1_RXI1" priority="6" usedState="Used"/>
 <Item currentVect="220" id="SCI1_TXI1" priority="6" usedState="Used"/>
 <Item currentVect="221" id="SCI1_TEI1" priority="6" usedState="Used"/>
-<Item currentVect="222" id="SCI5_ERI5" priority="14" usedState="Used"/>
-<Item currentVect="223" id="SCI5_RXI5" priority="14" usedState="Used"/>
-<Item currentVect="224" id="SCI5_TXI5" priority="14" usedState="Used"/>
-<Item currentVect="225" id="SCI5_TEI5" priority="14" usedState="Used"/>
-<Item currentVect="226" id="SCI6_ERI6" priority="5" usedState="Used"/>
-<Item currentVect="227" id="SCI6_RXI6" priority="5" usedState="Used"/>
-<Item currentVect="228" id="SCI6_TXI6" priority="5" usedState="Used"/>
-<Item currentVect="229" id="SCI6_TEI6" priority="5" usedState="Used"/>
-<Item currentVect="230" id="SCI8_ERI8" priority="14" usedState="Used"/>
-<Item currentVect="231" id="SCI8_RXI8" priority="14" usedState="Used"/>
-<Item currentVect="232" id="SCI8_TXI8" priority="14" usedState="Used"/>
-<Item currentVect="233" id="SCI8_TEI8" priority="14" usedState="Used"/>
-<Item currentVect="234" id="SCI9_ERI9" priority="14" usedState="Used"/>
-<Item currentVect="235" id="SCI9_RXI9" priority="14" usedState="Used"/>
-<Item currentVect="236" id="SCI9_TXI9" priority="14" usedState="Used"/>
-<Item currentVect="237" id="SCI9_TEI9" priority="14" usedState="Used"/>
+<Item currentVect="222" id="SCI5_ERI5" priority="13" usedState="Used"/>
+<Item currentVect="223" id="SCI5_RXI5" priority="13" usedState="Used"/>
+<Item currentVect="224" id="SCI5_TXI5" priority="13" usedState="Used"/>
+<Item currentVect="225" id="SCI5_TEI5" priority="13" usedState="Used"/>
+<Item currentVect="226" id="SCI6_ERI6" priority="14" usedState="Used"/>
+<Item currentVect="227" id="SCI6_RXI6" priority="14" usedState="Used"/>
+<Item currentVect="228" id="SCI6_TXI6" priority="14" usedState="Used"/>
+<Item currentVect="229" id="SCI6_TEI6" priority="14" usedState="Used"/>
+<Item currentVect="230" id="SCI8_ERI8" priority="15" usedState="Not Use"/>
+<Item currentVect="231" id="SCI8_RXI8" priority="15" usedState="Not Use"/>
+<Item currentVect="232" id="SCI8_TXI8" priority="15" usedState="Not Use"/>
+<Item currentVect="233" id="SCI8_TEI8" priority="15" usedState="Not Use"/>
+<Item currentVect="234" id="SCI9_ERI9" priority="15" usedState="Not Use"/>
+<Item currentVect="235" id="SCI9_RXI9" priority="15" usedState="Not Use"/>
+<Item currentVect="236" id="SCI9_TXI9" priority="15" usedState="Not Use"/>
+<Item currentVect="237" id="SCI9_TEI9" priority="15" usedState="Not Use"/>
 <Item currentVect="238" id="SCI12_ERI12" priority="15" usedState="Not Use"/>
 <Item currentVect="239" id="SCI12_RXI12" priority="15" usedState="Not Use"/>
 <Item currentVect="240" id="SCI12_TXI12" priority="15" usedState="Not Use"/>
@@ -329,8 +329,6 @@
 <pinItem allocation="50" comments="" direction="None" id="RXD5" isUsedBySoftware="true" locked="false" status="0"/>
 <pinItem allocation="27" comments="" direction="None" id="RXD0" isUsedBySoftware="true" locked="false" status="0"/>
 <pinItem allocation="31" comments="" direction="None" id="RXD1" isUsedBySoftware="true" locked="false" status="0"/>
-<pinItem allocation="46" comments="" direction="None" id="RXD8" isUsedBySoftware="true" locked="false" status="0"/>
-<pinItem allocation="54" comments="" direction="None" id="RXD9" isUsedBySoftware="true" locked="false" status="0"/>
 <pinItem allocation="85" comments="" direction="None" id="RXD6" isUsedBySoftware="true" locked="false" status="0"/>
 <pinItem allocation="10" comments="" direction="None" id="RES#" isUsedBySoftware="false" locked="false" status="0"/>
 <pinItem allocation="64" comments="" direction="None" id="MOSIA" isUsedBySoftware="true" locked="false" status="0"/>
@@ -338,8 +336,6 @@
 <pinItem allocation="49" comments="" direction="None" id="TXD5" isUsedBySoftware="true" locked="false" status="0"/>
 <pinItem allocation="30" comments="" direction="None" id="TXD1" isUsedBySoftware="true" locked="false" status="0"/>
 <pinItem allocation="28" comments="" direction="None" id="TXD0" isUsedBySoftware="true" locked="false" status="0"/>
-<pinItem allocation="53" comments="" direction="None" id="TXD9" isUsedBySoftware="true" locked="false" status="0"/>
-<pinItem allocation="45" comments="" direction="None" id="TXD8" isUsedBySoftware="true" locked="false" status="0"/>
 <pinItem allocation="76" comments="" direction="None" id="RXD12" isUsedBySoftware="false" locked="false" status="4"/>
 <pinItem allocation="34" comments="" direction="None" id="SCL" isUsedBySoftware="true" locked="false" status="0"/>
 </tool>
@@ -1410,7 +1406,7 @@
 <item id="Div32" input="" vlaue="0"/>
 <item id="Div64" input="" vlaue="0"/>
 </option>
-<option enabled="false" id="IrqPriority" selection="Level15">
+<option enabled="false" id="IrqPriority" selection="Level8">
 <item id="Level0" input="" vlaue="0"/>
 <item id="Level1" input="" vlaue="0"/>
 <item id="Level2" input="" vlaue="0"/>
@@ -1448,7 +1444,7 @@
 <item id="Div32" input="" vlaue="0"/>
 <item id="Div64" input="" vlaue="0"/>
 </option>
-<option enabled="false" id="IrqPriority" selection="Level15">
+<option enabled="false" id="IrqPriority" selection="Level8">
 <item id="Level0" input="" vlaue="0"/>
 <item id="Level1" input="" vlaue="0"/>
 <item id="Level2" input="" vlaue="0"/>
@@ -1723,250 +1719,6 @@
 </allocator>
 <source description="Code generator components provide peripheral drivers with customized generated source geared towards small code size" display="Code Generator" id="com.renesas.smc.tools.swcomponent.codegenerator.source"/>
 </configuration>
-<configuration id="9bba2599-1c66-47ae-a965-f4230fa01b6d" inuse="true" name="Config_SCI9_CellModule">
-<allocatable id="SCI9">
-<isocket id="CountingClockB" selection="Clock.tool_clock_pclkb" value="3.2E7"/>
-<option enabled="true" id="BitEdge" selection="FallEdge">
-<item id="LowLevel" input="" vlaue="0"/>
-<item id="FallEdge" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="DataLength" selection="8Bits">
-<item id="9Bits" input="" vlaue="0"/>
-<item id="8Bits" input="" vlaue="0"/>
-<item id="7Bits" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="Parity" selection="Even">
-<item id="None" input="" vlaue="0"/>
-<item id="Even" input="" vlaue="0"/>
-<item id="Odd" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="StopBit" selection="1Bit">
-<item id="1Bit" input="" vlaue="0"/>
-<item id="2Bits" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="TransDir" selection="LSB">
-<item id="LSB" input="" vlaue="0"/>
-<item id="MSB" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="TransClock" selection="Internal">
-<item id="Internal" input="" vlaue="0"/>
-<item id="External" input="" vlaue="0"/>
-</option>
-<option enabled="false" id="BaseClk" selection="16Cyl">
-<item id="16Cyl" input="" vlaue="0"/>
-<item id="8Cyl" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="Bitrate" selection="FreeValue">
-<item id="FreeValue" input="9600" vlaue="9600"/>
-<item id="9600" input="9600" vlaue="0"/>
-<item id="19200" input="19200" vlaue="0"/>
-<item id="31250" input="31250" vlaue="0"/>
-<item id="38400" input="38400" vlaue="0"/>
-<item id="75000" input="75000" vlaue="0"/>
-<item id="150000" input="150000" vlaue="0"/>
-<item id="325000" input="325000" vlaue="0"/>
-<item id="375000" input="375000" vlaue="0"/>
-</option>
-<option enabled="true" id="DutyCorrection" selection="Enable">
-<item id="Enable" input="" vlaue="0"/>
-<item id="Disable" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="SCKPinFun" selection="SckUnuse">
-<item id="SckUnuse" input="" vlaue="0"/>
-<item id="ClkOut" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="NoiseFilt" selection="Disable">
-<item id="Enable" input="" vlaue="0"/>
-<item id="Disable" input="" vlaue="0"/>
-</option>
-<option enabled="false" id="FiltClk" selection="Div1">
-<item id="Div1" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="FlowControl" selection="None">
-<item id="None" input="" vlaue="0"/>
-<item id="CTS" input="" vlaue="0"/>
-<item id="RTS" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="TransDataHandle" selection="ISR">
-<item id="ISR" input="" vlaue="0"/>
-<item id="DTC" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="RecvDataHandle" selection="ISR">
-<item id="ISR" input="" vlaue="0"/>
-<item id="DTC" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="ERIEnable" selection="Enable">
-<item id="Enable" input="" vlaue="0"/>
-<item id="Disable" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="ERIPriority" selection="Level14">
-<item id="Level0" input="" vlaue="0"/>
-<item id="Level1" input="" vlaue="0"/>
-<item id="Level2" input="" vlaue="0"/>
-<item id="Level3" input="" vlaue="0"/>
-<item id="Level4" input="" vlaue="0"/>
-<item id="Level5" input="" vlaue="0"/>
-<item id="Level6" input="" vlaue="0"/>
-<item id="Level7" input="" vlaue="0"/>
-<item id="Level8" input="" vlaue="0"/>
-<item id="Level9" input="" vlaue="0"/>
-<item id="Level10" input="" vlaue="0"/>
-<item id="Level11" input="" vlaue="0"/>
-<item id="Level12" input="" vlaue="0"/>
-<item id="Level13" input="" vlaue="0"/>
-<item id="Level14" input="" vlaue="0"/>
-<item id="Level15" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="TransEnd" selection="Enable">
-<item id="Enable" input="" vlaue="0"/>
-<item id="Disable" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="RecvEnd" selection="Enable">
-<item id="Enable" input="" vlaue="0"/>
-<item id="Disable" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="RecvError" selection="Enable">
-<item id="Enable" input="" vlaue="0"/>
-<item id="Disable" input="" vlaue="0"/>
-</option>
-</allocatable>
-<component description="This software component provides configurations for SCI(SCIF) single(multi-processor) asynchronous mode." detailDescription="" display="SCI/SCIF Asynchronous Mode" id="com.renesas.smc.tools.swcomponent.codegenerator.sciasyncmode" version="1.11.0"/>
-<allocator channelLevel0="9" channelLevel1="" channelLevel2="" channelLevel3="" channelLevel4="" channelLevel5="" description="SCI channel 9" display="SCI9" id="com.renesas.smc.tools.swcomponent.codegenerator.sciasync.rx130.sci9" type="SCI">
-<context>
-<option enabled="true" id="Mode" selection="BothMode">
-<item enabled="true" id="TransMode"/>
-<item enabled="true" id="RecvMode"/>
-<item enabled="true" id="BothMode"/>
-<item enabled="true" id="MultiTransMode"/>
-<item enabled="true" id="MultiRecvMode"/>
-<item enabled="true" id="MultiBothMode"/>
-</option>
-</context>
-</allocator>
-<source description="Code generator components provide peripheral drivers with customized generated source geared towards small code size" display="Code Generator" id="com.renesas.smc.tools.swcomponent.codegenerator.source"/>
-</configuration>
-<configuration id="0735ef5e-67e8-4897-8465-547357933066" inuse="true" name="Config_SCI8_CellModule">
-<allocatable id="SCI8">
-<isocket id="CountingClockB" selection="Clock.tool_clock_pclkb" value="3.2E7"/>
-<option enabled="true" id="BitEdge" selection="FallEdge">
-<item id="LowLevel" input="" vlaue="0"/>
-<item id="FallEdge" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="DataLength" selection="8Bits">
-<item id="9Bits" input="" vlaue="0"/>
-<item id="8Bits" input="" vlaue="0"/>
-<item id="7Bits" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="Parity" selection="Even">
-<item id="None" input="" vlaue="0"/>
-<item id="Even" input="" vlaue="0"/>
-<item id="Odd" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="StopBit" selection="1Bit">
-<item id="1Bit" input="" vlaue="0"/>
-<item id="2Bits" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="TransDir" selection="LSB">
-<item id="LSB" input="" vlaue="0"/>
-<item id="MSB" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="TransClock" selection="Internal">
-<item id="Internal" input="" vlaue="0"/>
-<item id="External" input="" vlaue="0"/>
-</option>
-<option enabled="false" id="BaseClk" selection="16Cyl">
-<item id="16Cyl" input="" vlaue="0"/>
-<item id="8Cyl" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="Bitrate" selection="FreeValue">
-<item id="FreeValue" input="9600" vlaue="9600"/>
-<item id="9600" input="9600" vlaue="0"/>
-<item id="19200" input="19200" vlaue="0"/>
-<item id="31250" input="31250" vlaue="0"/>
-<item id="38400" input="38400" vlaue="0"/>
-<item id="75000" input="75000" vlaue="0"/>
-<item id="150000" input="150000" vlaue="0"/>
-<item id="325000" input="325000" vlaue="0"/>
-<item id="375000" input="375000" vlaue="0"/>
-</option>
-<option enabled="true" id="DutyCorrection" selection="Enable">
-<item id="Enable" input="" vlaue="0"/>
-<item id="Disable" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="SCKPinFun" selection="SckUnuse">
-<item id="SckUnuse" input="" vlaue="0"/>
-<item id="ClkOut" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="NoiseFilt" selection="Disable">
-<item id="Enable" input="" vlaue="0"/>
-<item id="Disable" input="" vlaue="0"/>
-</option>
-<option enabled="false" id="FiltClk" selection="Div1">
-<item id="Div1" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="FlowControl" selection="None">
-<item id="None" input="" vlaue="0"/>
-<item id="CTS" input="" vlaue="0"/>
-<item id="RTS" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="TransDataHandle" selection="ISR">
-<item id="ISR" input="" vlaue="0"/>
-<item id="DTC" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="RecvDataHandle" selection="ISR">
-<item id="ISR" input="" vlaue="0"/>
-<item id="DTC" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="ERIEnable" selection="Enable">
-<item id="Enable" input="" vlaue="0"/>
-<item id="Disable" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="ERIPriority" selection="Level14">
-<item id="Level0" input="" vlaue="0"/>
-<item id="Level1" input="" vlaue="0"/>
-<item id="Level2" input="" vlaue="0"/>
-<item id="Level3" input="" vlaue="0"/>
-<item id="Level4" input="" vlaue="0"/>
-<item id="Level5" input="" vlaue="0"/>
-<item id="Level6" input="" vlaue="0"/>
-<item id="Level7" input="" vlaue="0"/>
-<item id="Level8" input="" vlaue="0"/>
-<item id="Level9" input="" vlaue="0"/>
-<item id="Level10" input="" vlaue="0"/>
-<item id="Level11" input="" vlaue="0"/>
-<item id="Level12" input="" vlaue="0"/>
-<item id="Level13" input="" vlaue="0"/>
-<item id="Level14" input="" vlaue="0"/>
-<item id="Level15" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="TransEnd" selection="Enable">
-<item id="Enable" input="" vlaue="0"/>
-<item id="Disable" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="RecvEnd" selection="Enable">
-<item id="Enable" input="" vlaue="0"/>
-<item id="Disable" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="RecvError" selection="Enable">
-<item id="Enable" input="" vlaue="0"/>
-<item id="Disable" input="" vlaue="0"/>
-</option>
-</allocatable>
-<component description="This software component provides configurations for SCI(SCIF) single(multi-processor) asynchronous mode." detailDescription="" display="SCI/SCIF Asynchronous Mode" id="com.renesas.smc.tools.swcomponent.codegenerator.sciasyncmode" version="1.11.0"/>
-<allocator channelLevel0="8" channelLevel1="" channelLevel2="" channelLevel3="" channelLevel4="" channelLevel5="" description="SCI channel 8" display="SCI8" id="com.renesas.smc.tools.swcomponent.codegenerator.sciasync.rx130.sci8" type="SCI">
-<context>
-<option enabled="true" id="Mode" selection="BothMode">
-<item enabled="true" id="TransMode"/>
-<item enabled="true" id="RecvMode"/>
-<item enabled="true" id="BothMode"/>
-<item enabled="true" id="MultiTransMode"/>
-<item enabled="true" id="MultiRecvMode"/>
-<item enabled="true" id="MultiBothMode"/>
-</option>
-</context>
-</allocator>
-<source description="Code generator components provide peripheral drivers with customized generated source geared towards small code size" display="Code Generator" id="com.renesas.smc.tools.swcomponent.codegenerator.source"/>
-</configuration>
 <configuration id="450de14c-476d-49f7-889e-e3885cca9022" inuse="true" name="Config_SCI5_CellModule">
 <allocatable id="SCI5">
 <isocket id="CountingClockB" selection="Clock.tool_clock_pclkb" value="3.2E7"/>
@@ -2044,7 +1796,7 @@
 <item id="Enable" input="" vlaue="0"/>
 <item id="Disable" input="" vlaue="0"/>
 </option>
-<option enabled="true" id="ERIPriority" selection="Level14">
+<option enabled="true" id="ERIPriority" selection="Level13">
 <item id="Level0" input="" vlaue="0"/>
 <item id="Level1" input="" vlaue="0"/>
 <item id="Level2" input="" vlaue="0"/>
@@ -2166,7 +1918,7 @@
 <item id="Enable" input="" vlaue="0"/>
 <item id="Disable" input="" vlaue="0"/>
 </option>
-<option enabled="true" id="ERIPriority" selection="Level14">
+<option enabled="true" id="ERIPriority" selection="Level13">
 <item id="Level0" input="" vlaue="0"/>
 <item id="Level1" input="" vlaue="0"/>
 <item id="Level2" input="" vlaue="0"/>
@@ -2207,190 +1959,6 @@
 <item enabled="true" id="MultiTransMode"/>
 <item enabled="true" id="MultiRecvMode"/>
 <item enabled="true" id="MultiBothMode"/>
-</option>
-</context>
-</allocator>
-<source description="Code generator components provide peripheral drivers with customized generated source geared towards small code size" display="Code Generator" id="com.renesas.smc.tools.swcomponent.codegenerator.source"/>
-</configuration>
-<configuration id="5a2575e6-cf33-4f9c-b745-195a524be5fd" inuse="true" name="Config_RSPI0_Shunt">
-<allocatable id="RSPI0">
-<allocatable id="RSPI_CMD0">
-<option enabled="true" id="DataLen" selection="8bit">
-<item id="8bit" input="" vlaue="0"/>
-<item id="9bit" input="" vlaue="0"/>
-<item id="10bit" input="" vlaue="0"/>
-<item id="11bit" input="" vlaue="0"/>
-<item id="12bit" input="" vlaue="0"/>
-<item id="13bit" input="" vlaue="0"/>
-<item id="14bit" input="" vlaue="0"/>
-<item id="15bit" input="" vlaue="0"/>
-<item id="16bit" input="" vlaue="0"/>
-<item id="20bit" input="" vlaue="0"/>
-<item id="24bit" input="" vlaue="0"/>
-<item id="32bit" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="Format" selection="MSB">
-<item id="MSB" input="" vlaue="0"/>
-<item id="LSB" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="CPha" selection="Even">
-<item id="Odd" input="" vlaue="0"/>
-<item id="Even" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="CPol" selection="CPolLow">
-<item id="CPolLow" input="" vlaue="0"/>
-<item id="CPolHigh" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="BRDiv" selection="Div8">
-<item id="Div1" input="" vlaue="0"/>
-<item id="Div2" input="" vlaue="0"/>
-<item id="Div4" input="" vlaue="0"/>
-<item id="Div8" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="ClkDelay" selection="1RSPCK">
-<item id="1RSPCK" input="" vlaue="0"/>
-<item id="SPCKD" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="NegateDelay" selection="1RSPCK">
-<item id="1RSPCK" input="" vlaue="0"/>
-<item id="SSLND" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="NextDelay" selection="1RSPCK2PCLK">
-<item id="1RSPCK2PCLK" input="" vlaue="0"/>
-<item id="SPND" input="" vlaue="0"/>
-</option>
-</allocatable>
-<isocket id="RSPI_PCLK" selection="Clock.tool_clock_pclkb" value="3.2E7"/>
-<option enabled="true" id="BufWid" selection="Word">
-<item id="Word" input="" vlaue="0"/>
-<item id="LWord" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="Parity" selection="ParityDis">
-<item id="ParityDis" input="" vlaue="0"/>
-<item id="ParityEven" input="" vlaue="0"/>
-<item id="ParityOdd" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="Bitrate" selection="Bitrate">
-<item id="Bitrate" input="1000" vlaue="1000"/>
-</option>
-<option enabled="true" id="CKdelay" selection="1RSPCK">
-<item id="1RSPCK" input="" vlaue="0"/>
-<item id="2RSPCK" input="" vlaue="0"/>
-<item id="3RSPCK" input="" vlaue="0"/>
-<item id="4RSPCK" input="" vlaue="0"/>
-<item id="5RSPCK" input="" vlaue="0"/>
-<item id="6RSPCK" input="" vlaue="0"/>
-<item id="7RSPCK" input="" vlaue="0"/>
-<item id="8RSPCK" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="SLNdelay" selection="1RSPCK">
-<item id="1RSPCK" input="" vlaue="0"/>
-<item id="2RSPCK" input="" vlaue="0"/>
-<item id="3RSPCK" input="" vlaue="0"/>
-<item id="4RSPCK" input="" vlaue="0"/>
-<item id="5RSPCK" input="" vlaue="0"/>
-<item id="6RSPCK" input="" vlaue="0"/>
-<item id="7RSPCK" input="" vlaue="0"/>
-<item id="8RSPCK" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="NAdelay" selection="1RSPCK2PCLK">
-<item id="1RSPCK2PCLK" input="" vlaue="0"/>
-<item id="2RSPCK2PCLK" input="" vlaue="0"/>
-<item id="3RSPCK2PCLK" input="" vlaue="0"/>
-<item id="4RSPCK2PCLK" input="" vlaue="0"/>
-<item id="5RSPCK2PCLK" input="" vlaue="0"/>
-<item id="6RSPCK2PCLK" input="" vlaue="0"/>
-<item id="7RSPCK2PCLK" input="" vlaue="0"/>
-<item id="8RSPCK2PCLK" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="AutoStp" selection="Disable">
-<item id="Disable" input="" vlaue="0"/>
-<item id="Enable" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="MosiIdle" selection="IdleFix">
-<item id="IdleFix" input="" vlaue="0"/>
-<item id="Idle0" input="" vlaue="0"/>
-<item id="Idle1" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="OutMode" selection="CMOS">
-<item id="CMOS" input="" vlaue="0"/>
-<item id="ODR" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="Loop" selection="LoopNM">
-<item id="LoopNM" input="" vlaue="0"/>
-<item id="Loop1" input="" vlaue="0"/>
-<item id="Loop2" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="DataFx" selection="DataIsr">
-<item id="DataIsr" input="" vlaue="0"/>
-<item id="DataDtc" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="PriTx" selection="Level15">
-<item id="Level0" input="" vlaue="0"/>
-<item id="Level1" input="" vlaue="0"/>
-<item id="Level2" input="" vlaue="0"/>
-<item id="Level3" input="" vlaue="0"/>
-<item id="Level4" input="" vlaue="0"/>
-<item id="Level5" input="" vlaue="0"/>
-<item id="Level6" input="" vlaue="0"/>
-<item id="Level7" input="" vlaue="0"/>
-<item id="Level8" input="" vlaue="0"/>
-<item id="Level9" input="" vlaue="0"/>
-<item id="Level10" input="" vlaue="0"/>
-<item id="Level11" input="" vlaue="0"/>
-<item id="Level12" input="" vlaue="0"/>
-<item id="Level13" input="" vlaue="0"/>
-<item id="Level14" input="" vlaue="0"/>
-<item id="Level15" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="EriSpi" selection="Enable">
-<item id="Disable" input="" vlaue="0"/>
-<item id="Enable" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="CbTx" selection="Enable">
-<item id="Disable" input="" vlaue="0"/>
-<item id="Enable" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="CbRx" selection="Enable">
-<item id="Disable" input="" vlaue="0"/>
-<item id="Enable" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="CbErSpi" selection="Enable">
-<item id="Disable" input="" vlaue="0"/>
-<item id="Enable" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="CmdNum" selection="1CMD1FR">
-<item id="1CMD1FR" input="" vlaue="0"/>
-<item id="1CMD2FR" input="" vlaue="0"/>
-<item id="1CMD3FR" input="" vlaue="0"/>
-<item id="1CMD4FR" input="" vlaue="0"/>
-<item id="2CMD2FR" input="" vlaue="0"/>
-<item id="2CMD4FR" input="" vlaue="0"/>
-<item id="3CMD3FR" input="" vlaue="0"/>
-<item id="4CMD4FR" input="" vlaue="0"/>
-<item id="5CMD5FR" input="" vlaue="0"/>
-<item id="6CMD6FR" input="" vlaue="0"/>
-<item id="7CMD7FR" input="" vlaue="0"/>
-<item id="8CMD8FR" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="Mode" selection="MasterFull">
-<item id="SlaveFull" input="" vlaue="0"/>
-<item id="SlaveTx" input="" vlaue="0"/>
-<item id="MasterFull" input="" vlaue="0"/>
-<item id="MasterTx" input="" vlaue="0"/>
-</option>
-<option enabled="true" id="regSPBR" selection="regSPBR">
-<item id="regSPBR" input="59" vlaue="15"/>
-</option>
-</allocatable>
-<component description="This component provides clock synchronous operation of RSPI or SCI (Simple SPI bus). It includes 4 transfer modes: Slave transmit/receive, Slave transmit, Master transmit/receive and Master transmit." detailDescription="" display="SPI Clock Synchronous Mode (3-wire method)" id="com.renesas.smc.tools.swcomponent.codegenerator.spiclocksync" version="1.11.0"/>
-<allocator channelLevel0="0" channelLevel1="" channelLevel2="" channelLevel3="" channelLevel4="" channelLevel5="" description="RSPI0" display="RSPI0" id="com.renesas.smc.tools.swcomponent.codegenerator.spiclocksync.rx130.rspi0" type="RSPI">
-<context>
-<option enabled="true" id="Mode" selection="MasterFull">
-<item enabled="true" id="SlaveFull"/>
-<item enabled="true" id="SlaveTx"/>
-<item enabled="true" id="MasterFull"/>
-<item enabled="true" id="MasterTx"/>
 </option>
 </context>
 </allocator>
@@ -2473,7 +2041,7 @@
 <item id="Enable" input="" vlaue="0"/>
 <item id="Disable" input="" vlaue="0"/>
 </option>
-<option enabled="true" id="ERIPriority" selection="Level5">
+<option enabled="true" id="ERIPriority" selection="Level14">
 <item id="Level0" input="" vlaue="0"/>
 <item id="Level1" input="" vlaue="0"/>
 <item id="Level2" input="" vlaue="0"/>
@@ -2864,6 +2432,190 @@
 <option enabled="true" id="Mode" selection="I2C">
 <item enabled="true" id="I2C"/>
 <item enabled="true" id="SMBS"/>
+</option>
+</context>
+</allocator>
+<source description="Code generator components provide peripheral drivers with customized generated source geared towards small code size" display="Code Generator" id="com.renesas.smc.tools.swcomponent.codegenerator.source"/>
+</configuration>
+<configuration id="0f03b1e5-481b-450e-bb91-e495e60f44f9" inuse="true" name="Config_RSPI0_Shunt">
+<allocatable id="RSPI0">
+<allocatable id="RSPI_CMD0">
+<option enabled="true" id="DataLen" selection="8bit">
+<item id="8bit" input="" vlaue="0"/>
+<item id="9bit" input="" vlaue="0"/>
+<item id="10bit" input="" vlaue="0"/>
+<item id="11bit" input="" vlaue="0"/>
+<item id="12bit" input="" vlaue="0"/>
+<item id="13bit" input="" vlaue="0"/>
+<item id="14bit" input="" vlaue="0"/>
+<item id="15bit" input="" vlaue="0"/>
+<item id="16bit" input="" vlaue="0"/>
+<item id="20bit" input="" vlaue="0"/>
+<item id="24bit" input="" vlaue="0"/>
+<item id="32bit" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="Format" selection="MSB">
+<item id="MSB" input="" vlaue="0"/>
+<item id="LSB" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="CPha" selection="Even">
+<item id="Odd" input="" vlaue="0"/>
+<item id="Even" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="CPol" selection="CPolLow">
+<item id="CPolLow" input="" vlaue="0"/>
+<item id="CPolHigh" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="BRDiv" selection="Div8">
+<item id="Div1" input="" vlaue="0"/>
+<item id="Div2" input="" vlaue="0"/>
+<item id="Div4" input="" vlaue="0"/>
+<item id="Div8" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="ClkDelay" selection="1RSPCK">
+<item id="1RSPCK" input="" vlaue="0"/>
+<item id="SPCKD" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="NegateDelay" selection="1RSPCK">
+<item id="1RSPCK" input="" vlaue="0"/>
+<item id="SSLND" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="NextDelay" selection="1RSPCK2PCLK">
+<item id="1RSPCK2PCLK" input="" vlaue="0"/>
+<item id="SPND" input="" vlaue="0"/>
+</option>
+</allocatable>
+<isocket id="RSPI_PCLK" selection="Clock.tool_clock_pclkb" value="3.2E7"/>
+<option enabled="true" id="BufWid" selection="Word">
+<item id="Word" input="" vlaue="0"/>
+<item id="LWord" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="Parity" selection="ParityDis">
+<item id="ParityDis" input="" vlaue="0"/>
+<item id="ParityEven" input="" vlaue="0"/>
+<item id="ParityOdd" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="Bitrate" selection="Bitrate">
+<item id="Bitrate" input="1000" vlaue="1000"/>
+</option>
+<option enabled="true" id="CKdelay" selection="1RSPCK">
+<item id="1RSPCK" input="" vlaue="0"/>
+<item id="2RSPCK" input="" vlaue="0"/>
+<item id="3RSPCK" input="" vlaue="0"/>
+<item id="4RSPCK" input="" vlaue="0"/>
+<item id="5RSPCK" input="" vlaue="0"/>
+<item id="6RSPCK" input="" vlaue="0"/>
+<item id="7RSPCK" input="" vlaue="0"/>
+<item id="8RSPCK" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="SLNdelay" selection="1RSPCK">
+<item id="1RSPCK" input="" vlaue="0"/>
+<item id="2RSPCK" input="" vlaue="0"/>
+<item id="3RSPCK" input="" vlaue="0"/>
+<item id="4RSPCK" input="" vlaue="0"/>
+<item id="5RSPCK" input="" vlaue="0"/>
+<item id="6RSPCK" input="" vlaue="0"/>
+<item id="7RSPCK" input="" vlaue="0"/>
+<item id="8RSPCK" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="NAdelay" selection="1RSPCK2PCLK">
+<item id="1RSPCK2PCLK" input="" vlaue="0"/>
+<item id="2RSPCK2PCLK" input="" vlaue="0"/>
+<item id="3RSPCK2PCLK" input="" vlaue="0"/>
+<item id="4RSPCK2PCLK" input="" vlaue="0"/>
+<item id="5RSPCK2PCLK" input="" vlaue="0"/>
+<item id="6RSPCK2PCLK" input="" vlaue="0"/>
+<item id="7RSPCK2PCLK" input="" vlaue="0"/>
+<item id="8RSPCK2PCLK" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="AutoStp" selection="Enable">
+<item id="Disable" input="" vlaue="0"/>
+<item id="Enable" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="MosiIdle" selection="Idle0">
+<item id="IdleFix" input="" vlaue="0"/>
+<item id="Idle0" input="" vlaue="0"/>
+<item id="Idle1" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="OutMode" selection="CMOS">
+<item id="CMOS" input="" vlaue="0"/>
+<item id="ODR" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="Loop" selection="LoopNM">
+<item id="LoopNM" input="" vlaue="0"/>
+<item id="Loop1" input="" vlaue="0"/>
+<item id="Loop2" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="DataFx" selection="DataIsr">
+<item id="DataIsr" input="" vlaue="0"/>
+<item id="DataDtc" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="PriTx" selection="Level15">
+<item id="Level0" input="" vlaue="0"/>
+<item id="Level1" input="" vlaue="0"/>
+<item id="Level2" input="" vlaue="0"/>
+<item id="Level3" input="" vlaue="0"/>
+<item id="Level4" input="" vlaue="0"/>
+<item id="Level5" input="" vlaue="0"/>
+<item id="Level6" input="" vlaue="0"/>
+<item id="Level7" input="" vlaue="0"/>
+<item id="Level8" input="" vlaue="0"/>
+<item id="Level9" input="" vlaue="0"/>
+<item id="Level10" input="" vlaue="0"/>
+<item id="Level11" input="" vlaue="0"/>
+<item id="Level12" input="" vlaue="0"/>
+<item id="Level13" input="" vlaue="0"/>
+<item id="Level14" input="" vlaue="0"/>
+<item id="Level15" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="EriSpi" selection="Enable">
+<item id="Disable" input="" vlaue="0"/>
+<item id="Enable" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="CbTx" selection="Enable">
+<item id="Disable" input="" vlaue="0"/>
+<item id="Enable" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="CbRx" selection="Enable">
+<item id="Disable" input="" vlaue="0"/>
+<item id="Enable" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="CbErSpi" selection="Enable">
+<item id="Disable" input="" vlaue="0"/>
+<item id="Enable" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="CmdNum" selection="1CMD1FR">
+<item id="1CMD1FR" input="" vlaue="0"/>
+<item id="1CMD2FR" input="" vlaue="0"/>
+<item id="1CMD3FR" input="" vlaue="0"/>
+<item id="1CMD4FR" input="" vlaue="0"/>
+<item id="2CMD2FR" input="" vlaue="0"/>
+<item id="2CMD4FR" input="" vlaue="0"/>
+<item id="3CMD3FR" input="" vlaue="0"/>
+<item id="4CMD4FR" input="" vlaue="0"/>
+<item id="5CMD5FR" input="" vlaue="0"/>
+<item id="6CMD6FR" input="" vlaue="0"/>
+<item id="7CMD7FR" input="" vlaue="0"/>
+<item id="8CMD8FR" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="Mode" selection="MasterFull">
+<item id="SlaveFull" input="" vlaue="0"/>
+<item id="SlaveTx" input="" vlaue="0"/>
+<item id="MasterFull" input="" vlaue="0"/>
+<item id="MasterTx" input="" vlaue="0"/>
+</option>
+<option enabled="true" id="regSPBR" selection="regSPBR">
+<item id="regSPBR" input="59" vlaue="15"/>
+</option>
+</allocatable>
+<component description="This component provides clock synchronous operation of RSPI or SCI (Simple SPI bus). It includes 4 transfer modes: Slave transmit/receive, Slave transmit, Master transmit/receive and Master transmit." detailDescription="" display="SPI Clock Synchronous Mode (3-wire method)" id="com.renesas.smc.tools.swcomponent.codegenerator.spiclocksync" version="1.11.0"/>
+<allocator channelLevel0="0" channelLevel1="" channelLevel2="" channelLevel3="" channelLevel4="" channelLevel5="" description="RSPI0" display="RSPI0" id="com.renesas.smc.tools.swcomponent.codegenerator.spiclocksync.rx130.rspi0" type="RSPI">
+<context>
+<option enabled="true" id="Mode" selection="MasterFull">
+<item enabled="true" id="SlaveFull"/>
+<item enabled="true" id="SlaveTx"/>
+<item enabled="true" id="MasterFull"/>
+<item enabled="true" id="MasterTx"/>
 </option>
 </context>
 </allocator>

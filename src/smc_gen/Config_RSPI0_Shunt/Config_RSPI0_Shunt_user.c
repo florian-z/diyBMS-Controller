@@ -229,6 +229,7 @@ static void r_Config_RSPI0_Shunt_callback_receiveend(void)
     /* Start user code for r_Config_RSPI0_Shunt_callback_receiveend. Do not edit comment generated here */
     log("RSPI rx end\n");
     log_shunt();
+    pass_message_shunt();
     /* End user code. Do not edit comment generated here */
 }
 
