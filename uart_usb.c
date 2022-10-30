@@ -64,9 +64,15 @@ void send_message_usb_done(void)
 void send_message_usb_trigger_send(void)
 {
     tx_usb_busy = true;
-    const uint8_t SEND_LEN = strlen((char*)send_buf_usb_rd);
-    R_Config_SCI6_USB_Serial_Send((uint8_t*)send_buf_usb_rd, SEND_LEN);
-    send_buf_usb_rd += SEND_LEN;
+    uint16_t send_len16 = strlen((char*)send_buf_usb_rd);
+    if (send_len16 > UINT8_MAX)
+    {
+        send_len16 = UINT8_MAX;
+    }
+    const uint8_t SEND_LEN8 = send_len16;
+
+    R_Config_SCI6_USB_Serial_Send((uint8_t*)send_buf_usb_rd, SEND_LEN8);
+    send_buf_usb_rd += SEND_LEN8;
     /* read pointer roll over */
     if(send_buf_usb_rd >= send_buf_usb + TX_BUF_USB - 1)
     {
