@@ -22,6 +22,6 @@ typedef struct
 } ble_gmf_t;
 
 void bluetooth_init();
-void send_cmd(ble_cmd_t ble_cmd);
+void send_ble_cmd(ble_cmd_t ble_cmd);
 
 #endif /* __bluetooth_h__ */

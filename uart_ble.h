@@ -4,7 +4,7 @@
 #include "main.h"
 #include "r_cg_userdefine.h"
 
-void send_message_ble(uint8_t const * const data);
+void send_message_ble_binary(uint8_t const * const data, uint8_t const data_len);
 void send_message_ble_done(void);
 
 void pass_message_ble(uint8_t const * const data, uint8_t const len);

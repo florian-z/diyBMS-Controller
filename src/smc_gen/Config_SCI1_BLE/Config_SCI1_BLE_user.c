@@ -2,15 +2,15 @@
 * DISCLAIMER
 * This software is supplied by Renesas Electronics Corporation and is only intended for use with Renesas products.
 * No other uses are authorized. This software is owned by Renesas Electronics Corporation and is protected under all
-* applicable laws, including copyright laws. 
+* applicable laws, including copyright laws.
 * THIS SOFTWARE IS PROVIDED "AS IS" AND RENESAS MAKES NO WARRANTIES REGARDING THIS SOFTWARE, WHETHER EXPRESS, IMPLIED
 * OR STATUTORY, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
 * NON-INFRINGEMENT.  ALL SUCH WARRANTIES ARE EXPRESSLY DISCLAIMED.TO THE MAXIMUM EXTENT PERMITTED NOT PROHIBITED BY
 * LAW, NEITHER RENESAS ELECTRONICS CORPORATION NOR ANY OF ITS AFFILIATED COMPANIES SHALL BE LIABLE FOR ANY DIRECT,
 * INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES FOR ANY REASON RELATED TO THIS SOFTWARE, EVEN IF RENESAS OR
 * ITS AFFILIATES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
-* Renesas reserves the right, without notice, to make changes to this software and to discontinue the availability 
-* of this software. By using this software, you agree to the additional terms and conditions found by accessing the 
+* Renesas reserves the right, without notice, to make changes to this software and to discontinue the availability
+* of this software. By using this software, you agree to the additional terms and conditions found by accessing the
 * following link:
 * http://www.renesas.com/disclaimer
 *
@@ -37,6 +37,7 @@ Includes
 #include "Config_SCI1_BLE.h"
 /* Start user code for include. Do not edit comment generated here */
 #include "uart_ble.h"
+#include "bluetooth.h"
 #include <string.h>
 #include "log_util.h"
 /* End user code. Do not edit comment generated here */
@@ -65,6 +66,7 @@ void r_Config_SCI1_BLE_restart_receiver(void);
 void R_Config_SCI1_BLE_Create_UserInit(void)
 {
     /* Start user code for user init. Do not edit comment generated here */
+    R_Config_SCI1_BLE_Serial_Receive((uint8_t*)g_sci1_rx_buf, RX_BUF_BLE);
     /* End user code. Do not edit comment generated here */
 }
 
@@ -138,27 +140,32 @@ __interrupt static void r_Config_SCI1_BLE_receive_interrupt(void)
     {
         /* rx buffer has space */
         uint8_t buf = SCI1.RDR;
-        if (buf == MSG_START)
+        if (buf == BLE_SYNC_WORD)
         {
             /* message start detected -> reset incoming buffer */
-            memset((uint8_t*)g_sci1_rx_buf, '\0', RX_BUF_CELLMODULE);
+            memset((uint8_t*)g_sci1_rx_buf, '\0', RX_BUF_BLE);
             g_sci1_rx_count = 0U;
-            g_sci1_rx_length = RX_BUF_CELLMODULE;
+            g_sci1_rx_length = RX_BUF_BLE;
             gp_sci1_rx_address = g_sci1_rx_buf;
         }
         /* append received byte to buffer */
         *gp_sci1_rx_address = buf;
         gp_sci1_rx_address++;
         g_sci1_rx_count++;
-        if(buf == MSG_END)
+
+        if (g_sci1_rx_count >= 5) // min: sync, len-h, len-l, op-code, crc
         {
-            /* message end detected -> forward received message */
-            r_Config_SCI1_BLE_callback_receiveend();
+            const uint16_t MSG_LEN = ((g_sci1_rx_buf[1]<<8) | g_sci1_rx_buf[2]) + 4; // msg.len + (sync, len-h, len-l, crc)
+            if(MSG_LEN == g_sci1_rx_count)
+            {
+                /* message end detected -> forward received message */
+                r_Config_SCI1_BLE_callback_receiveend();
+            }
         }
     }
     else
     {
-        /* rx buffer full, but no end character -> restart receiver */
+        /* rx buffer full, but msg end not reached -> restart receiver */
         SCI1.SCR.BIT.RIE = 0U;
         SCI1.SCR.BIT.RE = 0U;
         r_Config_SCI1_BLE_restart_receiver();
