@@ -4,6 +4,9 @@
 #include "main.h"
 #include "r_cg_userdefine.h"
 
+#define advertisement_UUID "B940FEC7FAB642DCA2E271A5F4C74198"
+
+
 typedef enum
 {
     Read_Local_Info_0x01,
@@ -12,14 +15,20 @@ typedef enum
 } ble_cmd_t;
 
 #define BLE_SYNC_WORD   0xAA
-typedef struct
-{
-    uint8_t start;          // static sync word
-    uint16_t len;           // only op_code + params
-    uint8_t op_code;
-    uint8_t* params;
-    uint8_t crc;            // sum of bytes (len + op_code + params) -> &0xff -> -1 -> bit inverse
-} ble_gmf_t;
+//typedef struct
+//{
+//    uint8_t start;          // static sync word
+//    uint16_t len;           // only op_code + params
+//    uint8_t op_code;
+//    uint8_t* params;
+//    uint8_t crc;            // sum of bytes (len + op_code + params) -> &0xff -> -1 -> bit inverse
+//} ble_gmf_t;
+
+#define BLE_SYNC_ID     0
+#define BLE_LEN_H       1
+#define BLE_LEN_L       2
+#define BLE_OPCODE      3
+
 
 void bluetooth_init_config_mode();
 void bluetooth_init_run_mode();

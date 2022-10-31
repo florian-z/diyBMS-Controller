@@ -33,6 +33,7 @@ void send_message_ble_binary(uint8_t const * const data, uint8_t const data_len)
     memcpy((uint8_t*)tx_ble_buf, data, data_len);
     tx_ble_buf_len = data_len;
 
+    log_hex((uint8_t*)tx_ble_buf, tx_ble_buf_len);
     R_Config_SCI1_BLE_Serial_Send((uint8_t*)tx_ble_buf, tx_ble_buf_len);
 }
 
@@ -67,15 +68,15 @@ void process_message_ble()
         const uint8_t len = process_buffer_ble_len;
         log_hex((uint8_t*)process_buffer_ble, len);  // TODO flo: debug remove
         uint8_t sum = 0;
-        for(uint8_t i = 3; i < len-1; i++)
+        for(uint8_t i = 1; i < len; i++) // exclude SYNC_WORD from crc
         {
             sum += process_buffer_ble[i];
         }
-        uint8_t crc = 255 - (sum - 1);
-        if (process_buffer_ble[len-1] == crc)
+        if (!sum)
         {
             // crc good
-            log("ble crc good\n");
+            //log("ble crc good\n");
+            // TODO process response
         }
         else
         {

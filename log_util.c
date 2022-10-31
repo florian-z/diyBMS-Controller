@@ -34,6 +34,6 @@ void log_hex(uint8_t const * const data, uint8_t const len)
         snprintf(buf+5+i*3, 200-5-i*3, "%02X ", data[i]);
     }
     snprintf(buf+5+len*3, 200-5-len*3, "\n");
-    send_message_usb(data);
+    send_message_usb(buf);
     GLOBAL_INT_RESTORE
 }

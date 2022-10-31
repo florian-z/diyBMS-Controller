@@ -38,7 +38,9 @@ int main(void)
     register_nmi_interrupt_handler();
     R_Config_TMR0_TMR1_Start(); // start timer tick
     shunt_init();
-    bluetooth_init_config_mode();
+    //bluetooth_init_config_mode();
+    bluetooth_init_run_mode();
+    //send_ble_cmd(Read_Local_Info_0x01);
 
 /// main loop
     uint8_t count_10ms = 0;
@@ -80,8 +82,8 @@ int main(void)
                     //OUT_SPI_nMSS_OFF
                     /// SPI shunt tests END
 
-
-                    send_ble_cmd(Read_Local_Info_0x01);
+                    //bluetooth_init_run_mode();
+                    //send_ble_cmd(Read_Local_Info_0x01);
                     //send_message_ble("disp uart test\n");
 
                     //print_cellmodule_full_debug();
