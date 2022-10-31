@@ -97,5 +97,13 @@ void R_Config_PORT_Create_UserInit(void);
 
 #define OUT_BLE_RESET_RUN       PORT5.PODR.BYTE |= (1<<2);
 #define OUT_BLE_RESET_RESET     PORT5.PODR.BYTE &= ~(1<<2);
+
+// TODO this is for pcb v2
+#define OUT_BLE_MODE_RUN        PORT5.PODR.BYTE &= ~(1<<1); PORT5.PDR.BYTE &= ~_02_Pm1_MODE_OUTPUT;
+#define OUT_BLE_MODE_CONFIG     PORT5.PODR.BYTE &= ~(1<<1); PORT5.PDR.BYTE |= _02_Pm1_MODE_OUTPUT;
+
+// TODO this is for pcb v3
+//#define OUT_BLE_MODE_RUN        PORT5.PODR.BYTE |= (1<<1);
+//#define OUT_BLE_MODE_CONFIG     PORT5.PODR.BYTE &= ~(1<<1);
 /* End user code. Do not edit comment generated here */
 #endif

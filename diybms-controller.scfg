@@ -307,7 +307,6 @@
 <pinItem allocation="33" comments="" direction="None" id="SDA" isUsedBySoftware="true" locked="false" status="0"/>
 <pinItem allocation="63" comments="" direction="None" id="MISOA" isUsedBySoftware="true" locked="false" status="0"/>
 <pinItem allocation="7" comments="" direction="None" id="FINED" isUsedBySoftware="true" locked="false" status="0"/>
-<pinItem allocation="77" comments="" direction="None" id="TXD12" isUsedBySoftware="false" locked="false" status="4"/>
 <pinItem allocation="83" comments="" direction="O" id="PD3" isUsedBySoftware="true" locked="false" status="0"/>
 <pinItem allocation="84" comments="" direction="O" id="PD2" isUsedBySoftware="true" locked="false" status="0"/>
 <pinItem allocation="81" comments="" direction="O" id="PD5" isUsedBySoftware="true" locked="false" status="0"/>
@@ -337,7 +336,6 @@
 <pinItem allocation="49" comments="" direction="None" id="TXD5" isUsedBySoftware="true" locked="false" status="0"/>
 <pinItem allocation="30" comments="" direction="None" id="TXD1" isUsedBySoftware="true" locked="false" status="0"/>
 <pinItem allocation="28" comments="" direction="None" id="TXD0" isUsedBySoftware="true" locked="false" status="0"/>
-<pinItem allocation="76" comments="" direction="None" id="RXD12" isUsedBySoftware="false" locked="false" status="4"/>
 <pinItem allocation="34" comments="" direction="None" id="SCL" isUsedBySoftware="true" locked="false" status="0"/>
 </tool>
 <tool id="Summary" version="1.0.0.0">
@@ -1968,7 +1966,7 @@
 <configuration id="912cb49a-90de-4933-8f52-30f5a5fb6b0e" inuse="true" name="Config_SCI6_USB">
 <allocatable id="SCI6">
 <isocket id="CountingClockB" selection="Clock.tool_clock_pclkb" value="3.2E7"/>
-<option enabled="true" id="BitEdge" selection="LowLevel">
+<option enabled="true" id="BitEdge" selection="FallEdge">
 <item id="LowLevel" input="" vlaue="0"/>
 <item id="FallEdge" input="" vlaue="0"/>
 </option>

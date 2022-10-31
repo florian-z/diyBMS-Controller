@@ -21,7 +21,8 @@ typedef struct
     uint8_t crc;            // sum of bytes (len + op_code + params) -> &0xff -> -1 -> bit inverse
 } ble_gmf_t;
 
-void bluetooth_init();
+void bluetooth_init_config_mode();
+void bluetooth_init_run_mode();
 void send_ble_cmd(ble_cmd_t ble_cmd);
 
 #endif /* __bluetooth_h__ */

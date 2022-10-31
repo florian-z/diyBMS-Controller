@@ -38,7 +38,7 @@ int main(void)
     register_nmi_interrupt_handler();
     R_Config_TMR0_TMR1_Start(); // start timer tick
     shunt_init();
-    bluetooth_init();
+    bluetooth_init_config_mode();
 
 /// main loop
     uint8_t count_10ms = 0;
@@ -73,7 +73,7 @@ int main(void)
                     calc_cellmodule_data();
                     charger_logic();
 
-                    shunt_tick();
+                    //shunt_tick();
 
                     /// SPI shunt tests
                     //OUT_SPI_nMSS_ON
