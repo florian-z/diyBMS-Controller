@@ -7,13 +7,13 @@
 #define SHUNT_LEN 10
 
 typedef struct {
-    float vshunt;
-    float vbus;
-    float dietemp;
-    float current;
-    float power;
-    float energy;
-    float charge;
+    float vshunt;   // mV
+    float vbus;     // V
+    float dietemp;  // °C
+    float current;  // A
+    float power;    // W
+    float energy;   // Wh
+    float charge;   // Ah
 } shunt_t;
 
 void shunt_init();

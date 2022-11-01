@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <smc>
 <general version="2.0.0.0">
-<configuration active="true" id="com.renesas.smc.toolchain.iccrx.configuration.release">
+<configuration active="false" id="com.renesas.smc.toolchain.iccrx.configuration.release">
 <property id="com.renesas.smc.service.project.buildArtefactType" values="com.renesas.smc.service.project.buildArtefactType.exe"/>
 <property id="com.renesas.smc.service.project.buildType" values="com.renesas.smc.service.project.buildType.release"/>
 <toolchain id="com.renesas.smc.toolchain.iccrx.toolchain.iccrx">
 <option id="com.renesas.smc.toolchain.option.buildArtefactType" key="com.renesas.smc.toolchain.option.buildArtefactType.exe"/>
 </toolchain>
 </configuration>
-<configuration active="false" id="com.renesas.smc.toolchain.iccrx.configuration.release">
+<configuration active="true" id="com.renesas.smc.toolchain.iccrx.configuration.release">
 <property id="com.renesas.smc.service.project.buildArtefactType" values="com.renesas.smc.service.project.buildArtefactType.exe"/>
 <property id="com.renesas.smc.service.project.buildType" values="com.renesas.smc.service.project.buildType.release"/>
 <toolchain id="com.renesas.smc.toolchain.iccrx.toolchain.iccrx">
@@ -2495,7 +2495,7 @@
 <item id="ParityOdd" input="" vlaue="0"/>
 </option>
 <option enabled="true" id="Bitrate" selection="Bitrate">
-<item id="Bitrate" input="1000" vlaue="1000"/>
+<item id="Bitrate" input="2000" vlaue="1000"/>
 </option>
 <option enabled="true" id="CKdelay" selection="1RSPCK">
 <item id="1RSPCK" input="" vlaue="0"/>
@@ -2531,7 +2531,7 @@
 <item id="Disable" input="" vlaue="0"/>
 <item id="Enable" input="" vlaue="0"/>
 </option>
-<option enabled="true" id="MosiIdle" selection="Idle0">
+<option enabled="true" id="MosiIdle" selection="IdleFix">
 <item id="IdleFix" input="" vlaue="0"/>
 <item id="Idle0" input="" vlaue="0"/>
 <item id="Idle1" input="" vlaue="0"/>
@@ -2604,7 +2604,7 @@
 <item id="MasterTx" input="" vlaue="0"/>
 </option>
 <option enabled="true" id="regSPBR" selection="regSPBR">
-<item id="regSPBR" input="59" vlaue="15"/>
+<item id="regSPBR" input="59" vlaue="7"/>
 </option>
 </allocatable>
 <component description="This component provides clock synchronous operation of RSPI or SCI (Simple SPI bus). It includes 4 transfer modes: Slave transmit/receive, Slave transmit, Master transmit/receive and Master transmit." detailDescription="" display="SPI Clock Synchronous Mode (3-wire method)" id="com.renesas.smc.tools.swcomponent.codegenerator.spiclocksync" version="1.11.0"/>

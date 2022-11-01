@@ -75,7 +75,7 @@ int main(void)
                     calc_cellmodule_data();
                     charger_logic();
 
-                    //shunt_tick();
+                    shunt_tick();
 
                     /// SPI shunt tests
                     //OUT_SPI_nMSS_ON

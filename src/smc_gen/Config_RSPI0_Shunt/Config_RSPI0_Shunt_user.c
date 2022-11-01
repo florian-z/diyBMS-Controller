@@ -213,7 +213,6 @@ __interrupt static void r_Config_RSPI0_Shunt_idle_interrupt(void)
 static void r_Config_RSPI0_Shunt_callback_transmitend(void)
 {
     /* Start user code for r_Config_RSPI0_Shunt_callback_transmitend. Do not edit comment generated here */
-    log("RSPI tx end\n");
     /* End user code. Do not edit comment generated here */
 }
 
@@ -227,8 +226,6 @@ static void r_Config_RSPI0_Shunt_callback_transmitend(void)
 static void r_Config_RSPI0_Shunt_callback_receiveend(void)
 {
     /* Start user code for r_Config_RSPI0_Shunt_callback_receiveend. Do not edit comment generated here */
-    log("RSPI rx end\n");
-    log_shunt();
     pass_message_shunt();
     /* End user code. Do not edit comment generated here */
 }
