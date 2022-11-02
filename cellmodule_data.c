@@ -63,6 +63,11 @@ void calc_cellmodule_data()
         int16_t tmp_sum = 0;
         for(uint8_t i=CELLMODULES_FIRST; i<MODULE_DATA_LEN; i++)
         {
+            if (SHUNT_AUX_TEMP == i)
+            {
+                // skip shunt temp sensor. only use batt and case temp as temp_aux
+                continue;
+            }
             if (module_data[i].temp_aux_c < tmp_low) {
                 tmp_low = module_data[i].temp_aux_c;
             }
@@ -101,7 +106,7 @@ void calc_cellmodule_data()
 // use heater until all cells above LOW and none above HIGH
 // true -> heater on
 #define LIMITS_TEMP_HEATER_NEEDED_LOW 20
-#define LIMITS_TEMP_HEATER_SAFETY_HIGH 30
+#define LIMITS_TEMP_HEATER_SAFETY_HIGH 35
 bool check_temp_should_use_heater()
 {
     if((module_data_stat.temp_batt_c_lowest < LIMITS_TEMP_HEATER_NEEDED_LOW || module_data_stat.temp_aux_c_lowest < LIMITS_TEMP_HEATER_NEEDED_LOW)
