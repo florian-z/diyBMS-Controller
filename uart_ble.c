@@ -28,6 +28,7 @@ void send_message_ble_binary(uint8_t const * const data, uint8_t const data_len)
     }
     tx_ble_busy = true;
     GLOBAL_INT_RESTORE
+    LED_GE1_ON
 
     memset((uint8_t*)tx_ble_buf, '\0', TX_BUF_BLE);
     memcpy((uint8_t*)tx_ble_buf, data, data_len);
@@ -41,11 +42,13 @@ void send_message_ble_binary(uint8_t const * const data, uint8_t const data_len)
 void send_message_ble_done(void)
 {
     tx_ble_busy = false;
+    LED_GE1_OFF
 }
 
 /* buffer incoming messages */
 void pass_message_ble(uint8_t const * const data, uint8_t const len)
 {
+    LED_GE2_ON
     log("BLE:rx data\n");
     if (process_buffer_ble[0] == '\0')
     {
@@ -86,5 +89,6 @@ void process_message_ble()
         /* last step: free buffer */
         memset((uint8_t*)process_buffer_ble, '\0', RX_BUF_BLE);
         process_buffer_ble_len = 0;
+        LED_GE2_OFF
     }
 }

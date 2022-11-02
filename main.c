@@ -17,7 +17,16 @@ void register_nmi_interrupt_handler(void);
 #define MAINTAIN_WATCHDOG //R_Config_IWDT_Restart();
 static volatile bool timer_tick = false;
 
-#define CHARGER_LOAD_DELAY 2
+// LED_GN1 on while message active on cell chain 1
+// LED_GE1 on while uart-BLE-tx active
+// LED_RT1
+// LED_BL1 on while comm with shunt active
+// LED_GN2 on while message active on cell chain 1
+// LED_GE2 on while uart-BLE-rx active
+// LED_RT2
+// LED_BL2 main loop
+
+// LED_RT1 & LED_RT2 alternating fast -> Error_Handler()
 
 int main(void)
 {
@@ -49,20 +58,22 @@ int main(void)
     {
         MAINTAIN_WATCHDOG
         // todo flo powersave / sleep
+        LED_BL2_OFF
         if (timer_tick)
         {
+            LED_BL2_ON
             timer_tick = false;
             count_10ms++;
             if (!(count_10ms % 10))
             {
                 /* 10 Hz */
                 tick_cellmodule();
+                shunt_tick();
             }
 
             if (!(count_10ms % 25))
             {
                 /* 4 Hz */
-                LED_GE1_TGL
                 //send_message_pwr_tick();
 
 
@@ -70,17 +81,12 @@ int main(void)
                 {
                     /* 1 Hz */
                     count_10ms = 0;
-                    LED_GE2_TGL
 
+                    // TODO move behind send_message_cellmodule()
                     calc_cellmodule_data();
                     charger_logic();
 
-                    shunt_tick();
 
-                    /// SPI shunt tests
-                    //OUT_SPI_nMSS_ON
-                    //OUT_SPI_nMSS_OFF
-                    /// SPI shunt tests END
 
                     //bluetooth_init_run_mode();
                     //send_ble_cmd(Read_Local_Info_0x01);
@@ -89,8 +95,17 @@ int main(void)
                     //print_cellmodule_full_debug();
                     //print_shunt_full_debug();
 
-
-
+                    static bool cellmodule_round_robin = 1;
+                    if (cellmodule_round_robin)
+                    {
+                        send_message_cellmodule("!0000*00\n"); // u_batt_mv 0.5Hz
+                        cellmodule_round_robin = 0;
+                    }
+                    else
+                    {
+                        send_message_cellmodule("!0100*01\n"); // temp_c 0.5Hz
+                        cellmodule_round_robin = 1;
+                    }
 
                     //send_message_cellmodule("!0100*01\n"); // temp_c 1Hz
                 }
@@ -100,7 +115,6 @@ int main(void)
                     //send_message_cellmodule("!0000*00\n"); // u_batt_mv ca. 3Hz
                 }
             }
-
         }
 
         process_message_usb();

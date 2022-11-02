@@ -188,8 +188,8 @@ void process_message_cellmodule_int(uint8_t const chain_no)
     if (CELLMODULES_PER_CHAIN[chain_no] != module_cnt)
     {
         // incorrect number of modules in response
-        //log_va("modulecnt cell %d: %s [cmd:%d]\n", chain_no, msg_ptr, msg_cmd);
-        //return;
+        log_va("modulecnt cell %d: %s [cmd:%d]\n", chain_no, msg_ptr, msg_cmd);
+        return;
     }
     //log_va("log cell %d: %s [cmd:%d mcnt:%d]\n", chain_no, msg_ptr, msg_cmd, module_cnt);
 
