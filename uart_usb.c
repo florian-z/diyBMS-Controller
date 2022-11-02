@@ -5,6 +5,7 @@
 #include "messages.h"
 #include "uart_cellmodule.h"
 #include "cellmodule_data.h"
+#include "shunt.h"
 #include "log_util.h"
 
 /*** USB / Debug UART ***/
@@ -106,7 +107,7 @@ void process_message_usb()
             ptr[strlen((char*)ptr)-1] = '\0'; // remove '\n'
 
             append_nmea_crc(ptr);
-            log(ptr);  // TODO flo: debug remove
+            log_va(">CMD: %s", ptr);  // TODO flo: debug remove
             send_message_cellmodule(ptr); // send to all chains
         }
         else if (!strncmp("CELL_CMD", (char*)process_buffer_usb, 8))
@@ -154,12 +155,16 @@ void process_message_usb()
         }
         else if (!strncmp("HELP", (char*)process_buffer_usb, 4))
         {
-            log("CHAIN_CMD, CELL_CMD, CELL_CFG\n");
+            log("CHAIN_CMD!<cmd>00  !0000 or !0100\nCELL_CMD<module>!<cmd>00 cmd:00..03, 07..08  01!0002\nCELL_CFG<module> <value>!<cmd>00  01 255!0004\nHELP\nBATT\n");
             log("GET_BATT_VOLT=0, GET_TEMP=1, IDENTIFY_MODULE=2, ACTIVATE_POWERSAVE=3, SET_CONFIG_BATT_VOLT_CALIB=4, SET_CONFIG_TEMP1_B_COEFF=5, SET_CONFIG_TEMP2_B_COEFF=6, GET_CONFIG=7, CLEAR_CONFIG=8\n");
         }
         else if (!strncmp("BATT", (char*)process_buffer_usb, 4))
         {
             print_cellmodule_full_debug();
+        }
+        else if (!strncmp("SHUNT", (char*)process_buffer_usb, 5))
+        {
+            print_shunt_full_debug();
         }
 
         /* last step: free buffer */
