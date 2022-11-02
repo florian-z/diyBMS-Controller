@@ -106,4 +106,8 @@ void R_Config_PORT_Create_UserInit(void);
 //#define OUT_BLE_MODE_RUN        PORT5.PODR.BYTE |= (1<<1);
 //#define OUT_BLE_MODE_CONFIG     PORT5.PODR.BYTE &= ~(1<<1);
 /* End user code. Do not edit comment generated here */
+
+#define SHUNT_CS_COMMUNICATION_STOP     PORTB.PODR.BYTE |= (1<<0);
+#define SHUNT_CS_CHIP_SELECTED          PORTB.PODR.BYTE &= ~(1<<0);
+
 #endif

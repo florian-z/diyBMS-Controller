@@ -226,6 +226,7 @@ static void r_Config_RSPI0_Shunt_callback_transmitend(void)
 static void r_Config_RSPI0_Shunt_callback_receiveend(void)
 {
     /* Start user code for r_Config_RSPI0_Shunt_callback_receiveend. Do not edit comment generated here */
+    SHUNT_CS_COMMUNICATION_STOP
     pass_message_shunt();
     /* End user code. Do not edit comment generated here */
 }
@@ -241,6 +242,7 @@ static void r_Config_RSPI0_Shunt_callback_receiveend(void)
 static void r_Config_RSPI0_Shunt_callback_error(uint8_t err_type)
 {
     /* Start user code for r_Config_RSPI0_Shunt_callback_error. Do not edit comment generated here */
+    SHUNT_CS_COMMUNICATION_STOP
     Error_Handler();
     /* End user code. Do not edit comment generated here */
 }
