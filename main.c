@@ -130,14 +130,16 @@ void charger_logic()
         if (!line_pwr_state)
         {
             // line power on latch
-            log("LINE DETECT LATCH ON\n");
+            log("LINE DETECT LATCH ON:BAL ON\n");
             line_pwr_state = true;
             // ensure balancer is on, when car is on
             OUT_BAL_LATCH_OFF_IDLE
             OUT_BAL_LATCH_ON_CURR
         }
         // check need for heating
-        if (check_temp_should_use_heater() && check_age_ticks_u_batt_and_temp_allowed())
+        bool check_temp_should_use_heater_var = check_temp_should_use_heater();
+        bool check_age_ticks_u_batt_and_temp_allowed_var = check_age_ticks_u_batt_and_temp_allowed();
+        if (check_temp_should_use_heater_var && check_age_ticks_u_batt_and_temp_allowed_var)
         {
             if (!heater_active_state)
             {
@@ -149,30 +151,68 @@ void charger_logic()
         } else {
             if (heater_active_state)
             {
-                log("HEATER LATCH OFF\n");
+                log("HEATER LATCH OFF");
+                if(!check_temp_should_use_heater_var) {
+                    log(":REACHED TEMP");
+                }
+                if (!check_age_ticks_u_batt_and_temp_allowed_var) {
+                    log(":CELL DATA TO OLD");
+                }
+                log("\n");
                 OUT_HEATER_LATCH_ON_IDLE
                 OUT_HEATER_LATCH_OFF_CURR
                 heater_active_state = false;
             }
         }
         // check if good for charging
-        if (check_temp_charging_allowed() && check_volt_charging_necessary_start() && !check_age_ticks_u_batt_and_temp_allowed())
+        bool check_temp_charging_allowed_var = check_temp_charging_allowed();
+        bool check_volt_charging_necessary_start_var = check_volt_charging_necessary_start();
+        //bool check_age_ticks_u_batt_and_temp_allowed_var = check_age_ticks_u_batt_and_temp_allowed();
+        if (check_temp_charging_allowed_var && check_volt_charging_necessary_start_var && !check_age_ticks_u_batt_and_temp_allowed_var)
         {
             if (!charger_active_state)
             {
                 log("CHARGE LATCH ON\n");
                 OUT_CHARGER_LOAD_ON
-                OUT_CHARGER_DOOR_ON
                 charger_active_state = true;
             }
+            else
+            {
+                OUT_CHARGER_DOOR_ON
+            }
+        } else {
+            log("NOT READY TO CHG");
+            if(!check_temp_charging_allowed_var) {
+                log(":TEMP DOES NOT ALLOW");
+            }
+            if(!check_volt_charging_necessary_start_var) {
+                log(":VOLT CHG NOT NEEDED");
+            }
+            if(!check_temp_charging_allowed_var) {
+                log(":CELL DATA TO OLD");
+            }
+            log("\n");
         }
         // check under/over-temp and charge-stop-voltage
-        if (!check_temp_charging_allowed() || check_volt_charging_safety_stop() || !check_age_ticks_u_batt_and_temp_allowed())
+        //bool check_temp_charging_allowed_var = check_temp_charging_allowed();
+        bool check_volt_charging_safety_stop_var = check_volt_charging_safety_stop();
+        //bool check_age_ticks_u_batt_and_temp_allowed_var = check_age_ticks_u_batt_and_temp_allowed();
+        if (!check_temp_charging_allowed_var || check_volt_charging_safety_stop_var || !check_age_ticks_u_batt_and_temp_allowed_var)
         {
             OUT_CHARGER_DOOR_OFF
             if (charger_active_state)
             {
-                log("CHARGE LATCH OFF\n");
+                log("CHARGE LATCH OFF");
+                if(!check_temp_charging_allowed_var) {
+                    log(":TEMP DOES NOT ALLOW");
+                }
+                if (check_volt_charging_safety_stop_var) {
+                    log(":VOLT SAFETY STOP");
+                }
+                if (!check_age_ticks_u_batt_and_temp_allowed_var) {
+                    log(":CELL DATA TO OLD");
+                }
+                log("\n");
                 charger_active_state = false;
             } else {
                 OUT_CHARGER_LOAD_OFF
@@ -185,7 +225,7 @@ void charger_logic()
         {
             // line power off latch
             line_pwr_state = false;
-            log("LINE DETECT LATCH OFF\n");
+            log("LINE DETECT LATCH OFF:HEATER OFF:CHG LOAD OFF:CHG DOOR OFF\n");
             charger_active_state = false;
             OUT_HEATER_LATCH_ON_IDLE
             OUT_HEATER_LATCH_OFF_CURR
@@ -201,11 +241,11 @@ void charger_logic()
         if (!kl15_pwr_state)
         {
             // KL15 on latch
-            log("KL15 DETECT LATCH ON\n");
+            log("KL15 DETECT LATCH ON:BAL ON\n");
             kl15_pwr_state = true;
             // ensure balancer is on, when car is on
             OUT_BAL_LATCH_OFF_IDLE
-            OUT_BAL_LATCH_ON_CURR // TODO ensure IDLE is reached
+            OUT_BAL_LATCH_ON_CURR
         }
     } else {
         // no KL15
