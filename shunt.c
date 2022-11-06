@@ -306,7 +306,7 @@ void process_message_shunt()
                 // CURRENT_LSB
                 shunt_data.current = ((int32_t)((rx_data[1]&0xff)<<24 | (rx_data[2]&0xff)<<16 | (rx_data[3]&0xff)<<8))*CURRENT_LSB/4096.0;
 //                log_va("%.3f A\n", shunt_data.current);
-                print_shunt_full_debug();
+                //print_shunt_full_debug();
                 break;
             case ADDR_POWER|ADDR_READ:
 //                log("SHUNT recv POWER ");

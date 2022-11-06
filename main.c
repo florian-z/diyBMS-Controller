@@ -10,6 +10,7 @@
 #include "bluetooth.h"
 #include "shunt.h"
 
+
 void charger_logic(void);
 void led_test(void);
 void config_communication(void);
@@ -54,6 +55,7 @@ int main(void)
 
 /// main loop
     uint8_t count_10ms = 0;
+    uint8_t count_1sec = 0;
     log("Main Loop\n");
     for(;;)
     {
@@ -82,38 +84,31 @@ int main(void)
                 {
                     /* 1 Hz */
                     count_10ms = 0;
+                    count_1sec++;
 
-                    // TODO move behind send_message_cellmodule()
-                    calc_cellmodule_data();
-                    charger_logic();
-
-
-
-                    //bluetooth_init_run_mode();
-                    //send_ble_cmd(Read_Local_Info_0x01);
-                    //send_message_ble("disp uart test\n");
-
-                    //print_cellmodule_full_debug();
-                    //print_shunt_full_debug();
-
-                    static bool cellmodule_round_robin = 1;
-                    if (cellmodule_round_robin)
+                    if (count_1sec%2)
                     {
                         send_message_cellmodule("!0000*00\n"); // u_batt_mv 0.5Hz
-                        cellmodule_round_robin = 0;
                     }
                     else
                     {
                         send_message_cellmodule("!0100*01\n"); // temp_c 0.5Hz
-                        cellmodule_round_robin = 1;
+                    }
+                    calc_cellmodule_data();
+                    charger_logic();
+
+
+                    if (count_1sec >= 9)
+                    {
+                        count_1sec = 0;
+//                        print_cellmodule_full_debug();
+                        print_shunt_full_debug();
+                        LED_RT2_TGL
                     }
 
-                    //send_message_cellmodule("!0100*01\n"); // temp_c 1Hz
-                }
-                else
-                {
-                    /* 4 Hz, but only triggers if 1 Hz part is not executed */
-                    //send_message_cellmodule("!0000*00\n"); // u_batt_mv ca. 3Hz
+                    //bluetooth_init_run_mode();
+                    //send_ble_cmd(Read_Local_Info_0x01);
+                    //send_message_ble("disp uart test\n");
                 }
             }
         }

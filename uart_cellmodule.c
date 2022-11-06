@@ -36,7 +36,7 @@ void send_message_cellmodule(uint8_t const * const data)
     }
     else
     {
-        log_va("out all cell: %s", data);
+//        log_va("out all cell: %s", data);
         // mark transmit of all chains as busy
         cellmodule_tx_busy = (1<<CELL_MODULE_CHAIN_1) | (1<<CELL_MODULE_CHAIN_2);
         // mark waiting-for-response of all chains as waiting
