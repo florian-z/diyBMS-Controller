@@ -166,7 +166,7 @@ Configuration Options
 
 /* Interrupt Stack size in bytes.
    NOTE: This setting is available only when using CCRX and GNUC. */
-#define BSP_CFG_ISTACK_BYTES            (0x200)
+#define BSP_CFG_ISTACK_BYTES            (0x400)
 
 /* Heap size in bytes.
    To disable the heap you must follow these steps:
@@ -221,7 +221,7 @@ Configuration Options
    3 = Sub-Clock Oscillator
    4 = PLL Circuit
 */
-#define BSP_CFG_CLOCK_SOURCE            (1) /* Generated value. Do not edit this manually */
+#define BSP_CFG_CLOCK_SOURCE            (4) /* Generated value. Do not edit this manually */
 
 /* LPT (Low Power Timer) Clock source select (LPTCR1.LPCNTCKSEL)
    0 = Sub-clock
@@ -273,12 +273,12 @@ Configuration Options
 /* PLL Input Frequency Divider Select (PLIDIV).
    Available divisors = /1 (no division), /2, /4
 */
-#define BSP_CFG_PLL_DIV                 (2) /* Generated value. Do not edit this manually */
+#define BSP_CFG_PLL_DIV                 (1) /* Generated value. Do not edit this manually */
 
 /* PLL Frequency Multiplication Factor Select (STC).
    Available multipliers = x4, x4.5, x5, x5.5, x6, x6.5, x7, x7.5, x8
 */
-#define BSP_CFG_PLL_MUL                 (8) /* Generated value. Do not edit this manually */
+#define BSP_CFG_PLL_MUL                 (4) /* Generated value. Do not edit this manually */
 
 /* System Clock Divider (ICK).
    Available divisors = /1 (no division), /2, /4, /8, /16, /32, /64
@@ -357,7 +357,7 @@ Configuration Options
              1 1: 1.90 V
    Default value is 0xFFFFFFFF.
 */
-#define BSP_CFG_OFS1_REG_VALUE  (0xFFFFFEF8) /* Generated value. Do not edit this manually */
+#define BSP_CFG_OFS1_REG_VALUE  (0xFFFFFFF8) /* Generated value. Do not edit this manually */
 
 /* This macro lets other modules no if a RTOS is being used.
    0 = RTOS is not used.

@@ -2904,6 +2904,9 @@
             <group>
                 <name>general</name>
                 <file>
+                    <name>$PROJ_DIR$\src\smc_gen\general\r_cg_dtc.h</name>
+                </file>
+                <file>
                     <name>$PROJ_DIR$\src\smc_gen\general\r_cg_hardware_setup.c</name>
                 </file>
                 <file>
@@ -3156,6 +3159,9 @@
         <name>$PROJ_DIR$\diybms-controller.ipcf</name>
     </file>
     <file>
+        <name>$PROJ_DIR$\freeze_util.c</name>
+    </file>
+    <file>
         <name>$PROJ_DIR$\log_util.c</name>
     </file>
     <file>
@@ -3166,6 +3172,12 @@
     </file>
     <file>
         <name>$PROJ_DIR$\shunt.c</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\storage_util.c</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\time_util.c</name>
     </file>
     <file>
         <name>$PROJ_DIR$\uart_ble.c</name>

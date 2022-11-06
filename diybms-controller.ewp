@@ -599,7 +599,7 @@
                 </option>
                 <option>
                     <name>AsmOutputFile</name>
-                    <state>$FILE_BNAME$.r54</state>
+                    <state>$FILE_BNAME$.o</state>
                 </option>
                 <option>
                     <name>AsmByteOrder</name>
@@ -669,7 +669,7 @@
                 </option>
                 <option>
                     <name>OOCOutputFile</name>
-                    <state></state>
+                    <state>diybms-controller.srec</state>
                 </option>
                 <option>
                     <name>OOCCommandLineProducer</name>
@@ -796,7 +796,7 @@
                 </option>
                 <option>
                     <name>IlinkEnableRemarks</name>
-                    <state>0</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>IlinkSuppressDiags</name>
@@ -2498,6 +2498,9 @@
         <name>$PROJ_DIR$\diybms-controller.ipcf</name>
     </file>
     <file>
+        <name>$PROJ_DIR$\freeze_util.c</name>
+    </file>
+    <file>
         <name>$PROJ_DIR$\log_util.c</name>
     </file>
     <file>
@@ -2508,6 +2511,12 @@
     </file>
     <file>
         <name>$PROJ_DIR$\shunt.c</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\storage_util.c</name>
+    </file>
+    <file>
+        <name>$PROJ_DIR$\time_util.c</name>
     </file>
     <file>
         <name>$PROJ_DIR$\uart_ble.c</name>
