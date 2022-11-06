@@ -39,7 +39,7 @@ Macro definitions (Register bit)
 /***********************************************************************************************************************
 Macro definitions
 ***********************************************************************************************************************/
-#define IWDT_IWDTCLK_COUNTER_DIVISION      (32)
+#define IWDT_IWDTCLK_COUNTER_DIVISION      (64)
 
 /***********************************************************************************************************************
 Typedef definitions
@@ -51,7 +51,6 @@ Global functions
 void R_Config_IWDT_Create(void);
 void R_Config_IWDT_Create_UserInit(void);
 void R_Config_IWDT_Restart(void);
-void r_Config_IWDT_nmi_interrupt(void);
 /* Start user code for function. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
 #endif

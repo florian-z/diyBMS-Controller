@@ -55,13 +55,10 @@ Global variables and functions
 void R_Config_IWDT_Create(void)
 {
     /* Set control registers */
-    IWDT.IWDTCR.WORD = _0003_IWDT_TIMEOUT_2048 | _0030_IWDT_CLOCK_DIV32 | _0300_IWDT_WINDOW_END_0 | 
+    IWDT.IWDTCR.WORD = _0002_IWDT_TIMEOUT_1024 | _0040_IWDT_CLOCK_DIV64 | _0300_IWDT_WINDOW_END_0 | 
                        _3000_IWDT_WINDOW_START_100;
-    IWDT.IWDTRCR.BYTE = _00_IWDT_NMI_INTERRUPT;
+    IWDT.IWDTRCR.BYTE = _80_IWDT_RESET_OUTPUT;
     IWDT.IWDTCSTPR.BYTE = _80_IWDT_COUNT_STOP_ENABLE;
-    
-    /* Enable NMI interrupt */
-    ICU.NMIER.BIT.IWDTEN = 1U;
     
     R_Config_IWDT_Create_UserInit();
 }

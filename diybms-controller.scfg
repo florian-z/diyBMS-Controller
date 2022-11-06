@@ -357,7 +357,7 @@
 <item id="RegMd" input="" vlaue="0"/>
 <item id="AutoMd" input="" vlaue="0"/>
 </option>
-<option enabled="true" id="ClkDiv" selection="32">
+<option enabled="true" id="ClkDiv" selection="64">
 <item id="1" input="" vlaue="0"/>
 <item id="16" input="" vlaue="0"/>
 <item id="32" input="" vlaue="0"/>
@@ -365,7 +365,7 @@
 <item id="128" input="" vlaue="0"/>
 <item id="256" input="" vlaue="0"/>
 </option>
-<option enabled="true" id="TmoutCycle" selection="2048">
+<option enabled="true" id="TmoutCycle" selection="1024">
 <item id="128" input="" vlaue="0"/>
 <item id="512" input="" vlaue="0"/>
 <item id="1024" input="" vlaue="0"/>
@@ -387,7 +387,7 @@
 <item id="CountStopEn" input="" vlaue="0"/>
 <item id="CountStopDis" input="" vlaue="0"/>
 </option>
-<option enabled="true" id="ResetInterruptRequest" selection="NmiInt">
+<option enabled="true" id="ResetInterruptRequest" selection="Res">
 <item id="NmiInt" input="" vlaue="0"/>
 <item id="Res" input="" vlaue="0"/>
 </option>
@@ -1834,7 +1834,7 @@
 <item id="Disable" input="" vlaue="0"/>
 </option>
 </allocatable>
-<osocket id="PORTINFO" value=";P40_O;P41_O;P42_O;P43_O;P44_O;P45_O;P46_O;P47_O;P51_O;P52_O;PB0_O;PD2_O;PD3_O;PD4_O;PD5_O;PD6_O;PD7_O;P14_I;"/>
+<osocket id="PORTINFO" value=";P14_I;P40_O;P41_O;P42_O;P43_O;P44_O;P45_O;P46_O;P47_O;P51_O;P52_O;PB0_O;PD2_O;PD3_O;PD4_O;PD5_O;PD6_O;PD7_O;"/>
 </allocatable>
 <component description="This software component provides configurations for General Purpose Input/Output. Common features such as reading, writing, and setting the direction of ports and pins can be configured. Enabling features such as open-drain outputs and internal pull-ups are also supported. " detailDescription="" display="Ports" id="com.renesas.smc.tools.swcomponent.codegenerator.port" version="2.3.0"/>
 <allocator channelLevel0="" channelLevel1="" channelLevel2="" channelLevel3="" channelLevel4="" channelLevel5="" description="Input output configuration of PORT" display="PORT" id="com.renesas.smc.tools.swcomponent.codegenerator.port.rx130.PORT" type="">

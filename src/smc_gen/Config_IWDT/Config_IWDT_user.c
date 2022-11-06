@@ -58,18 +58,5 @@ void R_Config_IWDT_Create_UserInit(void)
     /* End user code. Do not edit comment generated here */
 }
 
-/***********************************************************************************************************************
-* Function Name: r_Config_IWDT_nmi_interrupt
-* Description  : This function handles the NMI interrupt
-* Arguments    : None
-* Return Value : None
-***********************************************************************************************************************/
-
-void r_Config_IWDT_nmi_interrupt(void)
-{
-    /* Start user code for r_Config_IWDT_nmi_interrupt. Do not edit comment generated here */
-    /* End user code. Do not edit comment generated here */
-}
-
 /* Start user code for adding. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
