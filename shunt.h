@@ -19,8 +19,8 @@ typedef struct {
 void shunt_init();
 void shunt_tick();
 
-void log_shunt();
-void print_shunt_full_debug();
+void log_shunt_full_debug();
+void freezeframe_shunt_full_debug();
 
 void pass_message_shunt();
 void process_message_shunt();

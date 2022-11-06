@@ -209,22 +209,37 @@ bool check_age_ticks_u_batt_and_temp_allowed()
 
 /// debug log
 /* print all cellmodule data values and ages */
-void print_cellmodule_full_debug()
+void log_cellmodule_full_debug()
 {
-    // measured values
+    // measured values per module
     for(uint8_t i=0; i<=CELLMODULES_TOTAL; i++)
     {
         log_va("[%d: %dmV: %dC: %dC] ", i, module_data[i].u_batt_mv, module_data[i].temp_batt_c, module_data[i].temp_aux_c);
     }
     log_va("\n");
     // age of measured values
-//    for(uint8_t i=0; i<CELLMODULE_CHANNELS; i++)
-//    {
-//        log_va("debug cell age: chain %d ubatt %u temp %u\n", i, module_data_age[i].u_batt, module_data_age[i].temp);
-//    }
     log_va("[age: ubatt %u temp %u]", get_age_ticks_u_batt(), get_age_ticks_temp());
     // calculated values
     log_va("[%u %u %u mV] [%d %d %d battC] [%d %d %d auxC] [%d %d %d caseBotC] [%d shuntC]\n",
+        module_data_stat.u_batt_mv_lowest, module_data_stat.u_batt_mv_mean, module_data_stat.u_batt_mv_highest,
+        module_data_stat.temp_batt_c_lowest, module_data_stat.temp_batt_c_mean, module_data_stat.temp_batt_c_highest,
+        module_data_stat.temp_aux_c_lowest, module_data_stat.temp_aux_c_mean, module_data_stat.temp_aux_c_highest,
+        module_data_stat.temp_case_bottom_c_lowest, module_data_stat.temp_case_bottom_c_mean, module_data_stat.temp_case_bottom_c_highest,
+        module_data_stat.temp_shunt_c);
+}
+/* store all cellmodule data values and ages */
+void freezeframe_cellmodule_full_debug()
+{
+    // measured values per module
+    for(uint8_t i=0; i<=CELLMODULES_TOTAL; i++)
+    {
+        freeze_va("[%d: %dmV: %dC: %dC] ", i, module_data[i].u_batt_mv, module_data[i].temp_batt_c, module_data[i].temp_aux_c);
+    }
+    freeze_va("\n");
+    // age of measured values
+    freeze_va("[age: ubatt %u temp %u]", get_age_ticks_u_batt(), get_age_ticks_temp());
+    // calculated values
+    freeze_va("[%u %u %u mV] [%d %d %d battC] [%d %d %d auxC] [%d %d %d caseBotC] [%d shuntC]\n",
         module_data_stat.u_batt_mv_lowest, module_data_stat.u_batt_mv_mean, module_data_stat.u_batt_mv_highest,
         module_data_stat.temp_batt_c_lowest, module_data_stat.temp_batt_c_mean, module_data_stat.temp_batt_c_highest,
         module_data_stat.temp_aux_c_lowest, module_data_stat.temp_aux_c_mean, module_data_stat.temp_aux_c_highest,

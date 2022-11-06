@@ -53,7 +53,7 @@ uint16_t get_age_ticks_u_batt();
 uint16_t get_age_ticks_temp();
 bool check_age_ticks_u_batt_and_temp_allowed();
 
-void print_cellmodule_full_debug();
-
+void log_cellmodule_full_debug();
+void freezeframe_cellmodule_full_debug();
 
 #endif /* __cellmodule_data_h__ */

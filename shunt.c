@@ -90,6 +90,7 @@ void read_adc_config();
 void write_shunt_cal();
 void read_shunt_cal();
 
+/* trigger SPI communication */
 void shunt_tick()
 {
     static uint8_t round_robin_reader = 100;
@@ -175,13 +176,6 @@ void shunt_tick()
 }
 
 
-void log_shunt()
-{
-//    float tmp = ((int16_t)(((rx_data[1]&0xff)<<8)|rx_data[2]&0xff))*7.8125e-3;
-//    log_va("shunt RESULT TEMP    %04X %04X %04X       %f degC\n", rx_data[0], rx_data[1], rx_data[2], tmp);
-}
-
-
 void read_vshunt()
 {
     // returns mV
@@ -256,12 +250,13 @@ void read_charge()
 //    log_va("shunt CHARGE  %04X %04X %04X  %fAs\n", rx_data[0], rx_data[1], rx_data[2], shunt_data.charge);
 }
 
-
+/* signal received data */
 void pass_message_shunt()
 {
     ready_for_process = true;
 }
 
+/* process received data */
 void process_message_shunt()
 {
     if (ready_for_process)
@@ -349,16 +344,17 @@ void process_message_shunt()
     }
 }
 
-void print_shunt_full_debug()
+/* print all cellmodule data values and ages */
+void log_shunt_full_debug()
 {
     log_va("[SHUNT %.5fmV %.3fV %.1fC %.3fA %.3fW %.4fWh %.4fAh]\n",
         shunt_data.vshunt, shunt_data.vbus, shunt_data.dietemp,
         shunt_data.current, shunt_data.power, shunt_data.energy, shunt_data.charge);
 }
-
-void freezeframeprint_shunt_full_debug()
+/* store all cellmodule data values and ages */
+void freezeframe_shunt_full_debug()
 {
-    freeze_va("[SHUNT %.5fmV %.3fV %.1fC %.3fA %.3fW %.4fWh %.4fAh]\n",
+    freeze_va("[SHUNT %.4fmV %.2fV %.0fC %.2fA %.2fW %.3fWh %.3fAh]\n",
         shunt_data.vshunt, shunt_data.vbus, shunt_data.dietemp,
         shunt_data.current, shunt_data.power, shunt_data.energy, shunt_data.charge);
 }

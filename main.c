@@ -78,7 +78,9 @@ int main(void)
             if (!(count_10ms % 25))
             {
                 /* 4 Hz */
-                //send_message_pwr_tick();
+
+freezeframe_cellmodule_full_debug();
+freezeframe_shunt_full_debug();
 
 
                 if (count_10ms >= 100)
@@ -100,13 +102,12 @@ int main(void)
                     charger_logic();
 
                     log_va("time %s\n", get_ts_str());
-                    freeze_va("%02i jo test jojo, sag au\n", count_10ms); // TODO remove
 
                     if (count_1sec >= 9)
                     {
                         count_1sec = 0;
-//                        print_cellmodule_full_debug();
-                        print_shunt_full_debug();
+//                        log_cellmodule_full_debug();
+                        log_shunt_full_debug();
                         LED_RT2_TGL
                     }
 

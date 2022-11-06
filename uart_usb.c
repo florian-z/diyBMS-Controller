@@ -173,11 +173,11 @@ void process_message_usb()
         }
         else if (!strncmp("BATT", (char*)process_buffer_usb, 4))
         {
-            print_cellmodule_full_debug();
+            log_cellmodule_full_debug();
         }
         else if (!strncmp("SHUNT", (char*)process_buffer_usb, 5))
         {
-            print_shunt_full_debug();
+            log_shunt_full_debug();
         }
         else if (!strncmp("FREEZE", (char*)process_buffer_usb, 5))
         {
