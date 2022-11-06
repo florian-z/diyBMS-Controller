@@ -2,6 +2,7 @@
 #include <string.h>
 #include "log_util.h"
 #include "freeze_util.h"
+#include "time_util.h"
 
 #include "uart_ble.h"
 #include "uart_usb.h"
@@ -85,6 +86,7 @@ int main(void)
                     /* 1 Hz */
                     count_10ms = 0;
                     count_1sec++;
+                    time_tick_1sec();
 
                     if (count_1sec%2)
                     {
@@ -97,6 +99,8 @@ int main(void)
                     calc_cellmodule_data();
                     charger_logic();
 
+                    log_va("time %s\n", get_ts_str());
+                    freeze_va("%02i jo test jojo, sag au\n", count_10ms); // TODO remove
 
                     if (count_1sec >= 9)
                     {

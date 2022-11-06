@@ -2,6 +2,8 @@
 #define __log_util_h__
 
 #include <stdint.h>
+#include "time_util.h"
+
 #define LOG_BUF         200
 #define LOG_BUF_HEX     100
 

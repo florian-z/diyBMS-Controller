@@ -6,11 +6,13 @@
 #include "main.h"
 #include "r_cg_userdefine.h"
 #include "storage_util.h"
+#include "time_util.h"
 
 
 void freeze(uint8_t const * const data)
 {
     GLOBAL_INT_STORE_AND_DISABLE
+    store_msg((uint8_t*)get_ts_str());
     store_msg(data);
     GLOBAL_INT_RESTORE
 }
@@ -24,6 +26,7 @@ void freeze_va(const char * format, ...)
     vsnprintf(buf, LOG_BUF, format, args);
     va_end(args);
 
+    store_msg((uint8_t*)get_ts_str());
     store_msg((uint8_t*)buf);
     GLOBAL_INT_RESTORE
 }
@@ -39,6 +42,7 @@ void freeze_hex(uint8_t const * const data, uint8_t const len)
     }
     snprintf(buf+5+len*3, LOG_BUF_HEX-5-len*3, "\n");
 
+    store_msg((uint8_t*)get_ts_str());
     store_msg((uint8_t*)buf);
     GLOBAL_INT_RESTORE
 }
