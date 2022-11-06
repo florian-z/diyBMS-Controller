@@ -16,6 +16,13 @@
 #define ADDR_ADC_CONFIG     (0x01<<2)
 #define REG_ADC_CONFIG_B0_MODE_CONTINUOUS_SHUNT_AND_VBUS (0xB<<4)
 #define REG_ADC_CONFIG_B0_MODE_CONTINUOUS_ALL (0xF<<4)
+#define REG_ADC_CONFIG_B0_VSHUNT_CONV_TIME_4US (0x01)
+#define REG_ADC_CONFIG_B1_VSHUNT_CONV_TIME_4US (0xC0)
+#define REG_ADC_CONFIG_B1_AVG_4 (0x01)
+#define REG_ADC_CONFIG_B1_AVG_16 (0x02)
+#define REG_ADC_CONFIG_B1_AVG_64 (0x03)
+#define REG_ADC_CONFIG_B1_AVG_128 (0x04)
+
 #define ADDR_SHUNT_CAL      (0x02<<2)
 #define ADDR_SHUNT_TEMPCO   (0x03<<2)
 
@@ -53,6 +60,8 @@
 // power[W] = 3.2 * CURRENT_LSB * POWER
 // energy[J][Ws] = 16* 3.2 * CURRENT_LSB * ENERGY
 // charge[C][As] = CURRENT_LSB * CHARGE
+#define VBUS_CORRECTION     1.10254
+
 
 static shunt_t shunt_data = {0};
 
@@ -257,7 +266,7 @@ void process_message_shunt()
 {
     if (ready_for_process)
     {
-        log_va("SHUNT result tx[0] %02X rx[0] %02X %02X %02X %02X %02X %02X\n", tx_data[0], rx_data[0], rx_data[1], rx_data[2], rx_data[3], rx_data[4], rx_data[5]);
+//        log_va("SHUNT result tx[0] %02X rx[0] %02X %02X %02X %02X %02X %02X\n", tx_data[0], rx_data[0], rx_data[1], rx_data[2], rx_data[3], rx_data[4], rx_data[5]);
         if (rx_data[0] || !(rx_data[0]|rx_data[1]|rx_data[2]|rx_data[3]|rx_data[4]|rx_data[5]))
         {
             // rx_data[0] should be zero
@@ -266,62 +275,72 @@ void process_message_shunt()
             log_va("SHUNT possible comm error for tx[0] %02X\n", tx_data[0]);
         }
 
-        switch(tx_data[0]&~0x03) // ignore lowest two bits (b1 always zero, b0 r/w flag)
+        switch(tx_data[0]) // ignore lowest two bits (b1 always zero, b0 r/w flag)
         {
-            case ADDR_VSHUNT:
-                log("SHUNT recv VSHUNT ");
+            case ADDR_VSHUNT|ADDR_READ:
+//                log("SHUNT recv VSHUNT ");
                 // returns mV
                 // 312.5 nV/LSB when ADCRANGE = 0
                 // 78.125 nV/LSB when ADCRANGE = 1
                 shunt_data.vshunt = ((int32_t)((rx_data[1]&0xff)<<24 | (rx_data[2]&0xff)<<16 | (rx_data[3]&0xff)<<8))*78.125e-6/4096.0;
-                log_va("%.4f mV\n", shunt_data.vshunt);
+//                log_va("%.4f mV\n", shunt_data.vshunt);
                 break;
-            case ADDR_VBUS:
-                log("SHUNT recv VBUS ");
+            case ADDR_VBUS|ADDR_READ:
+//                log("SHUNT recv VBUS ");
                 // returns V
                 // 195.3125 μV/LSB
                 // 2.13 correction factor for VBUS resistor-devider
-                shunt_data.vbus = ((int32_t)((rx_data[1]&0xff)<<24 | (rx_data[2]&0xff)<<16 | (rx_data[3]&0xff)<<8))*195.3125e-6*2.13/4096.0;
-                log_va("%.3f V\n", shunt_data.vbus);
+                shunt_data.vbus = ((int32_t)((rx_data[1]&0xff)<<24 | (rx_data[2]&0xff)<<16 | (rx_data[3]&0xff)<<8))*195.3125e-6*2.13/4096.0*VBUS_CORRECTION;
+//                log_va("%.3f V\n", shunt_data.vbus);
                 break;
-            case ADDR_DIETEMP:
-                log("SHUNT recv DIETEMP ");
+            case ADDR_DIETEMP|ADDR_READ:
+//                log("SHUNT recv DIETEMP ");
                 // returns °C
                 // 7.8125 m°C/LSB
                 shunt_data.dietemp = ((int16_t)(((rx_data[1]&0xff)<<8)|rx_data[2]&0xff))*7.8125e-3;
-                log_va("%.3f degC\n", shunt_data.dietemp);
+//                log_va("%.3f degC\n", shunt_data.dietemp);
                 break;
-            case ADDR_CURRENT:
+            case ADDR_CURRENT|ADDR_READ:
+//                log("SHUNT recv CURRENT ");
                 // returns A
                 // CURRENT_LSB
-                log("SHUNT recv CURRENT ");
                 shunt_data.current = ((int32_t)((rx_data[1]&0xff)<<24 | (rx_data[2]&0xff)<<16 | (rx_data[3]&0xff)<<8))*CURRENT_LSB/4096.0;
-                log_va("%.3f A\n", shunt_data.current);
+//                log_va("%.3f A\n", shunt_data.current);
+                print_shunt_full_debug();
                 break;
-            case ADDR_POWER:
+            case ADDR_POWER|ADDR_READ:
+//                log("SHUNT recv POWER ");
                 // returns W
                 // CURRENT_LSB * 3.2
                 // 2.13 correction factor for VBUS resistor-devider
-                log("SHUNT recv POWER ");
-                shunt_data.power = ((uint32_t)((rx_data[1]&0xff)<<16 | (rx_data[2]&0xff)<<8 | (rx_data[3]&0xff)))*CURRENT_LSB*3.2*2.13;
-                log_va("%.3f W\n", shunt_data.power);
+                shunt_data.power = ((uint32_t)((rx_data[1]&0xff)<<16 | (rx_data[2]&0xff)<<8 | (rx_data[3]&0xff)))*CURRENT_LSB*3.2*2.13*VBUS_CORRECTION;
+//                log_va("%.3f W\n", shunt_data.power);
                 break;
-            case ADDR_ENERGY:
+            case ADDR_ENERGY|ADDR_READ:
+//                log("SHUNT recv ENERGY ");
                 // returns Wh
                 // CURRENT_LSB * 3.2 * 16
                 // 2.13 correction factor for VBUS resistor-devider
-                log("SHUNT recv ENERGY ");
-                shunt_data.energy = ((uint32_t)((rx_data[1]&0xff)<<24 | (rx_data[2]&0xff)<<16 | (rx_data[3]&0xff)<<8 | (rx_data[4]&0xff)))*CURRENT_LSB*3.2*16*2.13/3600.0;
+                shunt_data.energy = ((uint32_t)((rx_data[1]&0xff)<<24 | (rx_data[2]&0xff)<<16 | (rx_data[3]&0xff)<<8 | (rx_data[4]&0xff)))*CURRENT_LSB*3.2*16*2.13/3600.0*VBUS_CORRECTION;
                 // value read has five bytes, lowest byte is ignored here
-                log_va("%.3f Wh\n", shunt_data.energy);
+//                log_va("%.3f Wh\n", shunt_data.energy);
                 break;
-            case ADDR_CHARGE:
+            case ADDR_CHARGE|ADDR_READ:
+//                log("SHUNT recv CHARGE ");
                 // returns Ah
                 // CURRENT_LSB
-                log("SHUNT recv CHARGE ");
                 shunt_data.charge = ((int32_t)((rx_data[1]&0xff)<<24 | (rx_data[2]&0xff)<<16 | (rx_data[3]&0xff)<<8 | (rx_data[4]&0xff)))*CURRENT_LSB/3600.0;
                 // value read has five bytes, lowest byte is ignored here
-                log_va("%.3f Ah\n", shunt_data.charge);
+//                log_va("%.3f Ah\n", shunt_data.charge);
+                break;
+            case ADDR_ADC_CONFIG|ADDR_READ:
+                log_va("shunt ADC_CONFIG rd %02X %02X\n", rx_data[1], rx_data[2]);
+                break;
+            case ADDR_CONFIG|ADDR_READ:
+                log_va("shunt CONFIG rd %02X %02X\n", rx_data[1], rx_data[2]);
+                break;
+            case ADDR_SHUNT_CAL|ADDR_READ:
+                log_va("shunt SHUNT_CAL rd %02X %02X\n", rx_data[1], rx_data[2]);
                 break;
         }
         ready_for_transmit = true;
@@ -353,30 +372,28 @@ void write_config()
     tx_data[1] = 0;
     tx_data[2] = REG_CONFIG_B1_ADCRANGE_40mV;
     R_Config_RSPI0_Shunt_Send_Receive(tx_data, 3, rx_data);
-    log_va("\nshunt CONFIG wr %02X %02X\n", tx_data[1], tx_data[2]);
+    log_va("shunt CONFIG wr %02X %02X\n", tx_data[1], tx_data[2]);
 }
 void read_config()
 {
     // get CONFIG
     tx_data[0] = ADDR_CONFIG | ADDR_READ;
     R_Config_RSPI0_Shunt_Send_Receive(tx_data, 3, rx_data);
-    log_va("\nshunt CONFIG rd\n");
 }
 void write_adc_config()
 {
     // set ADC_CONFIG
     tx_data[0] = ADDR_ADC_CONFIG | ADDR_WRITE;
-    tx_data[1] = REG_ADC_CONFIG_B0_MODE_CONTINUOUS_ALL; // untested
-    tx_data[2] = 0;
+    tx_data[1] = REG_ADC_CONFIG_B0_MODE_CONTINUOUS_ALL | REG_ADC_CONFIG_B0_VSHUNT_CONV_TIME_4US;
+    tx_data[2] = REG_ADC_CONFIG_B1_VSHUNT_CONV_TIME_4US | REG_ADC_CONFIG_B1_AVG_64;
     R_Config_RSPI0_Shunt_Send_Receive(tx_data, 3, rx_data);
-    log_va("\nshunt ADC_CONFIG wr %02X %02X\n", tx_data[1], tx_data[2]);
+    log_va("shunt ADC_CONFIG wr %02X %02X\n", tx_data[1], tx_data[2]);
 }
 void read_adc_config()
 {
     // get ADC_CONFIG
     tx_data[0] = ADDR_ADC_CONFIG | ADDR_READ;
     R_Config_RSPI0_Shunt_Send_Receive(tx_data, 3, rx_data);
-    log_va("\nshunt ADC_CONFIG rd %02X %02X\n", rx_data[1], rx_data[2]);
 }
 void write_shunt_cal()
 {
@@ -385,12 +402,11 @@ void write_shunt_cal()
     tx_data[1] = SHUNT_VAL / 256;
     tx_data[2] = SHUNT_VAL & 0xff;
     R_Config_RSPI0_Shunt_Send_Receive(tx_data, 3, rx_data);
-    log_va("\nshunt SHUNT_CAL wr %02X %02X\n", tx_data[1], tx_data[2]);
+    log_va("shunt SHUNT_CAL wr %02X %02X\n", tx_data[1], tx_data[2]);
 }
 void read_shunt_cal()
 {
     // get SHUNT_CAL
     tx_data[0] = ADDR_SHUNT_CAL | ADDR_READ;
     R_Config_RSPI0_Shunt_Send_Receive(tx_data, 3, rx_data);
-    log_va("\nshunt SHUNT_CAL rd\n");
 }
