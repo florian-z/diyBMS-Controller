@@ -7,6 +7,7 @@
 #include "cellmodule_data.h"
 #include "shunt.h"
 #include "log_util.h"
+#include "storage_util.h"
 
 /*** USB / Debug UART ***/
 static volatile uint8_t send_buf_usb[TX_BUF_USB] = {0};     /* transmit buffer */
@@ -28,6 +29,7 @@ void send_message_usb(uint8_t const * const data)
         if(*send_buf_usb_wr != '\0')
         {
             /* buffer full -> skip */
+            *(send_buf_usb_wr-1) = '\0'; // ensure previous string has a defined end
             break;
         }
         *send_buf_usb_wr++ = data[i];
@@ -176,6 +178,16 @@ void process_message_usb()
         else if (!strncmp("SHUNT", (char*)process_buffer_usb, 5))
         {
             print_shunt_full_debug();
+        }
+        else if (!strncmp("FREEZE", (char*)process_buffer_usb, 5))
+        {
+//            if (give_buffer_start() != give_history_start())
+//            {
+//                send_message_usb_no_buffer(give_history_start(), strlen((char*)give_history_start()));
+//            }
+//            send_message_usb_no_buffer(give_buffer_start(), strlen((char*)give_buffer_start()));
+            send_message_usb_no_buffer(give_buffer_start(), STORAGE_UTIL_LEN);
+            log("END\n");
         }
 
         /* last step: free buffer */

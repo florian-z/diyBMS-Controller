@@ -2,6 +2,9 @@
 #include "log_util.h"
 #include <stdarg.h>
 #include <stdio.h>
+#include <string.h>
+#include "main.h"
+#include "r_cg_userdefine.h"
 #include "storage_util.h"
 
 
