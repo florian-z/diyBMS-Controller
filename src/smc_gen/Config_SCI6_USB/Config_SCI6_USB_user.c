@@ -50,6 +50,7 @@ extern volatile uint8_t * gp_sci6_rx_address;                /* SCI6 receive buf
 extern volatile uint16_t  g_sci6_rx_count;                   /* SCI6 receive data number */
 extern volatile uint16_t  g_sci6_rx_length;                  /* SCI6 receive data length */
 /* Start user code for global. Do not edit comment generated here */
+extern volatile uint8_t   g_sci6_mode;
 static volatile uint8_t g_sci6_rx_buf[RX_BUF_USB] = {0};     /* SCI6 internal receive buffer */
 static void r_Config_SCI6_USB_restart_receiver(void);
 /* End user code. Do not edit comment generated here */
@@ -85,7 +86,10 @@ __interrupt static void r_Config_SCI6_USB_transmit_interrupt(void)
     if (0U < g_sci6_tx_count)
     {
         SCI6.TDR = *gp_sci6_tx_address;
-        *gp_sci6_tx_address = '\0'; // mark as done / free
+        if (SCI_TX_ZERO == g_sci6_mode)
+        {
+            *gp_sci6_tx_address = '\0'; // mark as done / free
+        }
         gp_sci6_tx_address++;
         g_sci6_tx_count--;
     }
