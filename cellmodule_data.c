@@ -1,6 +1,7 @@
 #include "cellmodule_data.h"
 
 #include "log_util.h"
+#include "freeze_util.h"
 #include "uart_cellmodule.h"
 
 // measurement of all cell modules

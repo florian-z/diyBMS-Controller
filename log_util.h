@@ -2,6 +2,8 @@
 #define __log_util_h__
 
 #include <stdint.h>
+#define LOG_BUF         200
+#define LOG_BUF_HEX     100
 
 void log(uint8_t const * const data);
 void log_va(const char * format, ...);

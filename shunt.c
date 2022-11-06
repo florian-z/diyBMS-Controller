@@ -2,6 +2,7 @@
 
 #include <string.h>
 #include "log_util.h"
+#include "freeze_util.h"
 #include "messages.h"
 
 #define ADDR_READ  1
@@ -331,7 +332,14 @@ void process_message_shunt()
 
 void print_shunt_full_debug()
 {
-    log_va("[SHUNT %.3fmV %.2fV %.1f°C %.2fA %.2fW %.2fWh %.2fAh]\n",
+    log_va("[SHUNT %.5fmV %.3fV %.1fC %.3fA %.3fW %.4fWh %.4fAh]\n",
+        shunt_data.vshunt, shunt_data.vbus, shunt_data.dietemp,
+        shunt_data.current, shunt_data.power, shunt_data.energy, shunt_data.charge);
+}
+
+void freezeframeprint_shunt_full_debug()
+{
+    freeze_va("[SHUNT %.5fmV %.3fV %.1fC %.3fA %.3fW %.4fWh %.4fAh]\n",
         shunt_data.vshunt, shunt_data.vbus, shunt_data.dietemp,
         shunt_data.current, shunt_data.power, shunt_data.energy, shunt_data.charge);
 }

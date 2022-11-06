@@ -1,6 +1,7 @@
 #include "main.h"
 #include <string.h>
 #include "log_util.h"
+#include "freeze_util.h"
 
 #include "uart_ble.h"
 #include "uart_usb.h"
