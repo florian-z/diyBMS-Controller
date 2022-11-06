@@ -106,9 +106,6 @@ void R_Systeminit(void)
     /* Register undefined interrupt */
     R_BSP_InterruptWrite(BSP_INT_SRC_UNDEFINED_INTERRUPT,(bsp_int_cb_t)r_undefined_exception);
 
-    /* Register IWDT underflow/refresh error interrupt */
-    R_BSP_InterruptWrite(BSP_INT_SRC_IWDT_ERROR,(bsp_int_cb_t)r_Config_IWDT_nmi_interrupt);
-
     /* Disable writing to MPC pin function control registers */
     MPC.PWPR.BIT.PFSWE = 0U;
     MPC.PWPR.BIT.B0WI = 1U;

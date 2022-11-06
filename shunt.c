@@ -287,6 +287,10 @@ void process_message_shunt()
                 // 2.13 correction factor for VBUS resistor-devider
                 shunt_data.vbus = ((int32_t)((rx_data[1]&0xff)<<24 | (rx_data[2]&0xff)<<16 | (rx_data[3]&0xff)<<8))*195.3125e-6*2.13/4096.0*VBUS_CORRECTION;
 //                log_va("%.3f V\n", shunt_data.vbus);
+                if (shunt_data.vbus > 50.0)
+                {   // shunt does read a non-zero value
+                    report_system_status(SHUNT);
+                }
                 break;
             case ADDR_DIETEMP|ADDR_READ:
 //                log("SHUNT recv DIETEMP ");

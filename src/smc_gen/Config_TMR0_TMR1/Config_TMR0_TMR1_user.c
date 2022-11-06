@@ -74,7 +74,7 @@ __interrupt static void r_Config_TMR0_TMR1_cmia0_interrupt(void)
 #endif
 {
     /* Start user code for r_Config_TMR0_TMR1_cmia0_interrupt. Do not edit comment generated here */
-    // 100Hz (10ms)
+    // 1kHz (1ms)
     main_timer_tick();
     /* End user code. Do not edit comment generated here */
 }

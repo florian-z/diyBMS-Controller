@@ -16,8 +16,9 @@ void charger_logic(void);
 void led_test(void);
 void config_communication(void);
 void register_nmi_interrupt_handler(void);
+void tick_system_status(void);
 
-#define MAINTAIN_WATCHDOG //R_Config_IWDT_Restart();
+#define MAINTAIN_WATCHDOG   R_Config_IWDT_Restart();
 static volatile bool timer_tick = false;
 
 // LED_GN1 on while message active on cell chain 1
@@ -26,13 +27,14 @@ static volatile bool timer_tick = false;
 // LED_BL1 on while comm with shunt active
 // LED_GN2 on while message active on cell chain 1
 // LED_GE2 on while uart-BLE-rx active
-// LED_RT2
-// LED_BL2 main loop
+// LED_RT2 main loop 0.1Hz toggle
+// LED_BL2 main loop on while active/busy
 
 // LED_RT1 & LED_RT2 alternating fast -> Error_Handler()
 
 int main(void)
 {
+    MAINTAIN_WATCHDOG
     led_test();
     config_communication();
     log("Booting... :)\n");
@@ -43,24 +45,24 @@ int main(void)
     OUT_HEATER_LATCH_OFF_CURR
     OUT_BAL_LATCH_OFF_CURR
     MAINTAIN_WATCHDOG
-    R_BSP_SoftwareDelay(50, BSP_DELAY_MILLISECS);
+    R_BSP_SoftwareDelay(50, BSP_DELAY_MILLISECS); // 10ms needed for relais
     OUT_HEATER_LATCH_OFF_IDLE
     OUT_BAL_LATCH_OFF_IDLE
 
     register_nmi_interrupt_handler();
     R_Config_TMR0_TMR1_Start(); // start timer tick
+    MAINTAIN_WATCHDOG
     shunt_init();
     //bluetooth_init_config_mode();
     bluetooth_init_run_mode();
-    //send_ble_cmd(Read_Local_Info_0x01);
 
 /// main loop
+    MAINTAIN_WATCHDOG
     uint8_t count_10ms = 0;
     uint8_t count_1sec = 0;
     log("Main Loop\n");
     for(;;)
     {
-        MAINTAIN_WATCHDOG
         // todo flo powersave / sleep
         LED_BL2_OFF
         if (timer_tick)
@@ -71,6 +73,7 @@ int main(void)
             if (!(count_10ms % 10))
             {
                 /* 10 Hz */
+                tick_system_status();
                 tick_cellmodule();
                 shunt_tick();
             }
@@ -89,6 +92,7 @@ freezeframe_shunt_full_debug();
                     count_10ms = 0;
                     count_1sec++;
                     time_tick_1sec();
+                    report_system_status(MAIN_LOOP);
 
                     if (count_1sec%2)
                     {
@@ -96,14 +100,15 @@ freezeframe_shunt_full_debug();
                     }
                     else
                     {
+                        log_va("time %s\n", get_ts_str());
                         send_message_cellmodule("!0100*01\n"); // temp_c 0.5Hz
                     }
                     calc_cellmodule_data();
                     charger_logic();
 
-                    log_va("time %s\n", get_ts_str());
 
-                    if (count_1sec >= 9)
+
+                    if (count_1sec >= 10)
                     {
                         count_1sec = 0;
 //                        log_cellmodule_full_debug();
@@ -347,7 +352,6 @@ void Error_Handler(void)
     {
         LED_RT1_TGL
         LED_RT2_TGL
-        MAINTAIN_WATCHDOG // TODO flo debug only, remove before flight
         R_BSP_SoftwareDelay(200, BSP_DELAY_MILLISECS);
     }
 }
@@ -382,4 +386,71 @@ void register_nmi_interrupt_handler(void)
     R_BSP_InterruptWrite(BSP_INT_SRC_UNDEFINED_INTERRUPT, &nmi_interrupt_handler);
     R_BSP_InterruptWrite(BSP_INT_SRC_BUS_ERROR, &nmi_interrupt_handler);
     R_BSP_InterruptWrite(BSP_INT_SRC_EMPTY, &nmi_interrupt_handler);
+}
+
+static uint8_t tss_cellmodule_chain1 = 0;
+static uint8_t tss_cellmodule_chain2 = 0;
+static uint8_t tss_shunt = 0;
+static uint8_t tss_main_loop = 0;
+// SYSTEM_STATUS_TICK_LIMIT
+#define TSS_LIMIT 25
+void tick_system_status(void)
+{
+    if (tss_cellmodule_chain1 < TSS_LIMIT) // prevent rollover
+    {
+        tss_cellmodule_chain1++;
+    }
+    else
+    {
+        log("TSS CHAIN1\n");
+    }
+    if (tss_cellmodule_chain2 < TSS_LIMIT) // prevent rollover
+    {
+        tss_cellmodule_chain2++;
+    }
+    else
+    {
+        log("TSS CHAIN2\n");
+    }
+    if (tss_shunt < TSS_LIMIT) // prevent rollover
+    {
+        tss_shunt++;
+    }
+    else
+    {
+        log("TSS SHUNT\n");
+    }
+    if (tss_main_loop < TSS_LIMIT) // prevent rollover
+    {
+        tss_main_loop++;
+    }
+    else
+    {
+        log("TSS MAIN LOOP\n");
+    }
+
+    if(tss_cellmodule_chain1 < TSS_LIMIT && tss_cellmodule_chain2 < TSS_LIMIT && tss_shunt < TSS_LIMIT && tss_main_loop < TSS_LIMIT)
+    {
+        // all supervised functions are reporting success in a timely manner
+        MAINTAIN_WATCHDOG
+    }
+}
+
+void report_system_status(enum system_status id)
+{
+    switch(id)
+    {
+        case CELLMODULE_CHAIN1:
+            tss_cellmodule_chain1 = 0;
+            break;
+        case CELLMODULE_CHAIN2:
+            tss_cellmodule_chain2 = 0;
+            break;
+        case SHUNT:
+            tss_shunt = 0;
+            break;
+        case MAIN_LOOP:
+            tss_main_loop = 0;
+            break;
+    }
 }

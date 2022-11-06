@@ -158,10 +158,12 @@ void process_message_cellmodule()
                 if (CELL_MODULE_CHAIN_1 == chain_no)
                 {
                     LED_GN1_OFF
+                    report_system_status(CELLMODULE_CHAIN1);
                 }
                 else if (CELL_MODULE_CHAIN_2 == chain_no)
                 {
                     LED_GN2_OFF
+                    report_system_status(CELLMODULE_CHAIN2);
                 }
                 process_message_cellmodule_int(chain_no);
             }
