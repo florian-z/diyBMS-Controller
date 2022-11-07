@@ -31,3 +31,10 @@ char* get_ts_str() // 12 chars + '\0'
     strftime(buf, 20, "%m%d %H%M%S ", gmtime(&system_time_sec));
     return buf;
 }
+
+char* get_ts_full_str()
+{
+    static char buf[20] = {0};
+    strftime(buf, 20, "%y%m%d %H%M%S", gmtime(&system_time_sec));
+    return buf;
+}

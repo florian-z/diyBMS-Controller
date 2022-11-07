@@ -9,9 +9,11 @@
 
 typedef enum
 {
-    Read_Local_Info_0x01,
-    Reset_0x02,
-    Read_Status_0x03
+    Read_Local_Info_0x01 = 1,
+    Reset_0x02 = 2,
+    Read_Status_0x03 = 3,
+
+    SetTimestamp_0x86 = 0x86
 } ble_cmd_t;
 
 #define BLE_SYNC_WORD   0xAA
@@ -33,5 +35,6 @@ typedef enum
 void bluetooth_init_config_mode();
 void bluetooth_init_run_mode();
 void send_ble_cmd(ble_cmd_t ble_cmd);
+void recv_ble_msg(uint8_t* msg, uint8_t msglen);
 
 #endif /* __bluetooth_h__ */

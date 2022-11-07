@@ -82,9 +82,6 @@ int main(void)
             {
                 /* 4 Hz */
 
-freezeframe_cellmodule_full_debug();
-freezeframe_shunt_full_debug();
-
 
                 if (count_10ms >= 100)
                 {
@@ -100,7 +97,7 @@ freezeframe_shunt_full_debug();
                     }
                     else
                     {
-                        log_va("time %s\n", get_ts_str());
+                        //log_va("time %s\n", get_ts_str());
                         send_message_cellmodule("!0100*01\n"); // temp_c 0.5Hz
                     }
                     calc_cellmodule_data();
@@ -111,14 +108,16 @@ freezeframe_shunt_full_debug();
                     if (count_1sec >= 10)
                     {
                         count_1sec = 0;
-//                        log_cellmodule_full_debug();
+                        log_cellmodule_full_debug();
                         log_shunt_full_debug();
+                        freezeframe_cellmodule_full_debug();
+                        freezeframe_shunt_full_debug();
                         LED_RT2_TGL
                     }
 
                     //bluetooth_init_run_mode();
                     //send_ble_cmd(Read_Local_Info_0x01);
-                    //send_message_ble("disp uart test\n");
+                    send_message_ble_ascii("disp uart test\n");
                 }
             }
         }

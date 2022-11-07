@@ -179,7 +179,7 @@ void process_message_usb()
         {
             log_shunt_full_debug();
         }
-        else if (!strncmp("FREEZE", (char*)process_buffer_usb, 5))
+        else if (!strncmp("FREEZE", (char*)process_buffer_usb, 6))
         {
 //            if (give_buffer_start() != give_history_start())
 //            {
@@ -188,6 +188,14 @@ void process_message_usb()
 //            send_message_usb_no_buffer(give_buffer_start(), strlen((char*)give_buffer_start()));
             send_message_usb_no_buffer(give_buffer_start(), STORAGE_UTIL_LEN);
             log("END\n");
+        }
+        else if (!strncmp("TIME", (char*)process_buffer_usb, 4))
+        {
+            log_va("[TIME %s]\n", get_ts_full_str());
+        }
+        else
+        {
+            log_va("CMD UNKNOWN: \"%s\"\n");
         }
 
         /* last step: free buffer */

@@ -2,6 +2,7 @@
 
 #include "log_util.h"
 #include "uart_ble.h"
+#include "time_util.h"
 
 void bluetooth_init_config_mode()
 {
@@ -57,5 +58,24 @@ void send_ble_cmd(ble_cmd_t ble_cmd)
     send_message_ble_binary((uint8_t*)&msg, msg[BLE_LEN_L]+4);
 }
 
-
-
+void recv_ble_msg(uint8_t* msg, uint8_t msglen)
+{
+    if(msg[BLE_OPCODE] == SetTimestamp_0x86)
+    {
+        log("BLE Set Timestamp: ");
+        if(msg[BLE_LEN_H] == 0 && msg[BLE_LEN_L] == 5 && msglen == 9)
+        {
+            uint32_t ts = msg[BLE_OPCODE+1]<<24 | msg[BLE_OPCODE+2]<<16 | msg[BLE_OPCODE+3]<<8 | msg[BLE_OPCODE+4];
+            log_va("ts: %lu\n", ts);
+            set_time_tick(ts);
+        }
+        else
+        {
+            log("ble cmd malformed\n");
+        }
+    }
+    else
+    {
+        log_va("BLE unknown opcode: %02X\n", msg[BLE_OPCODE]);
+    }
+}

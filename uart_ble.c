@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include "log_util.h"
+#include "bluetooth.h"
 
 
 /*** Display / BT UART ***/
@@ -35,6 +36,29 @@ void send_message_ble_binary(uint8_t const * const data, uint8_t const data_len)
     tx_ble_buf_len = data_len;
 
     log_hex((uint8_t*)tx_ble_buf, tx_ble_buf_len);
+    R_Config_SCI1_BLE_Serial_Send((uint8_t*)tx_ble_buf, tx_ble_buf_len);
+}
+
+void send_message_ble_ascii(uint8_t const * const data)
+{
+    GLOBAL_INT_STORE_AND_DISABLE
+    if(tx_ble_busy)
+    {
+        // ble uart currently busy
+        log("BLE:tx busy\n");
+        GLOBAL_INT_RESTORE
+        return;
+    }
+    tx_ble_busy = true;
+    GLOBAL_INT_RESTORE
+    LED_GE1_ON
+
+
+    tx_ble_buf_len = strlen((char*)data);
+    memset((uint8_t*)tx_ble_buf, '\0', TX_BUF_BLE);
+    memcpy((uint8_t*)tx_ble_buf, data, tx_ble_buf_len);
+
+    log((uint8_t*)tx_ble_buf);
     R_Config_SCI1_BLE_Serial_Send((uint8_t*)tx_ble_buf, tx_ble_buf_len);
 }
 
@@ -78,8 +102,9 @@ void process_message_ble()
         if (!sum)
         {
             // crc good
-            //log("ble crc good\n");
-            // TODO process response
+            log("ble crc good\n");
+            // process response
+            recv_ble_msg((uint8_t*)process_buffer_ble, process_buffer_ble_len);
         }
         else
         {
