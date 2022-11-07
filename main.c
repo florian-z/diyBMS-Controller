@@ -202,6 +202,7 @@ void charger_logic()
                 LOG_AND_FREEZE("CHARGE LATCH ON:LOAD ON\n");
                 OUT_CHARGER_LOAD_ON
                 charger_active_state = true;
+                shunt_report_charge_start();
             }
             else
             {

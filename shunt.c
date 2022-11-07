@@ -10,6 +10,8 @@
 
 // config
 #define ADDR_CONFIG         (0x00<<2)
+// reset Charge and Energy accumulation registers
+#define REG_CONFIG_B0_RSTACC    (0x40)
 // select 40mV full scale ADC_RANGE
 #define REG_CONFIG_B1_ADCRANGE_40mV (1<<4)
 
@@ -84,6 +86,7 @@ void read_power();
 void read_energy();
 void read_charge();
 void write_config();
+void write_config_with_rstacc();
 void read_config();
 void write_adc_config();
 void read_adc_config();
@@ -92,6 +95,15 @@ void read_shunt_cal();
 void read_shunt_manufacturerid();
 
 /* trigger SPI communication */
+static bool shunt_reset_accu_regs = false;
+void shunt_report_charge_start()
+{
+    if (shunt_data.charge<0 || shunt_data.energy<0)
+    {
+        shunt_reset_accu_regs = true;
+    }
+}
+
 void shunt_tick()
 {
     static uint8_t round_robin_reader = 100;
@@ -153,7 +165,16 @@ void shunt_tick()
             switch(inner_round_robin_reader)
             {
                 case 0:
-                    read_dietemp();
+                    if (shunt_reset_accu_regs)
+                    {
+                        shunt_reset_accu_regs = false;
+                        freeze("SHUNT RSTACC\n");
+                        write_config_with_rstacc();
+                    }
+                    else
+                    {
+                        read_dietemp();
+                    }
                     break;
                 case 1:
                     read_energy();
@@ -378,6 +399,17 @@ void write_config()
     // select 40.96mV shunt full scale ADC_RANGE
     tx_data[0] = ADDR_CONFIG | ADDR_WRITE;
     tx_data[1] = 0;
+    tx_data[2] = REG_CONFIG_B1_ADCRANGE_40mV;
+    R_Config_RSPI0_Shunt_Send_Receive(tx_data, 3, rx_data);
+    log_va("shunt CONFIG wr %02X %02X\n", tx_data[1], tx_data[2]);
+}
+void write_config_with_rstacc()
+{
+    // set CONFIG
+    // select 40.96mV shunt full scale ADC_RANGE
+    // reset accumulations registers Charge and Energy
+    tx_data[0] = ADDR_CONFIG | ADDR_WRITE;
+    tx_data[1] = REG_CONFIG_B0_RSTACC;
     tx_data[2] = REG_CONFIG_B1_ADCRANGE_40mV;
     R_Config_RSPI0_Shunt_Send_Receive(tx_data, 3, rx_data);
     log_va("shunt CONFIG wr %02X %02X\n", tx_data[1], tx_data[2]);
