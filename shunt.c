@@ -89,6 +89,7 @@ void write_adc_config();
 void read_adc_config();
 void write_shunt_cal();
 void read_shunt_cal();
+void read_shunt_manufacturerid();
 
 /* trigger SPI communication */
 void shunt_tick()
@@ -165,6 +166,9 @@ void shunt_tick()
                     break;
                 case 4:
                     read_vshunt();
+                    break;
+                case 5:
+                    read_shunt_manufacturerid();
                     inner_round_robin_reader = UINT8_MAX; // restart inner round robin
                     break;
             }
@@ -287,10 +291,6 @@ void process_message_shunt()
                 // 2.13 correction factor for VBUS resistor-devider
                 shunt_data.vbus = ((int32_t)((rx_data[1]&0xff)<<24 | (rx_data[2]&0xff)<<16 | (rx_data[3]&0xff)<<8))*195.3125e-6*2.13/4096.0*VBUS_CORRECTION;
 //                log_va("%.3f V\n", shunt_data.vbus);
-                if (shunt_data.vbus > 50.0)
-                {   // shunt does read a non-zero value
-                    report_system_status(SHUNT);
-                }
                 break;
             case ADDR_DIETEMP|ADDR_READ:
 //                log("SHUNT recv DIETEMP ");
@@ -340,6 +340,14 @@ void process_message_shunt()
                 break;
             case ADDR_SHUNT_CAL|ADDR_READ:
                 log_va("shunt SHUNT_CAL rd %02X %02X\n", rx_data[1], rx_data[2]);
+                break;
+            case ADDR_MANUFACTURER_ID|ADDR_READ:
+                //log_va("shunt MANUF_ID rd %02X %02X\n", rx_data[1], rx_data[2]);
+                if ((rx_data[1] == 0x54) && (rx_data[2] == 0x49))
+                {
+                    // read value matches expected value -> SPI communication working
+                    report_system_status(SHUNT);
+                }
                 break;
         }
         ready_for_transmit = true;
@@ -408,5 +416,10 @@ void read_shunt_cal()
 {
     // get SHUNT_CAL
     tx_data[0] = ADDR_SHUNT_CAL | ADDR_READ;
+    R_Config_RSPI0_Shunt_Send_Receive(tx_data, 3, rx_data);
+}
+void read_shunt_manufacturerid()
+{
+    tx_data[0] = ADDR_MANUFACTURER_ID | ADDR_READ;
     R_Config_RSPI0_Shunt_Send_Receive(tx_data, 3, rx_data);
 }
