@@ -35,6 +35,7 @@ typedef enum
 void bluetooth_init_config_mode();
 void bluetooth_init_run_mode();
 void send_ble_cmd(ble_cmd_t ble_cmd);
+void send_ble_android();
 void recv_ble_msg(uint8_t* msg, uint8_t msglen);
 
 #endif /* __bluetooth_h__ */

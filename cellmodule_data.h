@@ -39,6 +39,13 @@ typedef struct {
 } module_data_statistics_t;
 
 
+#define BOTTOM_CASE_AUX_TEMP_ID_LEN 4
+#define BOTTOM_CASE_AUX_TEMP_1  1
+#define BOTTOM_CASE_AUX_TEMP_2  9
+#define BOTTOM_CASE_AUX_TEMP_3  37
+#define BOTTOM_CASE_AUX_TEMP_4  45
+#define SHUNT_AUX_TEMP 2
+
 
 /// measurement values
 void calc_cellmodule_data();

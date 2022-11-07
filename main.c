@@ -70,12 +70,17 @@ int main(void)
             LED_BL2_ON
             timer_tick = false;
             count_10ms++;
+            if (!(count_10ms % 5))
+            {
+                /* 20 Hz */
+                shunt_tick();
+            }
             if (!(count_10ms % 10))
             {
                 /* 10 Hz */
                 tick_system_status();
                 tick_cellmodule();
-                shunt_tick();
+                send_ble_android();
             }
 
             if (!(count_10ms % 25))
@@ -117,7 +122,8 @@ int main(void)
 
                     //bluetooth_init_run_mode();
                     //send_ble_cmd(Read_Local_Info_0x01);
-                    send_message_ble_ascii("disp uart test\n");
+                    //send_message_ble_ascii("disp uart test\n");
+
                 }
             }
         }

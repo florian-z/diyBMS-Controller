@@ -63,11 +63,11 @@
 #define VBUS_CORRECTION     1.10254
 
 
-static shunt_t shunt_data = {0};
+shunt_t shunt_data = {0};
 
 
-uint16_t rx_data[SHUNT_LEN] = {0};
-uint16_t tx_data[SHUNT_LEN] = {0};
+static uint16_t rx_data[SHUNT_LEN] = {0};
+static uint16_t tx_data[SHUNT_LEN] = {0};
 static volatile bool ready_for_transmit = false;
 static volatile bool ready_for_process = false;
 

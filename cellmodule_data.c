@@ -12,10 +12,7 @@ module_data_age_t module_data_age[CELLMODULE_CHANNELS] = {{.u_batt=UINT16_MAX, .
 module_data_statistics_t module_data_stat = {0};
 
 
-#define BOTTOM_CASE_AUX_TEMP_ID_LEN 4
-static const uint8_t BOTTOM_CASE_AUX_TEMP_IDS[BOTTOM_CASE_AUX_TEMP_ID_LEN] = { 1, 9, 37, 45 };
-#define SHUNT_AUX_TEMP 2
-
+static const uint8_t BOTTOM_CASE_AUX_TEMP_IDS[BOTTOM_CASE_AUX_TEMP_ID_LEN] = { BOTTOM_CASE_AUX_TEMP_1, BOTTOM_CASE_AUX_TEMP_2, BOTTOM_CASE_AUX_TEMP_3, BOTTOM_CASE_AUX_TEMP_4 };
 
 
 /// measurement values

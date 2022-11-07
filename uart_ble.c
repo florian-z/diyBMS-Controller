@@ -35,7 +35,7 @@ void send_message_ble_binary(uint8_t const * const data, uint8_t const data_len)
     memcpy((uint8_t*)tx_ble_buf, data, data_len);
     tx_ble_buf_len = data_len;
 
-    log_hex((uint8_t*)tx_ble_buf, tx_ble_buf_len);
+    //log_hex((uint8_t*)tx_ble_buf, tx_ble_buf_len);
     R_Config_SCI1_BLE_Serial_Send((uint8_t*)tx_ble_buf, tx_ble_buf_len);
 }
 
@@ -58,7 +58,7 @@ void send_message_ble_ascii(uint8_t const * const data)
     memset((uint8_t*)tx_ble_buf, '\0', TX_BUF_BLE);
     memcpy((uint8_t*)tx_ble_buf, data, tx_ble_buf_len);
 
-    log((uint8_t*)tx_ble_buf);
+    //log((uint8_t*)tx_ble_buf);
     R_Config_SCI1_BLE_Serial_Send((uint8_t*)tx_ble_buf, tx_ble_buf_len);
 }
 
