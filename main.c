@@ -204,7 +204,7 @@ void charger_logic()
         bool check_temp_charging_allowed_var = check_temp_charging_allowed();
         bool check_volt_charging_necessary_start_var = check_volt_charging_necessary_start();
         //bool check_age_ticks_u_batt_and_temp_allowed_var = check_age_ticks_u_batt_and_temp_allowed();
-        if (check_temp_charging_allowed_var && check_volt_charging_necessary_start_var && !check_age_ticks_u_batt_and_temp_allowed_var)
+        if (check_temp_charging_allowed_var && check_volt_charging_necessary_start_var && check_age_ticks_u_batt_and_temp_allowed_var)
         {
             if (!charger_active_state)
             {
@@ -218,26 +218,29 @@ void charger_logic()
                 OUT_CHARGER_DOOR_ON
             }
         } else {
-            char* msg_temp = "";
-            char* msg_not_needed = "";
-            char* msg_tick_age = "";
-            uint8_t new_reason_charge_not_starting = 0;
-            if(!check_temp_charging_allowed_var) {
-                msg_temp = ":TEMP DOES NOT ALLOW";
-                new_reason_charge_not_starting |= (1<<1);
-            }
-            if(!check_volt_charging_necessary_start_var) {
-                msg_not_needed = ":VOLT CHG NOT NEEDED";
-                new_reason_charge_not_starting |= (1<<2);
-            }
-            if(!check_temp_charging_allowed_var) {
-                msg_tick_age = ":CELL DATA TO OLD";
-                new_reason_charge_not_starting |= (1<<3);
-            }
-            if (new_reason_charge_not_starting != reason_charge_not_starting)
+            if (!charger_active_state)
             {
-                LOG_AND_FREEZE("NOT READY TO CHG%s%s%s\n", msg_temp, msg_not_needed, msg_tick_age);
-                reason_charge_not_starting = new_reason_charge_not_starting;
+                char* msg_temp = "";
+                char* msg_not_needed = "";
+                char* msg_tick_age = "";
+                uint8_t new_reason_charge_not_starting = 0;
+                if(!check_temp_charging_allowed_var) {
+                    msg_temp = ":TEMP DOES NOT ALLOW";
+                    new_reason_charge_not_starting |= (1<<1);
+                }
+                if(!check_volt_charging_necessary_start_var) {
+                    msg_not_needed = ":VOLT CHG NOT NEEDED";
+                    new_reason_charge_not_starting |= (1<<2);
+                }
+                if(!check_temp_charging_allowed_var) {
+                    msg_tick_age = ":CELL DATA TO OLD";
+                    new_reason_charge_not_starting |= (1<<3);
+                }
+                if (new_reason_charge_not_starting != reason_charge_not_starting)
+                {
+                    LOG_AND_FREEZE("NOT READY TO CHG%s%s%s\n", msg_temp, msg_not_needed, msg_tick_age);
+                    reason_charge_not_starting = new_reason_charge_not_starting;
+                }
             }
         }
         // check under/over-temp and charge-stop-voltage
@@ -261,7 +264,7 @@ void charger_logic()
                 if (!check_age_ticks_u_batt_and_temp_allowed_var) {
                     msg_tick_age = ":CELL DATA TO OLD";
                 }
-                LOG_AND_FREEZE("CHARGE LATCH OFF:DOOR OFF:%s%s%s\n",msg_temp, msg_safety_stop, msg_tick_age);
+                LOG_AND_FREEZE("CHARGE LATCH OFF:DOOR OFF%s%s%s\n",msg_temp, msg_safety_stop, msg_tick_age);
                 charger_active_state = false;
             } else {
                 OUT_CHARGER_LOAD_OFF

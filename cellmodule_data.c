@@ -191,11 +191,11 @@ uint16_t get_age_ticks_temp()
 
 // charge only if measurement data is not too old
 // true -> charging allowed
-#define LIMITS_TICKS_U_BATT_MAX_AGE 20
+#define LIMITS_TICKS_U_BATT_MAX_AGE 45
 #define LIMITS_TICKS_TEMP_MAX_AGE 100
 bool check_age_ticks_u_batt_and_temp_allowed()
 {
-    if (get_age_ticks_u_batt() < LIMITS_TICKS_U_BATT_MAX_AGE || get_age_ticks_temp() < LIMITS_TICKS_TEMP_MAX_AGE)
+    if (get_age_ticks_u_batt() < LIMITS_TICKS_U_BATT_MAX_AGE && get_age_ticks_temp() < LIMITS_TICKS_TEMP_MAX_AGE)
     {
         return true;
     }
