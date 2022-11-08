@@ -21,6 +21,7 @@ void tick_system_status(void);
 #define MAINTAIN_WATCHDOG   R_Config_IWDT_Restart();
 static volatile bool timer_tick = false;
 static uint8_t capture_full_freeze_frame = 10;
+static uint8_t capture_compact_freeze_frame = 0;
 
 // LED_GN1 on while message active on cell chain 1
 // LED_GE1 on while uart-BLE-tx active
@@ -128,6 +129,16 @@ int main(void)
                             freezeframe_shunt_full_debug();
                         }
                     }
+                    if (capture_compact_freeze_frame)
+                    {
+                        capture_compact_freeze_frame--;
+                        if(!capture_compact_freeze_frame)
+                        {
+                            freezeframe_cellmodule_compact_debug();
+                            freezeframe_shunt_full_debug();
+                        }
+                    }
+
 
 
                     //bluetooth_init_run_mode();
@@ -144,7 +155,7 @@ int main(void)
     }
 }
 
-#define LOG_AND_FREEZE(...)   log((uint8_t*)get_ts_str());log_va(__VA_ARGS__);freeze_va(__VA_ARGS__);capture_full_freeze_frame=3;
+#define LOG_AND_FREEZE(...)   freeze_va(__VA_ARGS__);capture_compact_freeze_frame=3;
 
 // true if charging (LINE DETECT) or key-on (KL15 ON)
 static bool car_active = false;

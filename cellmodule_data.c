@@ -209,7 +209,7 @@ bool check_age_ticks_u_batt_and_temp_allowed()
 void log_cellmodule_full_debug()
 {
     // measured values per module
-    for(uint8_t i=0; i<=CELLMODULES_TOTAL; i++)
+    for(uint8_t i=1; i<=CELLMODULES_TOTAL; i++)
     {
         log_va("[%d: %dmV: %dC: %dC] ", i, module_data[i].u_batt_mv, module_data[i].temp_batt_c, module_data[i].temp_aux_c);
     }
@@ -228,13 +228,26 @@ void log_cellmodule_full_debug()
 void freezeframe_cellmodule_full_debug()
 {
     // measured values per module
-    for(uint8_t i=0; i<=CELLMODULES_TOTAL; i++)
+    uint8_t i = 1;
+    freeze_va("[%d: %dmV: %dC: %dC]", i, module_data[i].u_batt_mv, module_data[i].temp_batt_c, module_data[i].temp_aux_c);
+    for(i++; i<=CELLMODULES_TOTAL; i++)
     {
-        freeze_va("[%d: %dmV: %dC: %dC] ", i, module_data[i].u_batt_mv, module_data[i].temp_batt_c, module_data[i].temp_aux_c);
+        freeze_va_no_ts(" [%d: %dmV: %dC: %dC]", i, module_data[i].u_batt_mv, module_data[i].temp_batt_c, module_data[i].temp_aux_c);
     }
-    freeze_va("\n");
+    freeze_va_no_ts("\n");
     // age of measured values
     freeze_va("[age: ubatt %u temp %u]", get_age_ticks_u_batt(), get_age_ticks_temp());
+    // calculated values
+    freeze_va_no_ts("[%u %u %u mV] [%d %d %d battC] [%d %d %d auxC] [%d %d %d caseBotC] [%d shuntC]\n",
+        module_data_stat.u_batt_mv_lowest, module_data_stat.u_batt_mv_mean, module_data_stat.u_batt_mv_highest,
+        module_data_stat.temp_batt_c_lowest, module_data_stat.temp_batt_c_mean, module_data_stat.temp_batt_c_highest,
+        module_data_stat.temp_aux_c_lowest, module_data_stat.temp_aux_c_mean, module_data_stat.temp_aux_c_highest,
+        module_data_stat.temp_case_bottom_c_lowest, module_data_stat.temp_case_bottom_c_mean, module_data_stat.temp_case_bottom_c_highest,
+        module_data_stat.temp_shunt_c);
+}
+/* store all calculated cellmodule data values and ages */
+void freezeframe_cellmodule_compact_debug()
+{
     // calculated values
     freeze_va("[%u %u %u mV] [%d %d %d battC] [%d %d %d auxC] [%d %d %d caseBotC] [%d shuntC]\n",
         module_data_stat.u_batt_mv_lowest, module_data_stat.u_batt_mv_mean, module_data_stat.u_batt_mv_highest,

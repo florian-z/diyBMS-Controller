@@ -31,6 +31,20 @@ void freeze_va(const char * format, ...)
     GLOBAL_INT_RESTORE
 }
 
+void freeze_va_no_ts(const char * format, ...)
+{
+    GLOBAL_INT_STORE_AND_DISABLE
+    static char buf[LOG_BUF];
+    va_list args;
+    va_start(args, format);
+    vsnprintf(buf, LOG_BUF, format, args);
+    va_end(args);
+
+    //store_msg((uint8_t*)get_ts_str());
+    store_msg((uint8_t*)buf);
+    GLOBAL_INT_RESTORE
+}
+
 void freeze_hex(uint8_t const * const data, uint8_t const len)
 {
     GLOBAL_INT_STORE_AND_DISABLE

@@ -23,6 +23,7 @@ void pointer_rollover(uint8_t** ptr)
 void store_msg(uint8_t const * const data)
 {
     GLOBAL_INT_STORE_AND_DISABLE
+    log(data);
     const uint8_t DATA_LEN = strlen((char*)data);
     for(uint8_t i = 0; i<DATA_LEN; i++)
     {

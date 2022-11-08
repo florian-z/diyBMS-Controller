@@ -62,5 +62,6 @@ bool check_age_ticks_u_batt_and_temp_allowed();
 
 void log_cellmodule_full_debug();
 void freezeframe_cellmodule_full_debug();
+void freezeframe_cellmodule_compact_debug();
 
 #endif /* __cellmodule_data_h__ */
