@@ -168,6 +168,8 @@ void shunt_tick()
                     if (shunt_reset_accu_regs)
                     {
                         shunt_reset_accu_regs = false;
+                        freezeframe_shunt_full_debug();
+                        log("SHUNT RSTACC\n");
                         freeze("SHUNT RSTACC\n");
                         write_config_with_rstacc();
                     }
