@@ -7,6 +7,7 @@
 #include "cellmodule_data.h"
 #include "shunt.h"
 #include "log_util.h"
+#include "freeze_util.h"
 #include "storage_util.h"
 
 /*** USB / Debug UART ***/
@@ -192,6 +193,18 @@ void process_message_usb()
         else if (!strncmp("TIME", (char*)process_buffer_usb, 4))
         {
             log_va("[TIME %s]\n", get_ts_full_str());
+        }
+        else if (!strncmp("BAL_ON", (char*)process_buffer_usb, 6))
+        {
+            freeze("[UART-USB: BAL ON]\n");
+            OUT_BAL_LATCH_OFF_IDLE
+            OUT_BAL_LATCH_ON_CURR
+        }
+        else if (!strncmp("BAL_OFF", (char*)process_buffer_usb, 7))
+        {
+            freeze("[UART-USB: BAL OFF]\n");
+            OUT_BAL_LATCH_ON_IDLE
+            OUT_BAL_LATCH_OFF_CURR
         }
         else
         {
