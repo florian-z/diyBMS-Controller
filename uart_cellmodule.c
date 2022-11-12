@@ -191,7 +191,7 @@ void process_message_cellmodule_int(uint8_t const chain_no)
     {
         // incorrect number of modules in response
         log_va("modulecnt cell %d: %s [cmd:%d]\n", chain_no, msg_ptr, msg_cmd);
-        return;
+        // TODO reenable ? return;
     }
     //log_va("log cell %d: %s [cmd:%d mcnt:%d]\n", chain_no, msg_ptr, msg_cmd, module_cnt);
 
@@ -234,10 +234,12 @@ void process_message_cellmodule_int(uint8_t const chain_no)
         case SET_CONFIG_BATT_VOLT_CALIB:
         {
             // ignore, just debug
+            uint16_t ubatt_mv_target = parse_chars_to_word(msg_ptr+5);
             uint16_t ubatt_mv_default_calib = parse_chars_to_word(msg_ptr+5+4);
             uint16_t ubatt_mv_after = parse_chars_to_word(msg_ptr+5+4+4);
             uint16_t volt_calib_value_after = parse_chars_to_word(msg_ptr+5+4+4+4);
-            log_va("log cell %d: SET_CFG_UBATT[%d] %s default-calib-ubatt:%d new-ubatt:%d new-calib:%d\n", chain_no, module_id, msg_ptr, ubatt_mv_default_calib, ubatt_mv_after, volt_calib_value_after);
+            log_va("log cell %d: SET_CFG_UBATT[%d] %s target-ubatt:%d default-calib-ubatt:%d new-ubatt:%d target-diff-ubatt: %d new-calib:%d\n", chain_no, module_id, msg_ptr,
+                ubatt_mv_target, ubatt_mv_default_calib, ubatt_mv_after, ubatt_mv_after - ubatt_mv_target, volt_calib_value_after);
             break;
         }
         case SET_CONFIG_TEMP1_B_COEFF:
