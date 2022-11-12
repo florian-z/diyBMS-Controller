@@ -45,7 +45,7 @@ Macro definitions
 ***********************************************************************************************************************/
 /* Start user code for macro define. Do not edit comment generated here */
 #define RX_BUF_USB 50
-#define TX_BUF_USB 500
+#define TX_BUF_USB 1500
 #define RX_BUF_CELLMODULE 130
 #define TX_BUF_CELLMODULE 20
 #define RX_BUF_BLE 50
