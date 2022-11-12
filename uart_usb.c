@@ -195,7 +195,7 @@ void process_message_usb()
         }
         else
         {
-            log_va("CMD UNKNOWN: \"%s\"\n");
+            log_va("CMD UNKNOWN: \"%s\"\n", process_buffer_usb);
         }
 
         /* last step: free buffer */
