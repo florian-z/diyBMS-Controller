@@ -135,12 +135,12 @@ void process_message_cellmodule()
         if (cellmodule_process_buf[chain_no][0] != '\0')
         {
             /* buffer is not empty -> process message */
-            //log_va("cell %d: %s", chain_no, (uint8_t*)cellmodule_process_buf[chain_no]);  // TODO flo: debug remove
+            //log_va("cell %d: %s", chain_no, (uint8_t*)cellmodule_process_buf[chain_no]);
             /* check message crc */
             if (!is_nmea_checksum_good((uint8_t*)cellmodule_process_buf[chain_no]))
             {
                 //  checksum bad
-                log_va("badcrc cell %d: %s", chain_no, (uint8_t*)cellmodule_process_buf[chain_no]);  // TODO flo: debug remove
+                log_va("badcrc cell %d: %s", chain_no, (uint8_t*)cellmodule_process_buf[chain_no]);
             }
             else
             {

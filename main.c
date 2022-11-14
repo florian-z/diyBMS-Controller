@@ -184,7 +184,7 @@ void charger_logic()
             LOG_AND_FREEZE("LINE DETECT LATCH ON\n");
             line_pwr_state = true;
         }
-        // check need for heating
+/// check need for heating
         bool check_temp_should_use_heater_var = check_temp_should_use_heater();
         bool check_age_ticks_u_batt_and_temp_allowed_var = check_age_ticks_u_batt_and_temp_allowed();
         if (check_temp_should_use_heater_var && check_age_ticks_u_batt_and_temp_allowed_var)
@@ -210,7 +210,7 @@ void charger_logic()
                 cl_heater_off();
             }
         }
-        // check if good for charging
+/// check if good for charging
         bool check_temp_charging_allowed_var = check_temp_charging_allowed();
         bool check_volt_charging_necessary_start_var = check_volt_charging_necessary_start();
         //bool check_age_ticks_u_batt_and_temp_allowed_var = check_age_ticks_u_batt_and_temp_allowed();
@@ -253,7 +253,7 @@ void charger_logic()
                 }
             }
         }
-        // check under/over-temp and charge-stop-voltage
+/// check under/over-temp and charge-stop-voltage
         //bool check_temp_charging_allowed_var = check_temp_charging_allowed();
         bool check_volt_charging_safety_stop_var = check_volt_charging_safety_stop();
         //bool check_age_ticks_u_batt_and_temp_allowed_var = check_age_ticks_u_batt_and_temp_allowed();

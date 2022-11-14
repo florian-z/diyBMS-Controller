@@ -121,7 +121,7 @@ void process_message_usb()
             ptr[strlen((char*)ptr)-1] = '\0'; // remove '\n'
 
             append_nmea_crc(ptr);
-            log_va(">CMD: %s", ptr);  // TODO flo: debug remove
+            log_va(">CMD: %s", ptr);
             send_message_cellmodule(ptr); // send to all chains
         }
         else if (!strncmp("CELL_CMD", (char*)process_buffer_usb, 8))
@@ -141,7 +141,7 @@ void process_message_usb()
             }
 
             append_nmea_crc(ptr);
-            log_va(">CMD: %d %s", module_id, ptr);  // TODO flo: debug remove
+            log_va(">CMD: %d %s", module_id, ptr);
             send_message_cellmodule_specific(ptr, module_id); // only send to chain containing module-id
         }
         else if (!strncmp("CELL_CFG", (char*)process_buffer_usb, 8))
@@ -164,7 +164,7 @@ void process_message_usb()
             format_word_to_chars(ptr+3+2, cfg_value);
 
             append_nmea_crc(ptr);
-            log_va(">CMD: %d %s", module_id, ptr);  // TODO flo: debug remove
+            log_va(">CMD: %d %s", module_id, ptr);
             send_message_cellmodule_specific(ptr, module_id); // only send to chain containing module-id
         }
         else if (!strncmp("HELP", (char*)process_buffer_usb, 4))

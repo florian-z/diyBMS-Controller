@@ -93,7 +93,7 @@ void process_message_ble()
     {
         /* buffer is not empty -> process message */
         const uint8_t len = process_buffer_ble_len;
-        log_hex((uint8_t*)process_buffer_ble, len);  // TODO flo: debug remove
+        log_hex((uint8_t*)process_buffer_ble, len);  // debug
         uint8_t sum = 0;
         for(uint8_t i = 1; i < len; i++) // exclude SYNC_WORD from crc
         {

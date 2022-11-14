@@ -292,7 +292,6 @@ void process_message_shunt()
         {
             // rx_data[0] should be zero
             // rx_data[1..5] should not all be zero
-            // TODO restart ?
             log_va("SHUNT possible comm error for tx[0] %02X\n", tx_data[0]);
         }
 

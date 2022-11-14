@@ -64,7 +64,6 @@ void send_ble_cmd(ble_cmd_t ble_cmd)
 
     // TODO calc crc
     //uint8_t msg2[] =
-    // TODO send binary
     send_message_ble_binary((uint8_t*)&msg, msg[BLE_LEN_L]+4);
 }
 

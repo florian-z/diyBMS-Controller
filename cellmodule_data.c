@@ -211,7 +211,7 @@ void log_cellmodule_full_debug()
     // measured values per module
     for(uint8_t i=1; i<=CELLMODULES_TOTAL; i++)
     {
-        log_va("[%d:%dmV:%d:%dC]", i, module_data[i].u_batt_mv, module_data[i].temp_batt_c, module_data[i].temp_aux_c);
+        log_va("[%02d:%dmV:%d:%dC]%s", i, module_data[i].u_batt_mv, module_data[i].temp_batt_c, module_data[i].temp_aux_c, (!(i%10)?"\n":""));
     }
     log_va("\n");
     // age of measured values
@@ -229,10 +229,10 @@ void freezeframe_cellmodule_full_debug()
 {
     // measured values per module
     uint8_t i = 1;
-    freeze_va("[%d:%dmV:%d:%dC]", i, module_data[i].u_batt_mv, module_data[i].temp_batt_c, module_data[i].temp_aux_c);
+    freeze_va("[%02d:%dmV:%d:%dC]", i, module_data[i].u_batt_mv, module_data[i].temp_batt_c, module_data[i].temp_aux_c);
     for(i++; i<=CELLMODULES_TOTAL; i++)
     {
-        freeze_va_no_ts(" [%d:%dmV:%d:%dC]", i, module_data[i].u_batt_mv, module_data[i].temp_batt_c, module_data[i].temp_aux_c);
+        freeze_va_no_ts("[%02d:%dmV:%d:%dC]%s", i, module_data[i].u_batt_mv, module_data[i].temp_batt_c, module_data[i].temp_aux_c,(!(i%10)?"\n":""));
     }
     freeze_va_no_ts("\n");
     // age of measured values
