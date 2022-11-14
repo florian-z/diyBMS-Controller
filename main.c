@@ -159,18 +159,21 @@ int main(void)
 
 // true if charging (LINE DETECT) or key-on (KL15 ON)
 static bool car_active = false;
+static bool kl15_pwr_state = false;
+static bool line_pwr_state = false;
+static bool heater_active_state = false;
+static bool balancer_active_state = false;
+static bool charger_active_state = false;
+static uint8_t reason_charge_not_starting = 0;
 void charger_logic()
 {
-    static bool kl15_pwr_state = false;
-    static bool line_pwr_state = false;
-    static bool heater_active_state = false;
-    static bool charger_active_state = false;
-    static uint8_t reason_charge_not_starting = 0;
 /// ensure relais coils IDLE is reached
     OUT_BAL_LATCH_OFF_IDLE
     OUT_BAL_LATCH_ON_IDLE
     OUT_HEATER_LATCH_OFF_IDLE
     OUT_HEATER_LATCH_ON_IDLE
+    // reset vars
+    reason_charge_not_starting = 0;
 /// check line power active
     if (IN_SIGNAL_LINE_PWR)
     {
@@ -180,7 +183,6 @@ void charger_logic()
             // line power on latch
             LOG_AND_FREEZE("LINE DETECT LATCH ON\n");
             line_pwr_state = true;
-            reason_charge_not_starting = 0;
         }
         // check need for heating
         bool check_temp_should_use_heater_var = check_temp_should_use_heater();
@@ -190,9 +192,7 @@ void charger_logic()
             if (!heater_active_state)
             {
                 LOG_AND_FREEZE("HEATER LATCH ON\n");
-                OUT_HEATER_LATCH_OFF_IDLE
-                OUT_HEATER_LATCH_ON_CURR
-                heater_active_state = true;
+                cl_heater_on();
             }
         } else {
             if (heater_active_state)
@@ -205,10 +205,9 @@ void charger_logic()
                 if (!check_age_ticks_u_batt_and_temp_allowed_var) {
                     msg_tick_age = ":CELL DATA TO OLD";
                 }
+
                 LOG_AND_FREEZE("HEATER LATCH OFF%s%s\n", msg_heater, msg_tick_age);
-                OUT_HEATER_LATCH_ON_IDLE
-                OUT_HEATER_LATCH_OFF_CURR
-                heater_active_state = false;
+                cl_heater_off();
             }
         }
         // check if good for charging
@@ -290,8 +289,7 @@ void charger_logic()
             line_pwr_state = false;
             LOG_AND_FREEZE("LINE DETECT LATCH OFF:HEATER OFF:CHG LOAD OFF:CHG DOOR OFF\n");
             charger_active_state = false;
-            OUT_HEATER_LATCH_ON_IDLE
-            OUT_HEATER_LATCH_OFF_CURR
+            cl_heater_off();
             OUT_CHARGER_LOAD_OFF
             OUT_CHARGER_DOOR_OFF
         }
@@ -326,8 +324,7 @@ void charger_logic()
             LOG_AND_FREEZE("CAR ACTIVE LATCH ON:BAL ON\n");
             car_active = true;
             // ensure balancer is on, when car is on
-            OUT_BAL_LATCH_OFF_IDLE
-            OUT_BAL_LATCH_ON_CURR
+            cl_balancer_on();
         }
     } else {
         // car sleeping
@@ -339,6 +336,44 @@ void charger_logic()
     }
 }
 
+void cl_balancer_on()
+{
+    LOG_AND_FREEZE("BAL LATCH ON\n");
+    balancer_active_state = true;
+    OUT_BAL_LATCH_OFF_IDLE
+    OUT_BAL_LATCH_ON_CURR
+}
+void cl_balancer_off()
+{
+    LOG_AND_FREEZE("BAL LATCH OFF\n");
+    balancer_active_state = false;
+    OUT_BAL_LATCH_ON_IDLE
+    OUT_BAL_LATCH_OFF_CURR
+}
+void cl_heater_on()
+{
+    LOG_AND_FREEZE("HEATER LATCH ON\n");
+    heater_active_state = true;
+    OUT_HEATER_LATCH_OFF_IDLE
+    OUT_HEATER_LATCH_ON_CURR
+}
+void cl_heater_off()
+{
+    LOG_AND_FREEZE("HEATER LATCH OFF\n");
+    heater_active_state = false;
+    OUT_HEATER_LATCH_ON_IDLE
+    OUT_HEATER_LATCH_OFF_CURR
+}
+void print_charger_logic_status()
+{
+    #pragma diag_suppress=Pa082
+    log_va("[CL: CAR:%d KL15:%d LINE:%d BAL:%d HEATER:%d | CHARGE_ON:%d CHG_DOOR:%d CHG_LOAD:%d REASON:%02X\n", car_active, kl15_pwr_state, line_pwr_state, balancer_active_state, heater_active_state, charger_active_state, IS_OUT_CHARGER_DOOR_ON, IS_OUT_CHARGER_LOAD_ON, reason_charge_not_starting);
+}
+void freeze_charger_logic_status()
+{
+    #pragma diag_suppress=Pa082
+    freeze_va("[CL: CAR:%d KL15:%d LINE:%d BAL:%d HEATER:%d | CHARGE_ON:%d CHG_DOOR:%d CHG_LOAD:%d REASON:%02X\n", car_active, kl15_pwr_state, line_pwr_state, balancer_active_state, heater_active_state, charger_active_state, IS_OUT_CHARGER_DOOR_ON, IS_OUT_CHARGER_LOAD_ON, reason_charge_not_starting);
+}
 
 void led_test(void)
 {

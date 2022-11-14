@@ -84,8 +84,10 @@ void R_Config_PORT_Create_UserInit(void);
 
 #define OUT_CHARGER_LOAD_ON         PORTD.PODR.BYTE |= (1<<4);
 #define OUT_CHARGER_LOAD_OFF        PORTD.PODR.BYTE &= ~(1<<4);
+#define IS_OUT_CHARGER_LOAD_ON      (PORTD.PODR.BYTE & (1<<4))
 #define OUT_CHARGER_DOOR_ON         PORTD.PODR.BYTE |= (1<<5);
 #define OUT_CHARGER_DOOR_OFF        PORTD.PODR.BYTE &= ~(1<<5);
+#define IS_OUT_CHARGER_DOOR_ON      (PORTD.PODR.BYTE & (1<<5))
 
 #define OUT_BAL_LATCH_ON_CURR      PORTD.PODR.BYTE |= (1<<7);
 #define OUT_BAL_LATCH_ON_IDLE      PORTD.PODR.BYTE &= ~(1<<7);

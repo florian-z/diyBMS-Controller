@@ -11,6 +11,15 @@ enum system_status {
 };
 
 void main_timer_tick(void);
+
+// charger logic
+void cl_balancer_on();
+void cl_balancer_off();
+void cl_heater_on();
+void cl_heater_off();
+void print_charger_logic_status();
+void freeze_charger_logic_status();
+
 void Error_Handler(void);
 void report_system_status(enum system_status);
 

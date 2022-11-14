@@ -169,7 +169,7 @@ void process_message_usb()
         }
         else if (!strncmp("HELP", (char*)process_buffer_usb, 4))
         {
-            log("CHAIN_CMD!<cmd>00  !0000 or !0100\nCELL_CMD<module>!<cmd>00 cmd:00..03, 07..08  01!0002\nCELL_CFG<module> <value>!<cmd>00  01 255!0004\nHELP\nBATT\n");
+            log("CHAIN_CMD!<cmd>00  !0000 or !0100\nCELL_CMD<module>!<cmd>00 cmd:00..03, 07..08  01!0002\nCELL_CFG<module> <value>!<cmd>00  01 255!0004\nHELP, BATT, SHUNT, FREEZE, TIME, DIRECT_BAL_ON/OFF, DIRECT_HEAT_ON/OFF, CL_STATUS, CL_STATUS_FREEZE\n");
             log("GET_BATT_VOLT=0, GET_TEMP=1, IDENTIFY_MODULE=2, ACTIVATE_POWERSAVE=3, SET_CONFIG_BATT_VOLT_CALIB=4, SET_CONFIG_TEMP1_B_COEFF=5, SET_CONFIG_TEMP2_B_COEFF=6, GET_CONFIG=7, CLEAR_CONFIG=8\n");
         }
         else if (!strncmp("BATT", (char*)process_buffer_usb, 4))
@@ -194,17 +194,33 @@ void process_message_usb()
         {
             log_va("[TIME %s]\n", get_ts_full_str());
         }
-        else if (!strncmp("BAL_ON", (char*)process_buffer_usb, 6))
+        else if (!strncmp("DIRECT_BAL_ON", (char*)process_buffer_usb, 13))
         {
-            freeze("[UART-USB: BAL ON]\n");
-            OUT_BAL_LATCH_OFF_IDLE
-            OUT_BAL_LATCH_ON_CURR
+            freeze("[UART-USB: DIRECT BAL ON]\n");
+            cl_balancer_on();
         }
-        else if (!strncmp("BAL_OFF", (char*)process_buffer_usb, 7))
+        else if (!strncmp("DIRECT_BAL_OFF", (char*)process_buffer_usb, 14))
         {
-            freeze("[UART-USB: BAL OFF]\n");
-            OUT_BAL_LATCH_ON_IDLE
-            OUT_BAL_LATCH_OFF_CURR
+            freeze("[UART-USB: DIRECT BAL OFF]\n");
+            cl_balancer_off();
+        }
+        else if (!strncmp("DIRECT_HEAT_ON", (char*)process_buffer_usb, 14))
+        {
+            freeze("[UART-USB: DIRECT HEAT ON]\n");
+            cl_heater_on();
+        }
+        else if (!strncmp("DIRECT_HEAT_OFF", (char*)process_buffer_usb, 15))
+        {
+            freeze("[UART-USB: DIRECT HEAT OFF]\n");
+            cl_heater_off();
+        }
+        else if (!strncmp("CL_STATUS", (char*)process_buffer_usb, 9))
+        {
+            print_charger_logic_status();
+        }
+        else if (!strncmp("CL_STATUS_FREEZE", (char*)process_buffer_usb, 16))
+        {
+            freeze_charger_logic_status();
         }
         else
         {
