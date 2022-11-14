@@ -12,6 +12,11 @@ void time_tick_1sec()
     system_time_sec++;
 }
 
+time_t get_system_time()
+{
+    return system_time_sec;
+}
+
 void set_time_tick(time_t new_timestamp)
 {
     if (new_timestamp >= START_TIME)
@@ -37,4 +42,14 @@ char* get_ts_full_str()
     static char buf[20] = {0};
     strftime(buf, 20, "%y%m%d %H%M%S", gmtime(&system_time_sec));
     return buf;
+}
+
+uint16_t get_dur_full_hours(time_t duration)
+{
+    return duration/3600;
+}
+
+uint8_t get_dur_full_minutes(time_t duration)
+{
+    return (duration/60)%60;
 }

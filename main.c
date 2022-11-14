@@ -156,6 +156,10 @@ int main(void)
 }
 
 #define LOG_AND_FREEZE(...)   freeze_va(__VA_ARGS__);capture_compact_freeze_frame=2;
+#define HOURS_TILL_NOW(timestamp)   get_dur_full_hours(get_system_time() - timestamp )
+#define MIN_TILL_NOW(timestamp)    get_dur_full_minutes(get_system_time() - timestamp )
+
+extern shunt_t shunt_data;
 
 // true if charging (LINE DETECT) or key-on (KL15 ON)
 static bool car_active = false;
@@ -167,6 +171,15 @@ static bool charger_active_state = false;
 static uint8_t reason_charge_not_starting = 0;
 void charger_logic()
 {
+    static time_t charge_started_ts = 0;
+    static float charge_started_charge = 0;
+    static float charge_started_energy = 0;
+    static time_t charge_ended_ts = 0;
+    static float charge_ended_charge = 0;
+    static float charge_ended_energy = 0;
+    static time_t kl15_started_ts = 0;
+    static float kl15_started_charge = 0;
+    static float kl15_started_energy = 0;
 /// ensure relais coils IDLE is reached
     OUT_BAL_LATCH_OFF_IDLE
     OUT_BAL_LATCH_ON_IDLE
@@ -218,10 +231,34 @@ void charger_logic()
         {
             if (!charger_active_state)
             {
-                LOG_AND_FREEZE("CHARGE LATCH ON:LOAD ON\n");
+                if (!charge_ended_ts)
+                {
+                    // data of previous charge available
+                    LOG_AND_FREEZE("CHARGE LATCH ON:LOAD ON expecting to recharge %.2Ah %.2kWh estimated duration %.1fh\n",
+                        charge_ended_charge - shunt_data.charge, charge_ended_energy - shunt_data.energy, (charge_ended_charge - shunt_data.charge) / 20.0 * 1.2);
+                }
+                else
+                {
+                    // no data of previous charge available
+                    LOG_AND_FREEZE("CHARGE LATCH ON:LOAD ON no data of prev charge avail\n");
+                }
                 OUT_CHARGER_LOAD_ON
                 charger_active_state = true;
-                shunt_report_charge_start();
+                if (shunt_report_charge_start())
+                {
+                    // shunt.charge and .energy will be reset to zero
+                    charge_started_charge = 0;
+                    charge_started_energy = 0;
+                }
+                else
+                {
+                    charge_started_charge = shunt_data.charge;
+                    charge_started_energy = shunt_data.energy;
+                }
+                charge_started_ts = get_system_time();
+                charge_ended_ts = 0;
+                charge_ended_charge = 0;
+                charge_ended_energy = 0;
             }
             else
             {
@@ -270,12 +307,21 @@ void charger_logic()
                 }
                 if (check_volt_charging_safety_stop_var) {
                     msg_safety_stop = ":VOLT SAFETY STOP";
+                    freezeframe_cellmodule_full_debug();
                 }
                 if (!check_age_ticks_u_batt_and_temp_allowed_var) {
                     msg_tick_age = ":CELL DATA TO OLD";
                 }
-                LOG_AND_FREEZE("CHARGE LATCH OFF:DOOR OFF%s%s%s\n",msg_temp, msg_safety_stop, msg_tick_age);
+                LOG_AND_FREEZE("CHARGE LATCH OFF:DOOR OFF%s%s%s charged %.2fAh %.2kWh in %dh%02dm\n", msg_temp, msg_safety_stop, msg_tick_age,
+                    shunt_data.charge - charge_started_charge, shunt_data.energy - charge_started_energy,
+                    HOURS_TILL_NOW(charge_started_ts), MIN_TILL_NOW(charge_started_ts));
                 charger_active_state = false;
+                charge_started_ts = 0;
+                charge_started_charge = 0;
+                charge_started_energy = 0;
+                charge_ended_ts = get_system_time();
+                charge_ended_charge = shunt_data.charge;
+                charge_ended_energy = shunt_data.energy;
             } else {
                 OUT_CHARGER_LOAD_OFF
             }
@@ -302,18 +348,37 @@ void charger_logic()
         if (!kl15_pwr_state)
         {
             // KL15 on latch
-            LOG_AND_FREEZE("KL15 DETECT LATCH ON\n");
+            if (!charge_ended_ts)
+            {
+                // data of previous charge available
+                LOG_AND_FREEZE("KL15 DETECT LATCH ON has avail %.2fAh %.2fkWh - last charging ended %dh%02dm ago\n", shunt_data.charge, shunt_data.energy,
+                    HOURS_TILL_NOW(charge_ended_ts), MIN_TILL_NOW(charge_ended_ts));
+            }
+            else
+            {
+                // no data of previous charge available
+                LOG_AND_FREEZE("KL15 DETECT LATCH ON has avail %.2fAh %.2fkWh - no data of prev charge avail\n", shunt_data.charge, shunt_data.energy);
+            }
             kl15_pwr_state = true;
+            kl15_started_ts = get_system_time();
+            kl15_started_charge = shunt_data.charge;
+            kl15_started_energy = shunt_data.energy;
         }
     } else {
         // no KL15
         if (kl15_pwr_state)
         {
             // KL15 off latch
-            LOG_AND_FREEZE("KL15 DETECT LATCH OFF\n");
+            LOG_AND_FREEZE("KL15 DETECT LATCH OFF used %.2fAh %.2fkWh in %dh%02dm\n",
+                kl15_started_charge - shunt_data.charge, kl15_started_energy - shunt_data.energy,
+                HOURS_TILL_NOW(kl15_started_ts), MIN_TILL_NOW(kl15_started_ts));
             kl15_pwr_state = false;
+            kl15_started_ts = 0;
+            kl15_started_charge = 0;
+            kl15_started_energy = 0;
         }
     }
+
 
 /// check if car is sleeping or not
     if (kl15_pwr_state || line_pwr_state)
