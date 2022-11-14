@@ -25,7 +25,7 @@ static uint8_t capture_compact_freeze_frame = 0;
 
 // LED_GN1 on while message active on cell chain 1
 // LED_GE1 on while uart-BLE-tx active
-// LED_RT1
+// LED_RT1 on for 2 seconds from systemstatus being too late / watchdog
 // LED_BL1 on while comm with shunt active
 // LED_GN2 on while message active on cell chain 1
 // LED_GE2 on while uart-BLE-rx active
@@ -474,6 +474,7 @@ static uint8_t tss_main_loop = 0;
 #define TSS_LIMIT 25
 void tick_system_status(void)
 {
+    static uint8_t watchdog_led_on = 0;
     if (tss_cellmodule_chain1 < TSS_LIMIT) // prevent rollover
     {
         tss_cellmodule_chain1++;
@@ -512,6 +513,21 @@ void tick_system_status(void)
         // all supervised functions are reporting success in a timely manner
         MAINTAIN_WATCHDOG
     }
+    else
+    {
+        watchdog_led_on = 21;
+    }
+
+    if (watchdog_led_on)
+    {
+        LED_RT1_ON
+        watchdog_led_on--;
+    }
+    else
+    {
+        LED_RT1_OFF
+    }
+
 }
 
 void report_system_status(enum system_status id)
