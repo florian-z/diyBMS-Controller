@@ -94,16 +94,18 @@ void write_shunt_cal();
 void read_shunt_cal();
 void read_shunt_manufacturerid();
 
-/* trigger SPI communication */
+/* check charge & energy values, reset if negative. returns true, if charge and energy will be reset to zero */
 static bool shunt_reset_accu_regs = false;
-void shunt_report_charge_start()
+bool shunt_report_charge_start()
 {
     if (shunt_data.charge<0 || shunt_data.energy<0)
     {
         shunt_reset_accu_regs = true;
     }
+    return shunt_reset_accu_regs;
 }
 
+/* trigger SPI communication */
 void shunt_tick()
 {
     static uint8_t round_robin_reader = 100;
@@ -162,39 +164,40 @@ void shunt_tick()
             break;
 
         case 3:
-            switch(inner_round_robin_reader)
+            if (shunt_reset_accu_regs)
             {
-                case 0:
-                    if (shunt_reset_accu_regs)
-                    {
-                        shunt_reset_accu_regs = false;
-                        freezeframe_shunt_full_debug();
-                        freeze("SHUNT RSTACC\n");
-                        write_config_with_rstacc();
-                    }
-                    else
-                    {
-                        read_dietemp();
-                    }
-                    break;
-                case 1:
-                    read_energy();
-                    break;
-                case 2:
-                    read_charge();
-                    break;
-                case 3:
-                    read_power();
-                    break;
-                case 4:
-                    read_vshunt();
-                    break;
-                case 5:
-                    read_shunt_manufacturerid();
-                    inner_round_robin_reader = UINT8_MAX; // restart inner round robin
-                    break;
+                shunt_reset_accu_regs = false;
+                freezeframe_shunt_full_debug();
+                freeze("SHUNT RSTACC\n");
+                write_config_with_rstacc();
             }
-            inner_round_robin_reader++;
+            else
+            {
+                switch(inner_round_robin_reader)
+                {
+                    case 0:
+                        read_dietemp();
+                        break;
+                    case 1:
+                        read_energy();
+                        break;
+                    case 2:
+                        read_charge();
+                        break;
+                    case 3:
+                        read_power();
+                        break;
+                    case 4:
+                        read_vshunt();
+                        break;
+                    case 5:
+                        read_shunt_manufacturerid();
+                        inner_round_robin_reader = UINT8_MAX; // restart inner round robin
+                        break;
+                }
+                inner_round_robin_reader++;
+            }
+
             round_robin_reader = UINT8_MAX; // restart round robin
             break;
     }

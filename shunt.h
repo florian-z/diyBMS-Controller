@@ -3,6 +3,7 @@
 
 #include "main.h"
 #include "r_cg_userdefine.h"
+#include <stdbool.h>
 
 #define SHUNT_LEN 10
 
@@ -19,7 +20,7 @@ typedef struct {
 void shunt_init();
 void shunt_tick();
 
-void shunt_report_charge_start();
+bool shunt_report_charge_start();
 
 void log_shunt_full_debug();
 void freezeframe_shunt_full_debug();
