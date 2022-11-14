@@ -8,6 +8,7 @@
 #include "cellmodule_data.h"
 #include "uart_cellmodule.h"
 #include "shunt.h"
+#include "storage_util.h"
 
 extern module_data_t module_data[MODULE_DATA_LEN];
 extern module_data_age_t module_data_age[CELLMODULE_CHANNELS];
@@ -72,6 +73,8 @@ void send_ble_android()
     static uint8_t msg[TX_BUF_BLE] = {0};
     memset(msg, 0, TX_BUF_BLE);
     static uint8_t msgid = 0;
+    uint8_t used_len = 0;
+    uint8_t* msg_start = "";
     uint8_t msg_len = 0;
     switch(++msgid) {
         case 1:
@@ -136,7 +139,20 @@ void send_ble_android()
             memcpy(&msg[56], &module_data_stat.temp_case_bottom_c_mean, 1);
             memcpy(&msg[57], &module_data_stat.temp_case_bottom_c_highest, 1);
 
-            msg_len = 59;
+            if (!has_ble_message())
+            {
+                // no message to send, continue with first case
+                msgid = 0;
+            }
+
+        case 5:
+            msg[0] = msgid;
+            msg[1] = 7;
+            used_len = 0;
+            msg_start = give_ble_start_and_increment(TX_BUF_BLE-2-1, &used_len); // TX_BUF_BLE - two start bytes - trailing '\0'
+            memcpy(&msg[2], msg_start, used_len);
+            msg_len = used_len+2+1;
+
             msgid = 0;
             break;
         default:

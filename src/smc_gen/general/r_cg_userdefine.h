@@ -49,7 +49,8 @@ Macro definitions
 #define RX_BUF_CELLMODULE 130
 #define TX_BUF_CELLMODULE 20
 #define RX_BUF_BLE 50
-#define TX_BUF_BLE 158
+// 144 fit within a MTU of 158
+#define TX_BUF_BLE 140
 #define RX_BUF_SHUNT 50
 #define TX_BUF_SHUNT 50
 
