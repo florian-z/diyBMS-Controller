@@ -155,7 +155,7 @@ int main(void)
     }
 }
 
-#define LOG_AND_FREEZE(...)   freeze_va(__VA_ARGS__);capture_compact_freeze_frame=3;
+#define LOG_AND_FREEZE(...)   freeze_va(__VA_ARGS__);capture_compact_freeze_frame=2;
 
 // true if charging (LINE DETECT) or key-on (KL15 ON)
 static bool car_active = false;
