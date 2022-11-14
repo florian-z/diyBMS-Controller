@@ -12,7 +12,7 @@ module_data_age_t module_data_age[CELLMODULE_CHANNELS] = {{.u_batt=UINT16_MAX, .
 module_data_statistics_t module_data_stat = {0};
 
 
-static const uint8_t BOTTOM_CASE_AUX_TEMP_IDS[BOTTOM_CASE_AUX_TEMP_ID_LEN] = { BOTTOM_CASE_AUX_TEMP_1, BOTTOM_CASE_AUX_TEMP_2, BOTTOM_CASE_AUX_TEMP_3, BOTTOM_CASE_AUX_TEMP_4 };
+static const uint8_t BOTTOM_CASE_AUX_TEMP_IDS[BOTTOM_CASE_AUX_TEMP_ID_LEN] = { BOTTOM_CASE_AUX_TEMP_ID_1, BOTTOM_CASE_AUX_TEMP_ID_2, BOTTOM_CASE_AUX_TEMP_ID_3, BOTTOM_CASE_AUX_TEMP_ID_4 };
 
 
 /// measurement values
@@ -61,7 +61,7 @@ void calc_cellmodule_data()
         int16_t tmp_sum = 0;
         for(uint8_t i=CELLMODULES_FIRST; i<MODULE_DATA_LEN; i++)
         {
-            if (SHUNT_AUX_TEMP == i)
+            if (SHUNT_AUX_TEMP_ID == i)
             {
                 // skip shunt temp sensor. only use batt and case temp as temp_aux
                 continue;
@@ -95,9 +95,6 @@ void calc_cellmodule_data()
         module_data_stat.temp_case_bottom_c_lowest = tmp_low;
         module_data_stat.temp_case_bottom_c_highest = tmp_high;
         module_data_stat.temp_case_bottom_c_mean = (uint8_t)(tmp_sum / (float)BOTTOM_CASE_AUX_TEMP_ID_LEN);
-    }
-    {
-        module_data_stat.temp_shunt_c = module_data[SHUNT_AUX_TEMP].temp_aux_c;
     }
 }
 
@@ -222,7 +219,7 @@ void log_cellmodule_full_debug()
         module_data_stat.temp_batt_c_lowest, module_data_stat.temp_batt_c_mean, module_data_stat.temp_batt_c_highest,
         module_data_stat.temp_aux_c_lowest, module_data_stat.temp_aux_c_mean, module_data_stat.temp_aux_c_highest,
         module_data_stat.temp_case_bottom_c_lowest, module_data_stat.temp_case_bottom_c_mean, module_data_stat.temp_case_bottom_c_highest,
-        module_data_stat.temp_shunt_c);
+        SHUNT_AUX_TEMP);
 }
 /* store all cellmodule data values and ages */
 void freezeframe_cellmodule_full_debug()
@@ -243,7 +240,7 @@ void freezeframe_cellmodule_full_debug()
         module_data_stat.temp_batt_c_lowest, module_data_stat.temp_batt_c_mean, module_data_stat.temp_batt_c_highest,
         module_data_stat.temp_aux_c_lowest, module_data_stat.temp_aux_c_mean, module_data_stat.temp_aux_c_highest,
         module_data_stat.temp_case_bottom_c_lowest, module_data_stat.temp_case_bottom_c_mean, module_data_stat.temp_case_bottom_c_highest,
-        module_data_stat.temp_shunt_c);
+        SHUNT_AUX_TEMP);
 }
 /* store all calculated cellmodule data values and ages */
 void freezeframe_cellmodule_compact_debug()
@@ -254,5 +251,5 @@ void freezeframe_cellmodule_compact_debug()
         module_data_stat.temp_batt_c_lowest, module_data_stat.temp_batt_c_mean, module_data_stat.temp_batt_c_highest,
         module_data_stat.temp_aux_c_lowest, module_data_stat.temp_aux_c_mean, module_data_stat.temp_aux_c_highest,
         module_data_stat.temp_case_bottom_c_lowest, module_data_stat.temp_case_bottom_c_mean, module_data_stat.temp_case_bottom_c_highest,
-        module_data_stat.temp_shunt_c);
+        SHUNT_AUX_TEMP);
 }

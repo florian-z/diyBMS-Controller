@@ -40,12 +40,12 @@ typedef struct {
 
 
 #define BOTTOM_CASE_AUX_TEMP_ID_LEN 4
-#define BOTTOM_CASE_AUX_TEMP_1  1
-#define BOTTOM_CASE_AUX_TEMP_2  9
-#define BOTTOM_CASE_AUX_TEMP_3  37
-#define BOTTOM_CASE_AUX_TEMP_4  45
-#define SHUNT_AUX_TEMP 2
-
+#define BOTTOM_CASE_AUX_TEMP_ID_1  1
+#define BOTTOM_CASE_AUX_TEMP_ID_2  9
+#define BOTTOM_CASE_AUX_TEMP_ID_3  37
+#define BOTTOM_CASE_AUX_TEMP_ID_4  45
+#define SHUNT_AUX_TEMP_ID 2
+#define SHUNT_AUX_TEMP module_data[SHUNT_AUX_TEMP_ID].temp_aux_c
 
 /// measurement values
 void calc_cellmodule_data();

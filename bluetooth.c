@@ -112,11 +112,11 @@ void send_ble_android()
             memcpy(&msg[22], &shunt_data.energy, 4);
             memcpy(&msg[26], &shunt_data.charge, 4);
 
-            memcpy(&msg[30], &module_data[BOTTOM_CASE_AUX_TEMP_1].temp_aux_c, 1);
-            memcpy(&msg[31], &module_data[BOTTOM_CASE_AUX_TEMP_2].temp_aux_c, 1);
-            memcpy(&msg[32], &module_data[BOTTOM_CASE_AUX_TEMP_3].temp_aux_c, 1);
-            memcpy(&msg[33], &module_data[BOTTOM_CASE_AUX_TEMP_4].temp_aux_c, 1);
-            memcpy(&msg[34], &module_data[SHUNT_AUX_TEMP].temp_aux_c, 1);
+            memcpy(&msg[30], &module_data[BOTTOM_CASE_AUX_TEMP_ID_1].temp_aux_c, 1);
+            memcpy(&msg[31], &module_data[BOTTOM_CASE_AUX_TEMP_ID_2].temp_aux_c, 1);
+            memcpy(&msg[32], &module_data[BOTTOM_CASE_AUX_TEMP_ID_3].temp_aux_c, 1);
+            memcpy(&msg[33], &module_data[BOTTOM_CASE_AUX_TEMP_ID_4].temp_aux_c, 1);
+            memcpy(&msg[34], &SHUNT_AUX_TEMP, 1);
 
             memcpy(&msg[35], &module_data_age[CELL_MODULE_CHAIN_1].u_batt, 2);
             memcpy(&msg[37], &module_data_age[CELL_MODULE_CHAIN_2].u_batt, 2);
@@ -135,7 +135,6 @@ void send_ble_android()
             memcpy(&msg[55], &module_data_stat.temp_case_bottom_c_lowest, 1);
             memcpy(&msg[56], &module_data_stat.temp_case_bottom_c_mean, 1);
             memcpy(&msg[57], &module_data_stat.temp_case_bottom_c_highest, 1);
-            memcpy(&msg[58], &module_data_stat.temp_shunt_c, 1);
 
             msg_len = 59;
             msgid = 0;
