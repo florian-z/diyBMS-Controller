@@ -280,7 +280,7 @@ void charger_logic()
                     msg_not_needed = ":VOLT CHG NOT NEEDED";
                     new_reason_charge_not_starting |= (1<<2);
                 }
-                if(!check_temp_charging_allowed_var) {
+                if(!check_age_ticks_u_batt_and_temp_allowed_var) {
                     msg_tick_age = ":CELL DATA TO OLD";
                     new_reason_charge_not_starting |= (1<<3);
                 }
