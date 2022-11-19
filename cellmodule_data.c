@@ -76,7 +76,7 @@ void calc_cellmodule_data()
         }
         module_data_stat.temp_aux_c_lowest = tmp_low;
         module_data_stat.temp_aux_c_highest = tmp_high;
-        module_data_stat.temp_aux_c_mean = (uint8_t)(tmp_sum / (float)CELLMODULES_TOTAL);
+        module_data_stat.temp_aux_c_mean = (uint8_t)(tmp_sum / (float)(CELLMODULES_TOTAL - 1)); // total cnt - shunt sensor
     }
     {
         int8_t tmp_low = INT8_MAX;
