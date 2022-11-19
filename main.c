@@ -186,8 +186,6 @@ void charger_logic()
     OUT_BAL_LATCH_ON_IDLE
     OUT_HEATER_LATCH_OFF_IDLE
     OUT_HEATER_LATCH_ON_IDLE
-    // reset vars
-    reason_charge_not_starting = 0;
 /// check line power active
     if (IN_SIGNAL_LINE_PWR)
     {
@@ -245,6 +243,7 @@ void charger_logic()
                 }
                 OUT_CHARGER_LOAD_ON
                 charger_active_state = true;
+                reason_charge_not_starting = 0;
                 if (shunt_report_charge_start())
                 {
                     // shunt.charge and .energy will be reset to zero
@@ -292,10 +291,10 @@ void charger_logic()
             }
         }
 /// check under/over-temp and charge-stop-voltage
-        //bool check_temp_charging_allowed_var = check_temp_charging_allowed();
+        bool check_temp_charging_safety_stop_var = check_temp_charging_safety_stop();
         bool check_volt_charging_safety_stop_var = check_volt_charging_safety_stop();
         //bool check_age_ticks_u_batt_and_temp_allowed_var = check_age_ticks_u_batt_and_temp_allowed();
-        if (!check_temp_charging_allowed_var || check_volt_charging_safety_stop_var || !check_age_ticks_u_batt_and_temp_allowed_var)
+        if (check_temp_charging_safety_stop_var || check_volt_charging_safety_stop_var || !check_age_ticks_u_batt_and_temp_allowed_var)
         {
             OUT_CHARGER_DOOR_OFF
             if (charger_active_state)
@@ -303,7 +302,7 @@ void charger_logic()
                 char* msg_temp = "";
                 char* msg_safety_stop = "";
                 char* msg_tick_age = "";
-                if(!check_temp_charging_allowed_var) {
+                if(check_temp_charging_safety_stop_var) {
                     msg_temp = ":TEMP DOES NOT ALLOW";
                 }
                 if (check_volt_charging_safety_stop_var) {
@@ -323,6 +322,7 @@ void charger_logic()
                 charge_ended_ts = get_system_time();
                 charge_ended_charge = shunt_data.charge;
                 charge_ended_energy = shunt_data.energy;
+                reason_charge_not_starting = 0;
             } else {
                 OUT_CHARGER_LOAD_OFF
             }
@@ -339,6 +339,7 @@ void charger_logic()
             cl_heater_off();
             OUT_CHARGER_LOAD_OFF
             OUT_CHARGER_DOOR_OFF
+            reason_charge_not_starting = 0;
         }
     }
 

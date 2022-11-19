@@ -50,8 +50,10 @@ typedef struct {
 /// measurement values
 void calc_cellmodule_data();
 bool check_temp_should_use_heater();
+bool check_temp_balancing_allowed();
 bool check_temp_charging_allowed();
 bool check_volt_charging_necessary_start();
+bool check_temp_charging_safety_stop();
 bool check_volt_charging_safety_stop();
 
 /// age of cell module data

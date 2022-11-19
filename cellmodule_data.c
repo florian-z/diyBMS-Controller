@@ -112,14 +112,29 @@ bool check_temp_should_use_heater()
     return false;
 }
 
+
+// balance charge only if all cells above LOW and none above HIGH
+// true -> charging on
+#define LIMITS_TEMP_BALANCING_NEEDED_LOW 10
+#define LIMITS_TEMP_BALANCING_SAFETY_HIGH 45
+bool check_temp_balancing_allowed()
+{
+    if((module_data_stat.temp_batt_c_lowest > LIMITS_TEMP_BALANCING_NEEDED_LOW && module_data_stat.temp_aux_c_lowest > LIMITS_TEMP_BALANCING_NEEDED_LOW)
+        && (module_data_stat.temp_batt_c_highest < LIMITS_TEMP_BALANCING_SAFETY_HIGH && module_data_stat.temp_aux_c_highest < LIMITS_TEMP_BALANCING_SAFETY_HIGH))
+    {
+        return true;
+    }
+    return false;
+}
+
 // charge only if all cells above LOW and none above HIGH
 // true -> charging on
-#define LIMITS_TEMP_CHARGING_NEEDED_LOW 15
-#define LIMITS_TEMP_CHARGING_SAFETY_HIGH 45
+#define LIMITS_TEMP_CHARGING_ALLOWED_LOW 18
+#define LIMITS_TEMP_CHARGING_ALLOWED_HIGH 45
 bool check_temp_charging_allowed()
 {
-    if((module_data_stat.temp_batt_c_lowest > LIMITS_TEMP_CHARGING_NEEDED_LOW && module_data_stat.temp_aux_c_lowest > LIMITS_TEMP_CHARGING_NEEDED_LOW)
-        && (module_data_stat.temp_batt_c_highest < LIMITS_TEMP_CHARGING_SAFETY_HIGH && module_data_stat.temp_aux_c_highest < LIMITS_TEMP_CHARGING_SAFETY_HIGH))
+    if((module_data_stat.temp_batt_c_lowest > LIMITS_TEMP_CHARGING_ALLOWED_LOW && module_data_stat.temp_aux_c_lowest > LIMITS_TEMP_CHARGING_ALLOWED_LOW)
+        && (module_data_stat.temp_batt_c_highest < LIMITS_TEMP_CHARGING_ALLOWED_HIGH && module_data_stat.temp_aux_c_highest < LIMITS_TEMP_CHARGING_ALLOWED_HIGH))
     {
         return true;
     }
@@ -140,12 +155,26 @@ bool check_volt_charging_necessary_start()
     return false;
 }
 
+// charge only if all cells above LOW and none above HIGH
+// true -> stop/end charging
+#define LIMITS_TEMP_CHARGING_SAFETY_STOP_LOW (LIMITS_TEMP_CHARGING_ALLOWED_LOW - 2)
+#define LIMITS_TEMP_CHARGING_SAFETY_STOP_HIGH (LIMITS_TEMP_CHARGING_ALLOWED_HIGH + 2)
+bool check_temp_charging_safety_stop()
+{
+    if((module_data_stat.temp_batt_c_lowest > LIMITS_TEMP_CHARGING_SAFETY_STOP_LOW && module_data_stat.temp_aux_c_lowest > LIMITS_TEMP_CHARGING_SAFETY_STOP_LOW)
+        && (module_data_stat.temp_batt_c_highest < LIMITS_TEMP_CHARGING_SAFETY_STOP_HIGH && module_data_stat.temp_aux_c_highest < LIMITS_TEMP_CHARGING_SAFETY_STOP_HIGH))
+    {
+        return false;
+    }
+    return true;
+}
+
 // stop charging if one cell above HIGH
 // true -> stop/end charging
-#define LIMITS_VOLT_CHARGING_SAFETY_HIGH 3500
+#define LIMITS_VOLT_CHARGING_SAFETY_STOP_HIGH 3500
 bool check_volt_charging_safety_stop()
 {
-    if(module_data_stat.u_batt_mv_highest >= LIMITS_VOLT_CHARGING_SAFETY_HIGH)
+    if(module_data_stat.u_batt_mv_highest >= LIMITS_VOLT_CHARGING_SAFETY_STOP_HIGH)
     {
         return true;
     }
