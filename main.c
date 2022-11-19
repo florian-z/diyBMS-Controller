@@ -169,6 +169,7 @@ static bool heater_active_state = false;
 static bool balancer_active_state = false;
 static bool charger_active_state = false;
 static uint8_t reason_charge_not_starting = 0;
+static uint8_t reason_balancer_not_starting = 0;
 void charger_logic()
 {
     static time_t charge_started_ts = 0;
@@ -388,8 +389,6 @@ void charger_logic()
         {
             LOG_AND_FREEZE("CAR ACTIVE LATCH ON:BAL ON\n");
             car_active = true;
-            // ensure balancer is on, when car is on
-            cl_balancer_on();
         }
     } else {
         // car sleeping
@@ -399,12 +398,55 @@ void charger_logic()
             car_active = false;
         }
     }
+
+/// check if balancer is needed and allowed
+    if (car_active)
+    {
+        if (!balancer_active_state)
+        {
+            // balancer not active
+            if (check_temp_balancing_allowed())
+            {
+                cl_balancer_on();
+            }
+            else
+            {
+                if (!reason_balancer_not_starting)
+                {
+                    LOG_AND_FREEZE("BAL NOT ON:TEMP DOES NOT ALLOW\n");
+                }
+                reason_balancer_not_starting = 1;
+            }
+        }
+        else
+        {
+            // balancer active
+            if (!check_temp_balancing_allowed())
+            {
+                cl_balancer_off();
+                LOG_AND_FREEZE("BAL OFF:TEMP DOES NOT ALLOW(1)\n");
+            }
+        }
+    }
+    else
+    {
+        // car not active
+        if (balancer_active_state && !check_temp_balancing_allowed())
+        {
+            cl_balancer_off();
+            LOG_AND_FREEZE("BAL OFF:TEMP DOES NOT ALLOW(2)\n");
+        }
+        reason_balancer_not_starting = 0;
+    }
 }
+
+
 
 void cl_balancer_on()
 {
     LOG_AND_FREEZE("BAL LATCH ON\n");
     balancer_active_state = true;
+    reason_balancer_not_starting = 0;
     OUT_BAL_LATCH_OFF_IDLE
     OUT_BAL_LATCH_ON_CURR
 }
@@ -412,6 +454,7 @@ void cl_balancer_off()
 {
     LOG_AND_FREEZE("BAL LATCH OFF\n");
     balancer_active_state = false;
+    reason_balancer_not_starting = 0;
     OUT_BAL_LATCH_ON_IDLE
     OUT_BAL_LATCH_OFF_CURR
 }
