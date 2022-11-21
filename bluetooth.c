@@ -139,11 +139,14 @@ void send_ble_android()
             memcpy(&msg[56], &module_data_stat.temp_case_bottom_c_mean, 1);
             memcpy(&msg[57], &module_data_stat.temp_case_bottom_c_highest, 1);
 
+            msg_len = 58;
+
             if (!has_ble_message())
             {
                 // no message to send, continue with first case
                 msgid = 0;
             }
+            break;
 
         case 5:
             msg[0] = msgid;
@@ -151,7 +154,7 @@ void send_ble_android()
             used_len = 0;
             msg_start = give_ble_start_and_increment(TX_BUF_BLE-2-1, &used_len); // TX_BUF_BLE - two start bytes - trailing '\0'
             memcpy(&msg[2], msg_start, used_len);
-            msg_len = used_len+2+1;
+            msg_len = used_len+2;
 
             msgid = 0;
             break;

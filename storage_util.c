@@ -71,20 +71,20 @@ uint8_t has_ble_message(void)
 uint8_t* give_ble_start_and_increment(uint8_t max_len, uint8_t* used_len)
 {
     uint8_t* tmp_rd_ptr = storage_buf_rd_ble;
-    used_len = 0;
+    *used_len = 0;
     if (*storage_buf_rd_ble)
     {
         // message is not empty, set pointer behind this message / to next message
         do {
             storage_buf_rd_ble++;
             max_len--;
-            used_len++;
+            (*used_len)++;
         } while(*storage_buf_rd_ble && *storage_buf_rd_ble != '\n' && max_len > 0);
         if (*storage_buf_rd_ble != '\0' && max_len > 0)
         {
             // now points to '\n', increment to point to first char of next message
             storage_buf_rd_ble++;
-            used_len++;
+            (*used_len)++;
         }
     }
     return tmp_rd_ptr;
