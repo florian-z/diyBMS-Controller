@@ -170,15 +170,15 @@ static bool balancer_active_state = false;
 static bool charger_active_state = false;
 static uint8_t reason_charge_not_starting = 0;
 static uint8_t reason_balancer_not_starting = 0;
+static time_t charge_started_ts = 0;
+static time_t charge_ended_ts = 0;
+static time_t kl15_started_ts = 0;
 void charger_logic()
 {
-    static time_t charge_started_ts = 0;
     static float charge_started_charge = 0;
     static float charge_started_energy = 0;
-    static time_t charge_ended_ts = 0;
     static float charge_ended_charge = 0;
     static float charge_ended_energy = 0;
-    static time_t kl15_started_ts = 0;
     static float kl15_started_charge = 0;
     static float kl15_started_energy = 0;
 /// ensure relais coils IDLE is reached
@@ -483,6 +483,16 @@ void freeze_charger_logic_status()
     #pragma diag_suppress=Pa082
     freeze_va("[CL: CAR:%d KL15:%d LINE:%d BAL:%d HEATER:%d | CHARGE_ON:%d CHG_DOOR:%d CHG_LOAD:%d REASON:%02X\n", car_active, kl15_pwr_state, line_pwr_state, balancer_active_state, heater_active_state, charger_active_state, IS_OUT_CHARGER_DOOR_ON, IS_OUT_CHARGER_LOAD_ON, reason_charge_not_starting);
 }
+
+
+
+void update_charger_logic_timestamps(time_t timestamp_delta)
+{
+    if (charge_started_ts) { charge_started_ts += timestamp_delta; }
+    if (charge_ended_ts) { charge_ended_ts += timestamp_delta; }
+    if (kl15_started_ts) { kl15_started_ts += timestamp_delta; }
+}
+
 
 void led_test(void)
 {

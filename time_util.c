@@ -1,6 +1,8 @@
 #include "time_util.h"
 
 #include "log_util.h"
+#include "freeze_util.h"
+#include "main.h"
 
 // 01.11.2022 00:00:00 (UTC)
 #define START_TIME 1667260800
@@ -25,7 +27,8 @@ void set_time_tick(time_t new_timestamp)
         char buf_new[20] = {0};
         strftime(buf_prev, 20, "%y%m%d %H%M%S", gmtime(&system_time_sec));
         strftime(buf_new, 20, "%y%m%d %H%M%S", gmtime(&new_timestamp));
-        log_va("prev-ts: %s new-ts: %s\n", buf_prev, buf_new);
+        freeze_va("prev-ts: %s new-ts: %s\n", buf_prev, buf_new);
+        update_charger_logic_timestamps(new_timestamp - system_time_sec);
         system_time_sec = new_timestamp;
     }
 }
