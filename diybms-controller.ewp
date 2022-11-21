@@ -2495,6 +2495,9 @@
         <name>$PROJ_DIR$\cellmodule_data.c</name>
     </file>
     <file>
+        <name>$PROJ_DIR$\charger_logic.c</name>
+    </file>
+    <file>
         <name>$PROJ_DIR$\diybms-controller.ipcf</name>
     </file>
     <file>

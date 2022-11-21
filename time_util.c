@@ -2,7 +2,7 @@
 
 #include "log_util.h"
 #include "freeze_util.h"
-#include "main.h"
+#include "charger_logic.h"
 
 // 01.11.2022 00:00:00 (UTC)
 #define START_TIME 1667260800

@@ -2,7 +2,6 @@
 #define __user_main_h__
 
 #include "r_smc_entry.h"
-#include <time.h>
 
 enum system_status {
     CELLMODULE_CHAIN1,
@@ -12,15 +11,6 @@ enum system_status {
 };
 
 void main_timer_tick(void);
-
-// charger logic
-void cl_balancer_on();
-void cl_balancer_off();
-void cl_heater_on();
-void cl_heater_off();
-void print_charger_logic_status();
-void freeze_charger_logic_status();
-void update_charger_logic_timestamps(time_t timestamp_delta);
 
 void Error_Handler(void);
 void report_system_status(enum system_status);

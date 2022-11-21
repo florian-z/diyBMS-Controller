@@ -9,6 +9,7 @@
 #include "log_util.h"
 #include "freeze_util.h"
 #include "storage_util.h"
+#include "charger_logic.h"
 
 /*** USB / Debug UART ***/
 static volatile uint8_t send_buf_usb[TX_BUF_USB] = {0};     /* transmit buffer */
