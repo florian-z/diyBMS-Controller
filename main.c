@@ -231,7 +231,7 @@ void charger_logic()
         {
             if (!charger_active_state)
             {
-                if (!charge_ended_ts)
+                if (charge_ended_ts)
                 {
                     // data of previous charge available
                     LOG_AND_FREEZE("CHARGE LATCH ON:LOAD ON expecting to recharge %.2Ah %.2kWh estimated duration %.1fh\n",
@@ -351,7 +351,7 @@ void charger_logic()
         if (!kl15_pwr_state)
         {
             // KL15 on latch
-            if (!charge_ended_ts)
+            if (charge_ended_ts)
             {
                 // data of previous charge available
                 LOG_AND_FREEZE("KL15 DETECT LATCH ON has avail %.2fAh %.2fkWh - last charging ended %dh%02dm ago\n", shunt_data.charge, shunt_data.energy,
