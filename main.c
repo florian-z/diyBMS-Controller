@@ -186,6 +186,7 @@ void charger_logic()
     OUT_BAL_LATCH_ON_IDLE
     OUT_HEATER_LATCH_OFF_IDLE
     OUT_HEATER_LATCH_ON_IDLE
+    bool check_age_ticks_u_batt_and_temp_allowed_var = check_age_ticks_u_batt_and_temp_allowed();
 /// check line power active
     if (IN_SIGNAL_LINE_PWR)
     {
@@ -198,7 +199,7 @@ void charger_logic()
         }
 /// check need for heating
         bool check_temp_should_use_heater_var = check_temp_should_use_heater();
-        bool check_age_ticks_u_batt_and_temp_allowed_var = check_age_ticks_u_batt_and_temp_allowed();
+        // bool check_age_ticks_u_batt_and_temp_allowed_var = check_age_ticks_u_batt_and_temp_allowed();
         if (check_temp_should_use_heater_var && check_age_ticks_u_batt_and_temp_allowed_var)
         {
             if (!heater_active_state)
@@ -401,41 +402,69 @@ void charger_logic()
     }
 
 /// check if balancer is needed and allowed
+    bool check_temp_balancing_allowed_var = check_temp_balancing_allowed();
     if (car_active)
     {
         if (!balancer_active_state)
         {
             // balancer not active
-            if (check_temp_balancing_allowed())
+            if (check_temp_balancing_allowed_var && check_age_ticks_u_batt_and_temp_allowed_var)
             {
                 cl_balancer_on();
             }
             else
             {
-                if (!reason_balancer_not_starting)
-                {
-                    LOG_AND_FREEZE("BAL NOT ON:TEMP DOES NOT ALLOW\n");
+                char* msg_temp = "";
+                char* msg_tick_age = "";
+                uint8_t new_reason_balancer_not_starting = 0;
+                if(!check_temp_balancing_allowed_var) {
+                    msg_temp = ":TEMP DOES NOT ALLOW";
+                    new_reason_balancer_not_starting |= (1<<1);
                 }
-                reason_balancer_not_starting = 1;
+                if(!check_age_ticks_u_batt_and_temp_allowed_var) {
+                    msg_tick_age = ":CELL DATA TO OLD";
+                    new_reason_balancer_not_starting |= (1<<2);
+                }
+                if (new_reason_balancer_not_starting != reason_balancer_not_starting)
+                {
+                    LOG_AND_FREEZE("BAL NOT ON%s%s%s\n", msg_temp, msg_tick_age);
+                    reason_balancer_not_starting = new_reason_balancer_not_starting;
+                }
             }
         }
         else
         {
             // balancer active
-            if (!check_temp_balancing_allowed())
+            if (!check_temp_balancing_allowed_var || !check_age_ticks_u_batt_and_temp_allowed_var)
             {
                 cl_balancer_off();
-                LOG_AND_FREEZE("BAL OFF:TEMP DOES NOT ALLOW(1)\n");
+                char* msg_temp = "";
+                char* msg_tick_age = "";
+                if(!check_temp_balancing_allowed_var) {
+                    msg_temp = ":TEMP DOES NOT ALLOW";
+                }
+                if(!check_age_ticks_u_batt_and_temp_allowed_var) {
+                    msg_tick_age = ":CELL DATA TO OLD";
+                }
+                LOG_AND_FREEZE("BAL OFF (CAR active)%s%s\n", msg_temp, msg_tick_age);
             }
         }
     }
     else
     {
         // car not active
-        if (balancer_active_state && !check_temp_balancing_allowed())
+        if (balancer_active_state && (!check_temp_balancing_allowed_var || !check_age_ticks_u_batt_and_temp_allowed_var))
         {
             cl_balancer_off();
-            LOG_AND_FREEZE("BAL OFF:TEMP DOES NOT ALLOW(2)\n");
+            char* msg_temp = "";
+                char* msg_tick_age = "";
+                if(!check_temp_balancing_allowed_var) {
+                    msg_temp = ":TEMP DOES NOT ALLOW";
+                }
+                if(!check_age_ticks_u_batt_and_temp_allowed_var) {
+                    msg_tick_age = ":CELL DATA TO OLD";
+                }
+                LOG_AND_FREEZE("BAL OFF (CAR not active)%s%s\n", msg_temp, msg_tick_age);
         }
         reason_balancer_not_starting = 0;
     }
