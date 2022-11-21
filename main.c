@@ -517,6 +517,7 @@ void freeze_charger_logic_status()
 
 void update_charger_logic_timestamps(time_t timestamp_delta)
 {
+    // only update timestamps, if already set (not zero)
     if (charge_started_ts) { charge_started_ts += timestamp_delta; }
     if (charge_ended_ts) { charge_ended_ts += timestamp_delta; }
     if (kl15_started_ts) { kl15_started_ts += timestamp_delta; }

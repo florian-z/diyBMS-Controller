@@ -147,14 +147,13 @@ void send_ble_android()
                 msgid = 0;
             }
             break;
-
         case 5:
             msg[0] = msgid;
             msg[1] = 7;
             used_len = 0;
             msg_start = give_ble_start_and_increment(TX_BUF_BLE-2-1, &used_len); // TX_BUF_BLE - two start bytes - trailing '\0'
             memcpy(&msg[2], msg_start, used_len);
-            msg_len = used_len+2;
+            msg_len = used_len+2; // do not transmit trailing '\0'
 
             msgid = 0;
             break;
