@@ -258,7 +258,7 @@ void freezeframe_cellmodule_full_debug()
     freeze_va("[%02d:%dmV:%d:%dC]", i, module_data[i].u_batt_mv, module_data[i].temp_batt_c, module_data[i].temp_aux_c);
     for(i++; i<=CELLMODULES_TOTAL; i++)
     {
-        freeze_va_no_ts("[%02d:%dmV:%d:%dC]%s", i, module_data[i].u_batt_mv, module_data[i].temp_batt_c, module_data[i].temp_aux_c,(!(i%10)?"\n":""));
+        freeze_va_no_ts("[%02d:%dmV:%d:%dC]", i, module_data[i].u_batt_mv, module_data[i].temp_batt_c, module_data[i].temp_aux_c);
     }
     freeze_va_no_ts("\n");
     // age of measured values
