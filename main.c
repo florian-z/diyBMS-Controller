@@ -10,9 +10,9 @@
 #include "cellmodule_data.h"
 #include "bluetooth.h"
 #include "shunt.h"
+#include "charger_logic.h"
 
 
-void charger_logic(void);
 void led_test(void);
 void config_communication(void);
 void register_nmi_interrupt_handler(void);
