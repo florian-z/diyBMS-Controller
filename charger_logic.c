@@ -51,20 +51,21 @@ void charger_logic_tick()
         }
 /// check need for heating
         bool check_temp_should_use_heater_var = check_temp_should_use_heater();
+        bool check_temp_should_turn_off_heater_var = check_temp_should_turn_off_heater();
         // bool check_age_ticks_u_batt_and_temp_allowed_var = check_age_ticks_u_batt_and_temp_allowed();
-        if (check_temp_should_use_heater_var && check_age_ticks_u_batt_and_temp_allowed_var)
+        if (!heater_active_state)
         {
-            if (!heater_active_state)
+            if (check_temp_should_use_heater_var && check_age_ticks_u_batt_and_temp_allowed_var)
             {
                 LOG_AND_FREEZE("HEATER LATCH ON\n");
                 cl_heater_on();
             }
         } else {
-            if (heater_active_state)
+            if (check_temp_should_turn_off_heater_var || !check_age_ticks_u_batt_and_temp_allowed_var)
             {
                 char* msg_heater = "";
                 char* msg_tick_age = "";
-                if(!check_temp_should_use_heater_var) {
+                if(check_temp_should_turn_off_heater_var) {
                     msg_heater = ":REACHED TEMP";
                 }
                 if (!check_age_ticks_u_batt_and_temp_allowed_var) {
@@ -255,6 +256,7 @@ void charger_logic_tick()
 
 /// check if balancer is needed and allowed
     bool check_temp_balancing_allowed_var = check_temp_balancing_allowed();
+    bool check_temp_balancing_safety_stop_var = check_temp_balancing_safety_stop();
     if (car_active)
     {
         if (!balancer_active_state)
@@ -287,12 +289,12 @@ void charger_logic_tick()
         else
         {
             // balancer active
-            if (!check_temp_balancing_allowed_var || !check_age_ticks_u_batt_and_temp_allowed_var)
+            if (check_temp_balancing_safety_stop_var || !check_age_ticks_u_batt_and_temp_allowed_var)
             {
                 cl_balancer_off();
                 char* msg_temp = "";
                 char* msg_tick_age = "";
-                if(!check_temp_balancing_allowed_var) {
+                if(check_temp_balancing_safety_stop_var) {
                     msg_temp = ":TEMP DOES NOT ALLOW";
                 }
                 if(!check_age_ticks_u_batt_and_temp_allowed_var) {
@@ -305,12 +307,12 @@ void charger_logic_tick()
     else
     {
         // car not active
-        if (balancer_active_state && (!check_temp_balancing_allowed_var || !check_age_ticks_u_batt_and_temp_allowed_var))
+        if (balancer_active_state && (check_temp_balancing_safety_stop_var || !check_age_ticks_u_batt_and_temp_allowed_var))
         {
             cl_balancer_off();
             char* msg_temp = "";
                 char* msg_tick_age = "";
-                if(!check_temp_balancing_allowed_var) {
+                if(check_temp_balancing_safety_stop_var) {
                     msg_temp = ":TEMP DOES NOT ALLOW";
                 }
                 if(!check_age_ticks_u_batt_and_temp_allowed_var) {

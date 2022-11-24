@@ -98,14 +98,26 @@ void calc_cellmodule_data()
     }
 }
 
-// use heater until all cells above LOW and none above HIGH
+// enable heater only if at least one cell below LOW and none above HIGH
 // true -> heater on
-#define LIMITS_TEMP_HEATER_NEEDED_LOW 20
+#define LIMITS_TEMP_HEATER_NEEDED_LOW 13
 #define LIMITS_TEMP_HEATER_SAFETY_HIGH 35
 bool check_temp_should_use_heater()
 {
-    if((module_data_stat.temp_batt_c_lowest < LIMITS_TEMP_HEATER_NEEDED_LOW || module_data_stat.temp_aux_c_lowest < LIMITS_TEMP_HEATER_NEEDED_LOW)
+    if((module_data_stat.temp_batt_c_lowest <= LIMITS_TEMP_HEATER_NEEDED_LOW || module_data_stat.temp_aux_c_lowest <= LIMITS_TEMP_HEATER_NEEDED_LOW)
         && (module_data_stat.temp_batt_c_highest < LIMITS_TEMP_HEATER_SAFETY_HIGH && module_data_stat.temp_aux_c_highest < LIMITS_TEMP_HEATER_SAFETY_HIGH))
+    {
+        return true;
+    }
+    return false;
+}
+// disable the heater if all cells above LOW or any above HIGH
+// true -> heater off
+#define LIMITS_TEMP_HEATER_NOT_NEEDED_ANYMORE (LIMITS_TEMP_HEATER_NEEDED_LOW + 2)
+bool check_temp_should_turn_off_heater()
+{
+    if((module_data_stat.temp_batt_c_lowest >= LIMITS_TEMP_HEATER_NOT_NEEDED_ANYMORE && module_data_stat.temp_aux_c_lowest >= LIMITS_TEMP_HEATER_NOT_NEEDED_ANYMORE)
+        || (module_data_stat.temp_batt_c_highest >= LIMITS_TEMP_HEATER_SAFETY_HIGH || module_data_stat.temp_aux_c_highest >= LIMITS_TEMP_HEATER_SAFETY_HIGH))
     {
         return true;
     }
@@ -113,9 +125,9 @@ bool check_temp_should_use_heater()
 }
 
 
-// balance charge only if all cells above LOW and none above HIGH
-// true -> charging on
-#define LIMITS_TEMP_BALANCING_NEEDED_LOW 10
+// start balance charge only if all cells above LOW and none above HIGH
+// true -> start balancing
+#define LIMITS_TEMP_BALANCING_NEEDED_LOW 5
 #define LIMITS_TEMP_BALANCING_SAFETY_HIGH 45
 bool check_temp_balancing_allowed()
 {
@@ -126,10 +138,23 @@ bool check_temp_balancing_allowed()
     }
     return false;
 }
+// stop balance charge if any cell below LOW or any above HIGH
+// true -> stop/end balancing
+#define LIMITS_TEMP_BALANCING_SAFETY_STOP_LOW (LIMITS_TEMP_BALANCING_NEEDED_LOW - 2)
+#define LIMITS_TEMP_BALANCING_SAFETY_STOP_HIGH (LIMITS_TEMP_BALANCING_SAFETY_HIGH + 2)
+bool check_temp_balancing_safety_stop()
+{
+    if((module_data_stat.temp_batt_c_lowest > LIMITS_TEMP_BALANCING_SAFETY_STOP_LOW && module_data_stat.temp_aux_c_lowest > LIMITS_TEMP_BALANCING_SAFETY_STOP_LOW)
+        && (module_data_stat.temp_batt_c_highest < LIMITS_TEMP_BALANCING_SAFETY_STOP_HIGH && module_data_stat.temp_aux_c_highest < LIMITS_TEMP_BALANCING_SAFETY_STOP_HIGH))
+    {
+        return false;
+    }
+    return true;
+}
 
 // charge only if all cells above LOW and none above HIGH
 // true -> charging on
-#define LIMITS_TEMP_CHARGING_ALLOWED_LOW 18
+#define LIMITS_TEMP_CHARGING_ALLOWED_LOW 11
 #define LIMITS_TEMP_CHARGING_ALLOWED_HIGH 45
 bool check_temp_charging_allowed()
 {
