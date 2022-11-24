@@ -14,5 +14,7 @@ uint8_t* give_history_start(void);
 uint8_t has_ble_message(void);
 /* give ble-read-pointer to next message (terminated by '\n') */
 uint8_t* give_ble_start_and_increment(uint8_t max_len, uint8_t* used_len);
+/* set flag to restart ble-read-pointer to oldest message */
+void restart_ble_message(void);
 
 #endif /* __storage_util_h__ */

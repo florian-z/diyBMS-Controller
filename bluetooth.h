@@ -13,7 +13,8 @@ typedef enum
     Reset_0x02 = 2,
     Read_Status_0x03 = 3,
 
-    SetTimestamp_0x86 = 0x86
+    SetTimestamp_0x86 = 0x86,
+    RequestFreezeLog_0x87 = 0x87
 } ble_cmd_t;
 
 #define BLE_SYNC_WORD   0xAA

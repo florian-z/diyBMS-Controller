@@ -11,6 +11,7 @@ static uint8_t storage_buf[STORAGE_UTIL_LEN] = {0}; /* storage buffer */
 static uint8_t* storage_buf_wr = storage_buf;       /* write pointer */
 static uint8_t* storage_buf_rd = storage_buf;       /* read pointer */
 static uint8_t* storage_buf_rd_ble = storage_buf;   /* ble read pointer */
+static bool restart_ble_message_var = false;        /* send all messages via ble flag */
 
 void pointer_rollover(uint8_t** ptr)
 {
@@ -67,9 +68,21 @@ uint8_t has_ble_message(void)
     return *storage_buf_rd_ble;
 }
 
+/* set flag to restart ble-read-pointer to oldest message */
+void restart_ble_message(void)
+{
+    restart_ble_message_var = true;
+}
+
 /* give ble-read-pointer to next message (terminated by '\n') */
 uint8_t* give_ble_start_and_increment(uint8_t max_len, uint8_t* used_len)
 {
+    if (restart_ble_message_var)
+    {
+        // send all messages via ble by moving ble-read-pointer
+        restart_ble_message_var = false;
+        storage_buf_rd_ble = give_history_start();
+    }
     uint8_t* tmp_rd_ptr = storage_buf_rd_ble;
     *used_len = 0;
     if (*storage_buf_rd_ble)

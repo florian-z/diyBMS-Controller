@@ -84,7 +84,7 @@ void send_ble_android()
             {
                 memcpy(&msg[i*2], &module_data[i].u_batt_mv, 2);
             }
-            msg_len = 96;
+            msg_len = MODULE_DATA_LEN*2 + 2;
             break;
         case 2:
             msg[0] = msgid;
@@ -93,7 +93,7 @@ void send_ble_android()
             {
                 memcpy(&msg[i], &module_data[i].temp_batt_c, 1);
             }
-            msg_len = 49;
+            msg_len = MODULE_DATA_LEN + 2;
             break;
         case 3:
             msg[0] = msgid;
@@ -102,7 +102,7 @@ void send_ble_android()
             {
                 memcpy(&msg[i], &module_data[i].temp_aux_c, 1);
             }
-            msg_len = 49;
+            msg_len = MODULE_DATA_LEN + 2;
             break;
         case 4:
             msg[0] = msgid;
@@ -165,12 +165,13 @@ void send_ble_android()
     send_message_ble_binary((uint8_t*)&msg, msg_len);
 }
 
+#define BLE_MINIMUM_LEN 5
 void recv_ble_msg(uint8_t* msg, uint8_t msglen)
 {
     if(msg[BLE_OPCODE] == SetTimestamp_0x86)
     {
         log("BLE Set Timestamp: ");
-        if(msg[BLE_LEN_H] == 0 && msg[BLE_LEN_L] == 5 && msglen == 9)
+        if(msg[BLE_LEN_H] == 0 && msg[BLE_LEN_L] == 5 && msglen == BLE_MINIMUM_LEN + 4)
         {
             uint32_t ts;
             memcpy(&ts, &msg[BLE_OPCODE+1], 4);
@@ -179,7 +180,19 @@ void recv_ble_msg(uint8_t* msg, uint8_t msglen)
         }
         else
         {
-            log("ble cmd malformed\n");
+            log("ble cmd set-ts malformed\n");
+        }
+    }
+    else if(msg[BLE_OPCODE] == RequestFreezeLog_0x87)
+    {
+        log("BLE Set Timestamp: ");
+        if(msg[BLE_LEN_H] == 0 && msg[BLE_LEN_L] == 1 && msglen == BLE_MINIMUM_LEN)
+        {
+            restart_ble_message();
+        }
+        else
+        {
+            log("ble cmd req-freeze-log malformed\n");
         }
     }
     else
