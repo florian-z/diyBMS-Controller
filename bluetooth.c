@@ -91,7 +91,7 @@ void send_ble_android()
             msg[1] = MODULE_DATA_LEN;
             for(uint8_t i = 1; i<MODULE_DATA_LEN; i++)
             {
-                memcpy(&msg[i], &module_data[i].temp_batt_c, 1);
+                memcpy(&msg[i+1], &module_data[i].temp_batt_c, 1);
             }
             msg_len = MODULE_DATA_LEN + 2;
             break;
@@ -100,7 +100,7 @@ void send_ble_android()
             msg[1] = MODULE_DATA_LEN;
             for(uint8_t i = 1; i<MODULE_DATA_LEN; i++)
             {
-                memcpy(&msg[i], &module_data[i].temp_aux_c, 1);
+                memcpy(&msg[i+1], &module_data[i].temp_aux_c, 1);
             }
             msg_len = MODULE_DATA_LEN + 2;
             break;
@@ -192,7 +192,7 @@ void recv_ble_msg(uint8_t* msg, uint8_t msglen)
         }
         else
         {
-            log("ble cmd req-freeze-log malformed\n");
+            log("BLE cmd set-ts malformed\n");
         }
     }
     else
