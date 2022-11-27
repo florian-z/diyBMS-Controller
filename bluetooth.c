@@ -177,17 +177,6 @@ void recv_ble_msg(uint8_t* msg, uint8_t msglen)
             memcpy(&ts, &msg[BLE_OPCODE+1], 4);
             log_va("ts: %lu\n", ts);
             set_time_tick(ts);
-        }
-        else
-        {
-            log("ble cmd set-ts malformed\n");
-        }
-    }
-    else if(msg[BLE_OPCODE] == RequestFreezeLog_0x87)
-    {
-        log("BLE Set Timestamp: ");
-        if(msg[BLE_LEN_H] == 0 && msg[BLE_LEN_L] == 1 && msglen == BLE_MINIMUM_LEN)
-        {
             restart_ble_message();
         }
         else
