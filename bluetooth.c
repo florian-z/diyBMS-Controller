@@ -9,11 +9,13 @@
 #include "uart_cellmodule.h"
 #include "shunt.h"
 #include "storage_util.h"
+#include "charger_logic.h"
 
 extern module_data_t module_data[MODULE_DATA_LEN];
 extern module_data_age_t module_data_age[CELLMODULE_CHANNELS];
 extern module_data_statistics_t module_data_stat;
 extern shunt_t shunt_data;
+extern charger_logic_globals_t chargerlogic;
 
 void bluetooth_init_config_mode()
 {
@@ -76,6 +78,7 @@ void send_ble_android()
     uint8_t used_len = 0;
     uint8_t* msg_start = "";
     uint8_t msg_len = 0;
+    uint8_t bool_tmp = 0;
     switch(++msgid) {
         case 1:
             msg[0] = msgid;
@@ -139,7 +142,13 @@ void send_ble_android()
             memcpy(&msg[56], &module_data_stat.temp_case_bottom_c_mean, 1);
             memcpy(&msg[57], &module_data_stat.temp_case_bottom_c_highest, 1);
 
-            msg_len = 58;
+            memcpy(&msg[58], &chargerlogic.overall_highest_charge, 4);
+            memcpy(&msg[62], &chargerlogic.overall_highest_energy, 4);
+            bool_tmp = chargerlogic.car_active<<7 | chargerlogic.kl15_pwr_state<<6 | chargerlogic.line_pwr_state<<5 | chargerlogic.heater_active_state<<4 |
+                chargerlogic.balancer_active_state<<3 | chargerlogic.charger_active_state<<2;
+            memcpy(&msg[66], &bool_tmp, 1);
+
+            msg_len = 67;
 
             if (!has_ble_message())
             {

@@ -9,25 +9,20 @@
 #define LOG_AND_FREEZE(...)   freeze_va(__VA_ARGS__);capture_compact_freeze_frame=2;
 #define DAYS_TILL_NOW(timestamp)     get_dur_full_days(get_system_time() - timestamp )
 #define HOURS_TILL_NOW(timestamp)   get_dur_full_hours(get_system_time() - timestamp )
-#define MIN_TILL_NOW(timestamp)    get_dur_full_minutes(get_system_time() - timestamp )
+#define MIN_TILL_NOW(timestamp)   get_dur_full_minutes(get_system_time() - timestamp )
 
 extern shunt_t shunt_data;
 extern uint8_t capture_compact_freeze_frame;
 
-// true if charging (LINE DETECT) or key-on (KL15 ON)
-static bool car_active = false;
-static bool kl15_pwr_state = false;
-static bool line_pwr_state = false;
-static bool heater_active_state = false;
-static bool balancer_active_state = false;
-static bool charger_active_state = false;
+// car_active => true if charging (LINE DETECT) or key-on (KL15 ON)
 static uint8_t reason_charge_not_starting = 0;
 static uint8_t reason_balancer_not_starting = 0;
 static time_t charge_started_ts = 0;
 static time_t charge_ended_ts = 0;
 static time_t kl15_started_ts = 0;
-static float overall_highest_charge = 0;
-static float overall_highest_energy = 0;
+
+charger_logic_globals_t chargerlogic = {0};
+
 void charger_logic_tick()
 {
     static float charge_started_charge = 0;
@@ -46,17 +41,17 @@ void charger_logic_tick()
     if (IN_SIGNAL_LINE_PWR)
     {
         // line power on
-        if (!line_pwr_state)
+        if (!chargerlogic.line_pwr_state)
         {
             // line power on latch
             LOG_AND_FREEZE("LINE DETECT LATCH ON\n");
-            line_pwr_state = true;
+            chargerlogic.line_pwr_state = true;
         }
 /// check need for heating
         bool check_temp_should_use_heater_var = check_temp_should_use_heater();
         bool check_temp_should_turn_off_heater_var = check_temp_should_turn_off_heater();
         // bool check_age_ticks_u_batt_and_temp_allowed_var = check_age_ticks_u_batt_and_temp_allowed();
-        if (!heater_active_state)
+        if (!chargerlogic.heater_active_state)
         {
             if (check_temp_should_use_heater_var && check_age_ticks_u_batt_and_temp_allowed_var)
             {
@@ -84,14 +79,14 @@ void charger_logic_tick()
         //bool check_age_ticks_u_batt_and_temp_allowed_var = check_age_ticks_u_batt_and_temp_allowed();
         if (check_temp_charging_allowed_var && check_volt_charging_necessary_start_var && check_age_ticks_u_batt_and_temp_allowed_var)
         {
-            if (!charger_active_state)
+            if (!chargerlogic.charger_active_state)
             {
                 if (charge_ended_ts)
                 {
                     // data of previous charge available
                     LOG_AND_FREEZE("CHARGE LATCH ON:LOAD ON expecting to recharge %.3fAh %.3fkWh estimated duration %.1fh\n",
-                        overall_highest_charge - shunt_data.charge, (overall_highest_energy - shunt_data.energy)/1000.0,
-                        (overall_highest_charge - shunt_data.charge) / 20.0 * 1.2);
+                        chargerlogic.overall_highest_charge - shunt_data.charge, (chargerlogic.overall_highest_energy - shunt_data.energy)/1000.0,
+                        (chargerlogic.overall_highest_charge - shunt_data.charge) / 20.0 * 1.2);
                 }
                 else
                 {
@@ -99,7 +94,7 @@ void charger_logic_tick()
                     LOG_AND_FREEZE("CHARGE LATCH ON:LOAD ON no data of prev charge avail\n");
                 }
                 OUT_CHARGER_LOAD_ON
-                charger_active_state = true;
+                chargerlogic.charger_active_state = true;
                 reason_charge_not_starting = 0;
                 if (shunt_report_charge_start())
                 {
@@ -122,7 +117,7 @@ void charger_logic_tick()
                 OUT_CHARGER_DOOR_ON
             }
         } else {
-            if (!charger_active_state)
+            if (!chargerlogic.charger_active_state)
             {
                 char* msg_temp = "";
                 char* msg_not_needed = "";
@@ -154,7 +149,7 @@ void charger_logic_tick()
         if (check_temp_charging_safety_stop_var || check_volt_charging_safety_stop_var || !check_age_ticks_u_batt_and_temp_allowed_var)
         {
             OUT_CHARGER_DOOR_OFF
-            if (charger_active_state)
+            if (chargerlogic.charger_active_state)
             {
                 char* msg_temp = "";
                 char* msg_safety_stop = "";
@@ -172,7 +167,7 @@ void charger_logic_tick()
                 LOG_AND_FREEZE("CHARGE LATCH OFF:DOOR OFF%s%s%s charged %.3fAh %.2fWh in %dd%02dh%02dm\n", msg_temp, msg_safety_stop, msg_tick_age,
                     shunt_data.charge - charge_started_charge, shunt_data.energy - charge_started_energy,
                     DAYS_TILL_NOW(charge_started_ts), HOURS_TILL_NOW(charge_started_ts), MIN_TILL_NOW(charge_started_ts));
-                charger_active_state = false;
+                chargerlogic.charger_active_state = false;
                 charge_started_ts = 0;
                 charge_started_charge = 0;
                 charge_started_energy = 0;
@@ -187,14 +182,14 @@ void charger_logic_tick()
 
     } else {
         // no line power
-        if (line_pwr_state)
+        if (chargerlogic.line_pwr_state)
         {
             // line power off latch
-            line_pwr_state = false;
+            chargerlogic.line_pwr_state = false;
             LOG_AND_FREEZE("LINE DETECT LATCH OFF:HEATER OFF:CHG LOAD OFF:CHG DOOR OFF charged %.3fAh %.2fWh in %dd%02dh%02dm\n",
                 shunt_data.charge - charge_started_charge, shunt_data.energy - charge_started_energy,
                 DAYS_TILL_NOW(charge_started_ts), HOURS_TILL_NOW(charge_started_ts), MIN_TILL_NOW(charge_started_ts));
-            charger_active_state = false;
+            chargerlogic.charger_active_state = false;
             charge_started_ts = 0;
             charge_started_charge = 0;
             charge_started_energy = 0;
@@ -209,20 +204,20 @@ void charger_logic_tick()
     }
 
 /// charge ended max
-    if (charge_ended_charge > overall_highest_charge)
+    if (charge_ended_charge > chargerlogic.overall_highest_charge)
     {
-        overall_highest_charge = charge_ended_charge;
+        chargerlogic.overall_highest_charge = charge_ended_charge;
     }
-    if (charge_ended_energy > overall_highest_energy)
+    if (charge_ended_energy > chargerlogic.overall_highest_energy)
     {
-        overall_highest_energy = charge_ended_energy;
+        chargerlogic.overall_highest_energy = charge_ended_energy;
     }
 
 /// check KL15 power active
     if (IN_SIGNAL_KL15_PWR)
     {
         // KL15 on
-        if (!kl15_pwr_state)
+        if (!chargerlogic.kl15_pwr_state)
         {
             // KL15 on latch
             if (charge_ended_ts)
@@ -236,20 +231,20 @@ void charger_logic_tick()
                 // no data of previous charge available
                 LOG_AND_FREEZE("KL15 DETECT LATCH ON has avail %.3fAh %.2fWh - no data of prev charge avail\n", shunt_data.charge, shunt_data.energy);
             }
-            kl15_pwr_state = true;
+            chargerlogic.kl15_pwr_state = true;
             kl15_started_ts = get_system_time();
             kl15_started_charge = shunt_data.charge;
             kl15_started_energy = shunt_data.energy;
         }
     } else {
         // no KL15
-        if (kl15_pwr_state)
+        if (chargerlogic.kl15_pwr_state)
         {
             // KL15 off latch
             LOG_AND_FREEZE("KL15 DETECT LATCH OFF used %.3fAh %.2fWh in %dd%dh%02dm\n",
                 kl15_started_charge - shunt_data.charge, kl15_started_energy - shunt_data.energy,
                 DAYS_TILL_NOW(kl15_started_ts), HOURS_TILL_NOW(kl15_started_ts), MIN_TILL_NOW(kl15_started_ts));
-            kl15_pwr_state = false;
+            chargerlogic.kl15_pwr_state = false;
             kl15_started_ts = 0;
             kl15_started_charge = 0;
             kl15_started_energy = 0;
@@ -258,29 +253,29 @@ void charger_logic_tick()
 
 
 /// check if car is sleeping or not
-    if (kl15_pwr_state || line_pwr_state)
+    if (chargerlogic.kl15_pwr_state || chargerlogic.line_pwr_state)
     {
         // car active (KL15 ON and / or LINE DETECT)
-        if (!car_active)
+        if (!chargerlogic.car_active)
         {
             LOG_AND_FREEZE("CAR ACTIVE LATCH ON:BAL ON\n");
-            car_active = true;
+            chargerlogic.car_active = true;
         }
     } else {
         // car sleeping
-        if (car_active)
+        if (chargerlogic.car_active)
         {
             LOG_AND_FREEZE("CAR ACTIVE LATCH OFF\n");
-            car_active = false;
+            chargerlogic.car_active = false;
         }
     }
 
 /// check if balancer is needed and allowed
     bool check_temp_balancing_allowed_var = check_temp_balancing_allowed();
     bool check_temp_balancing_safety_stop_var = check_temp_balancing_safety_stop();
-    if (car_active)
+    if (chargerlogic.car_active)
     {
-        if (!balancer_active_state)
+        if (!chargerlogic.balancer_active_state)
         {
             // balancer not active
             if (check_temp_balancing_allowed_var && check_age_ticks_u_batt_and_temp_allowed_var)
@@ -328,7 +323,7 @@ void charger_logic_tick()
     else
     {
         // car not active
-        if (balancer_active_state && (check_temp_balancing_safety_stop_var || !check_age_ticks_u_batt_and_temp_allowed_var))
+        if (chargerlogic.balancer_active_state && (check_temp_balancing_safety_stop_var || !check_age_ticks_u_batt_and_temp_allowed_var))
         {
             cl_balancer_off();
             char* msg_temp = "";
@@ -350,7 +345,7 @@ void charger_logic_tick()
 void cl_balancer_on()
 {
     LOG_AND_FREEZE("BAL LATCH ON\n");
-    balancer_active_state = true;
+    chargerlogic.balancer_active_state = true;
     reason_balancer_not_starting = 0;
     OUT_BAL_LATCH_OFF_IDLE
     OUT_BAL_LATCH_ON_CURR
@@ -358,7 +353,7 @@ void cl_balancer_on()
 void cl_balancer_off()
 {
     LOG_AND_FREEZE("BAL LATCH OFF\n");
-    balancer_active_state = false;
+    chargerlogic.balancer_active_state = false;
     reason_balancer_not_starting = 0;
     OUT_BAL_LATCH_ON_IDLE
     OUT_BAL_LATCH_OFF_CURR
@@ -366,26 +361,30 @@ void cl_balancer_off()
 void cl_heater_on()
 {
     LOG_AND_FREEZE("HEATER LATCH ON\n");
-    heater_active_state = true;
+    chargerlogic.heater_active_state = true;
     OUT_HEATER_LATCH_OFF_IDLE
     OUT_HEATER_LATCH_ON_CURR
 }
 void cl_heater_off()
 {
     LOG_AND_FREEZE("HEATER LATCH OFF\n");
-    heater_active_state = false;
+    chargerlogic.heater_active_state = false;
     OUT_HEATER_LATCH_ON_IDLE
     OUT_HEATER_LATCH_OFF_CURR
 }
 void print_charger_logic_status()
 {
     #pragma diag_suppress=Pa082
-    log_va("[CL: CAR:%d KL15:%d LINE:%d BAL:%d HEATER:%d | CHARGE_ON:%d CHG_DOOR:%d CHG_LOAD:%d REASON:%02X\n", car_active, kl15_pwr_state, line_pwr_state, balancer_active_state, heater_active_state, charger_active_state, IS_OUT_CHARGER_DOOR_ON, IS_OUT_CHARGER_LOAD_ON, reason_charge_not_starting);
+    log_va("[CL: CAR:%d KL15:%d LINE:%d BAL:%d HEATER:%d | CHARGE_ON:%d CHG_DOOR:%d CHG_LOAD:%d REASON:%02X\n",
+        chargerlogic.car_active, chargerlogic.kl15_pwr_state, chargerlogic.line_pwr_state, chargerlogic.balancer_active_state,
+        chargerlogic.heater_active_state, chargerlogic.charger_active_state, IS_OUT_CHARGER_DOOR_ON, IS_OUT_CHARGER_LOAD_ON, reason_charge_not_starting);
 }
 void freeze_charger_logic_status()
 {
     #pragma diag_suppress=Pa082
-    freeze_va("[CL: CAR:%d KL15:%d LINE:%d BAL:%d HEATER:%d | CHARGE_ON:%d CHG_DOOR:%d CHG_LOAD:%d REASON:%02X\n", car_active, kl15_pwr_state, line_pwr_state, balancer_active_state, heater_active_state, charger_active_state, IS_OUT_CHARGER_DOOR_ON, IS_OUT_CHARGER_LOAD_ON, reason_charge_not_starting);
+    freeze_va("[CL: CAR:%d KL15:%d LINE:%d BAL:%d HEATER:%d | CHARGE_ON:%d CHG_DOOR:%d CHG_LOAD:%d REASON:%02X\n",
+        chargerlogic.car_active, chargerlogic.kl15_pwr_state, chargerlogic.line_pwr_state, chargerlogic.balancer_active_state,
+        chargerlogic.heater_active_state, chargerlogic.charger_active_state, IS_OUT_CHARGER_DOOR_ON, IS_OUT_CHARGER_LOAD_ON, reason_charge_not_starting);
 }
 
 
