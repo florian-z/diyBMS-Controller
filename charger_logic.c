@@ -7,6 +7,7 @@
 #include "cellmodule_data.h"
 
 #define LOG_AND_FREEZE(...)   freeze_va(__VA_ARGS__);capture_compact_freeze_frame=2;
+#define DAYS_TILL_NOW(timestamp)     get_dur_full_days(get_system_time() - timestamp )
 #define HOURS_TILL_NOW(timestamp)   get_dur_full_hours(get_system_time() - timestamp )
 #define MIN_TILL_NOW(timestamp)    get_dur_full_minutes(get_system_time() - timestamp )
 
@@ -168,7 +169,7 @@ void charger_logic_tick()
                 }
                 LOG_AND_FREEZE("CHARGE LATCH OFF:DOOR OFF%s%s%s charged %.2fAh %.2kWh in %dh%02dm\n", msg_temp, msg_safety_stop, msg_tick_age,
                     shunt_data.charge - charge_started_charge, shunt_data.energy - charge_started_energy,
-                    HOURS_TILL_NOW(charge_started_ts), MIN_TILL_NOW(charge_started_ts));
+                    DAYS_TILL_NOW(charge_started_ts), HOURS_TILL_NOW(charge_started_ts), MIN_TILL_NOW(charge_started_ts));
                 charger_active_state = false;
                 charge_started_ts = 0;
                 charge_started_charge = 0;
@@ -208,7 +209,7 @@ void charger_logic_tick()
             {
                 // data of previous charge available
                 LOG_AND_FREEZE("KL15 DETECT LATCH ON has avail %.2fAh %.2fkWh - last charging ended %dh%02dm ago\n", shunt_data.charge, shunt_data.energy,
-                    HOURS_TILL_NOW(charge_ended_ts), MIN_TILL_NOW(charge_ended_ts));
+                    DAYS_TILL_NOW(charge_ended_ts), HOURS_TILL_NOW(charge_ended_ts), MIN_TILL_NOW(charge_ended_ts));
             }
             else
             {
@@ -227,7 +228,7 @@ void charger_logic_tick()
             // KL15 off latch
             LOG_AND_FREEZE("KL15 DETECT LATCH OFF used %.2fAh %.2fkWh in %dh%02dm\n",
                 kl15_started_charge - shunt_data.charge, kl15_started_energy - shunt_data.energy,
-                HOURS_TILL_NOW(kl15_started_ts), MIN_TILL_NOW(kl15_started_ts));
+                DAYS_TILL_NOW(kl15_started_ts), HOURS_TILL_NOW(kl15_started_ts), MIN_TILL_NOW(kl15_started_ts));
             kl15_pwr_state = false;
             kl15_started_ts = 0;
             kl15_started_charge = 0;
