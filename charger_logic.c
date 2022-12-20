@@ -203,8 +203,8 @@ void charger_logic_tick()
             charge_ended_energy = shunt_data.energy;
             reason_charge_not_starting = 0;
             cl_heater_off();
-            OUT_CHARGER_LOAD_OFF
             OUT_CHARGER_DOOR_OFF
+            OUT_CHARGER_LOAD_OFF
         }
     }
 
@@ -344,7 +344,6 @@ void charger_logic_tick()
         reason_balancer_not_starting = 0;
     }
 }
-
 
 
 void cl_balancer_on()
