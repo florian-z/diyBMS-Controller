@@ -263,7 +263,7 @@ void charger_logic_tick()
         // car active (KL15 ON and / or LINE DETECT)
         if (!chargerlogic.car_active)
         {
-            LOG_AND_FREEZE("CAR ACTIVE LATCH ON:BAL ON\n");
+            LOG_AND_FREEZE("CAR ACTIVE LATCH ON\n");
             chargerlogic.car_active = true;
         }
     } else {
@@ -278,70 +278,50 @@ void charger_logic_tick()
 /// check if balancer is needed and allowed
     bool check_temp_balancing_allowed_var = check_temp_balancing_allowed();
     bool check_temp_balancing_safety_stop_var = check_temp_balancing_safety_stop();
-    if (chargerlogic.car_active)
+    if (!chargerlogic.balancer_active_state)
     {
-        if (!chargerlogic.balancer_active_state)
+        // balancer not active
+        if (check_temp_balancing_allowed_var && check_age_ticks_u_batt_and_temp_allowed_var)
         {
-            // balancer not active
-            if (check_temp_balancing_allowed_var && check_age_ticks_u_batt_and_temp_allowed_var)
-            {
-                cl_balancer_on();
-            }
-            else
-            {
-                char* msg_temp = "";
-                char* msg_tick_age = "";
-                uint8_t new_reason_balancer_not_starting = 0;
-                if(!check_temp_balancing_allowed_var) {
-                    msg_temp = ":TEMP DOES NOT ALLOW";
-                    new_reason_balancer_not_starting |= (1<<1);
-                }
-                if(!check_age_ticks_u_batt_and_temp_allowed_var) {
-                    msg_tick_age = ":CELL DATA TO OLD";
-                    new_reason_balancer_not_starting |= (1<<2);
-                }
-                if (new_reason_balancer_not_starting != reason_balancer_not_starting)
-                {
-                    LOG_AND_FREEZE("BAL NOT ON%s%s%s\n", msg_temp, msg_tick_age);
-                    reason_balancer_not_starting = new_reason_balancer_not_starting;
-                }
-            }
+            cl_balancer_on();
         }
         else
         {
-            // balancer active
-            if (check_temp_balancing_safety_stop_var || !check_age_ticks_u_batt_and_temp_allowed_var)
+            char* msg_temp = "";
+            char* msg_tick_age = "";
+            uint8_t new_reason_balancer_not_starting = 0;
+            if(!check_temp_balancing_allowed_var) {
+                msg_temp = ":TEMP DOES NOT ALLOW";
+                new_reason_balancer_not_starting |= (1<<1);
+            }
+            if(!check_age_ticks_u_batt_and_temp_allowed_var) {
+                msg_tick_age = ":CELL DATA TO OLD";
+                new_reason_balancer_not_starting |= (1<<2);
+            }
+            if (new_reason_balancer_not_starting != reason_balancer_not_starting)
             {
-                cl_balancer_off();
-                char* msg_temp = "";
-                char* msg_tick_age = "";
-                if(check_temp_balancing_safety_stop_var) {
-                    msg_temp = ":TEMP DOES NOT ALLOW";
-                }
-                if(!check_age_ticks_u_batt_and_temp_allowed_var) {
-                    msg_tick_age = ":CELL DATA TO OLD";
-                }
-                LOG_AND_FREEZE("BAL OFF (CAR active)%s%s\n", msg_temp, msg_tick_age);
+                LOG_AND_FREEZE("BAL NOT ON%s%s\n", msg_temp, msg_tick_age);
+                reason_balancer_not_starting = new_reason_balancer_not_starting;
             }
         }
     }
     else
     {
-        // car not active
-        if (chargerlogic.balancer_active_state && (check_temp_balancing_safety_stop_var || !check_age_ticks_u_batt_and_temp_allowed_var))
+        // balancer active
+        if (check_temp_balancing_safety_stop_var || !check_age_ticks_u_batt_and_temp_allowed_var)
         {
             cl_balancer_off();
             char* msg_temp = "";
-                char* msg_tick_age = "";
-                if(check_temp_balancing_safety_stop_var) {
-                    msg_temp = ":TEMP DOES NOT ALLOW";
-                }
-                if(!check_age_ticks_u_batt_and_temp_allowed_var) {
-                    msg_tick_age = ":CELL DATA TO OLD";
-                }
-                LOG_AND_FREEZE("BAL OFF (CAR not active)%s%s\n", msg_temp, msg_tick_age);
+            char* msg_tick_age = "";
+            if(check_temp_balancing_safety_stop_var) {
+                msg_temp = ":TEMP DOES NOT ALLOW";
+            }
+            if(!check_age_ticks_u_batt_and_temp_allowed_var) {
+                msg_tick_age = ":CELL DATA TO OLD";
+            }
+            LOG_AND_FREEZE("BAL OFF%s%s\n", msg_temp, msg_tick_age);
+            reason_balancer_not_starting = 0;
         }
-        reason_balancer_not_starting = 0;
     }
 }
 
