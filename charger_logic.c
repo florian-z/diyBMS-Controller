@@ -31,6 +31,8 @@ void charger_logic_tick()
     static float charge_ended_energy = 0;
     static float kl15_started_charge = 0;
     static float kl15_started_energy = 0;
+/// state machine helpers
+    static bool charge_shutdown_in_progress = false;
 /// ensure relais coils IDLE is reached
     OUT_BAL_LATCH_OFF_IDLE
     OUT_BAL_LATCH_ON_IDLE
@@ -95,6 +97,7 @@ void charger_logic_tick()
                 }
                 OUT_CHARGER_LOAD_ON
                 chargerlogic.charger_active_state = true;
+                charge_shutdown_in_progress = false; // prevent any weird timing issues
                 reason_charge_not_starting = 0;
                 if (shunt_report_charge_start())
                 {
@@ -146,7 +149,7 @@ void charger_logic_tick()
         bool check_temp_charging_safety_stop_var = check_temp_charging_safety_stop();
         bool check_volt_charging_safety_stop_var = check_volt_charging_safety_stop();
         //bool check_age_ticks_u_batt_and_temp_allowed_var = check_age_ticks_u_batt_and_temp_allowed();
-        if (check_temp_charging_safety_stop_var || check_volt_charging_safety_stop_var || !check_age_ticks_u_batt_and_temp_allowed_var)
+        if (check_temp_charging_safety_stop_var || check_volt_charging_safety_stop_var || !check_age_ticks_u_batt_and_temp_allowed_var || charge_shutdown_in_progress)
         {
             OUT_CHARGER_DOOR_OFF
             if (chargerlogic.charger_active_state)
@@ -168,6 +171,7 @@ void charger_logic_tick()
                     shunt_data.charge - charge_started_charge, shunt_data.energy - charge_started_energy,
                     DAYS_TILL_NOW(charge_started_ts), HOURS_TILL_NOW(charge_started_ts), MIN_TILL_NOW(charge_started_ts));
                 chargerlogic.charger_active_state = false;
+                charge_shutdown_in_progress = true; // ensures that next call will be able to reach OUT_CHARGER_LOAD_OFF in else branch
                 charge_started_ts = 0;
                 charge_started_charge = 0;
                 charge_started_energy = 0;
@@ -176,6 +180,7 @@ void charger_logic_tick()
                 charge_ended_energy = shunt_data.energy;
                 reason_charge_not_starting = 0;
             } else {
+                charge_shutdown_in_progress = false;
                 OUT_CHARGER_LOAD_OFF
             }
         }
