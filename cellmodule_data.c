@@ -100,7 +100,7 @@ void calc_cellmodule_data()
 
 // enable heater only if at least one cell below LOW and none above HIGH
 // true -> heater on
-#define LIMITS_TEMP_HEATER_NEEDED_LOW 18
+#define LIMITS_TEMP_HEATER_NEEDED_LOW 15
 #define LIMITS_TEMP_HEATER_SAFETY_HIGH 35
 bool check_temp_should_use_heater()
 {
