@@ -145,7 +145,7 @@ void send_ble_android()
             memcpy(&msg[58], &chargerlogic.overall_highest_charge, 4);
             memcpy(&msg[62], &chargerlogic.overall_highest_energy, 4);
             bool_tmp = chargerlogic.car_active<<7 | chargerlogic.kl15_pwr_state<<6 | chargerlogic.line_pwr_state<<5 | chargerlogic.heater_active_state<<4 |
-                chargerlogic.balancer_active_state<<3 | chargerlogic.charger_active_state<<2;
+                chargerlogic.balancer_active_state<<3 | chargerlogic.charger_active_state<<2 | (!check_age_ticks_u_batt_and_temp_allowed())<<1;
             memcpy(&msg[66], &bool_tmp, 1);
 
             msg_len = 67;
