@@ -312,7 +312,7 @@ void process_message_shunt()
 //                log("SHUNT recv VBUS ");
                 // returns V
                 // 195.3125 μV/LSB
-                // 2.13 correction factor for VBUS resistor-devider
+                // *2.13*VBUS_CORRECTION correction factor for VBUS resistor-devider
                 shunt_data.vbus = ((int32_t)((rx_data[1]&0xff)<<24 | (rx_data[2]&0xff)<<16 | (rx_data[3]&0xff)<<8))*195.3125e-6*2.13/4096.0*VBUS_CORRECTION;
 //                log_va("%.3f V\n", shunt_data.vbus);
                 break;
@@ -335,7 +335,7 @@ void process_message_shunt()
 //                log("SHUNT recv POWER ");
                 // returns W
                 // CURRENT_LSB * 3.2
-                // 2.13 correction factor for VBUS resistor-devider
+                // *2.13*VBUS_CORRECTION correction factor for VBUS resistor-devider
                 shunt_data.power = ((uint32_t)((rx_data[1]&0xff)<<16 | (rx_data[2]&0xff)<<8 | (rx_data[3]&0xff)))*CURRENT_LSB*3.2*2.13*VBUS_CORRECTION;
 //                log_va("%.3f W\n", shunt_data.power);
                 break;
@@ -343,17 +343,19 @@ void process_message_shunt()
 //                log("SHUNT recv ENERGY ");
                 // returns Wh
                 // CURRENT_LSB * 3.2 * 16
-                // 2.13 correction factor for VBUS resistor-devider
-                shunt_data.energy = ((uint32_t)((rx_data[1]&0xff)<<24 | (rx_data[2]&0xff)<<16 | (rx_data[3]&0xff)<<8 | (rx_data[4]&0xff)))*CURRENT_LSB*3.2*16*2.13/3600.0*VBUS_CORRECTION;
-                // value read has five bytes, lowest byte is ignored here
+                // *2.13*VBUS_CORRECTION correction factor for VBUS resistor-devider
+                // /3600 -> Ws to Wh
+                // *256 -> value read has five bytes, lowest byte is ignored here
+                shunt_data.energy = ((uint32_t)((rx_data[1]&0xff)<<24 | (rx_data[2]&0xff)<<16 | (rx_data[3]&0xff)<<8 | (rx_data[4]&0xff)))*CURRENT_LSB*3.2*16*2.13/3600.0*VBUS_CORRECTION*256.0;
 //                log_va("%.3f Wh\n", shunt_data.energy);
                 break;
             case ADDR_CHARGE|ADDR_READ:
 //                log("SHUNT recv CHARGE ");
                 // returns Ah
                 // CURRENT_LSB
-                shunt_data.charge = ((int32_t)((rx_data[1]&0xff)<<24 | (rx_data[2]&0xff)<<16 | (rx_data[3]&0xff)<<8 | (rx_data[4]&0xff)))*CURRENT_LSB/3600.0;
-                // value read has five bytes, lowest byte is ignored here
+                // /3600 -> As to Ah
+                // *256 -> value read has five bytes, lowest byte is ignored here
+                shunt_data.charge = ((int32_t)((rx_data[1]&0xff)<<24 | (rx_data[2]&0xff)<<16 | (rx_data[3]&0xff)<<8 | (rx_data[4]&0xff)))*CURRENT_LSB/3600.0*256.0;
 //                log_va("%.3f Ah\n", shunt_data.charge);
                 break;
             case ADDR_ADC_CONFIG|ADDR_READ:
