@@ -28,7 +28,7 @@ void set_time_tick(time_t new_timestamp)
         strftime(buf_prev, 20, "%y%m%d %H%M%S", gmtime(&system_time_sec));
         strftime(buf_new, 20, "%y%m%d %H%M%S", gmtime(&new_timestamp));
         freeze_va("[prev-ts: %s new-ts: %s delta: %dd %dh %dm]\n", buf_prev, buf_new,
-        get_dur_full_days(new_timestamp - system_time_sec), get_dur_full_hours(new_timestamp - system_time_sec), get_dur_full_minutes(new_timestamp - system_time_sec));
+        get_dur_total_full_days(new_timestamp - system_time_sec), get_dur_only_full_hours(new_timestamp - system_time_sec), get_dur_only_full_minutes(new_timestamp - system_time_sec));
         update_charger_logic_timestamps(new_timestamp - system_time_sec);
         system_time_sec = new_timestamp;
     }
@@ -48,17 +48,22 @@ char* get_ts_full_str()
     return buf;
 }
 
-uint16_t get_dur_full_days(time_t duration)
-{
-    return duration/86400;
-}
-
-uint16_t get_dur_full_hours(time_t duration)
+uint8_t get_dur_only_full_hours(time_t duration)
 {
     return (duration/3600)%24;
 }
 
-uint8_t get_dur_full_minutes(time_t duration)
+uint8_t get_dur_only_full_minutes(time_t duration)
 {
     return (duration/60)%60;
+}
+
+uint16_t get_dur_total_full_days(time_t duration)
+{
+    return duration/86400;
+}
+
+uint16_t get_dur_total_full_minutes(time_t duration)
+{
+    return duration/60<UINT16_MAX ? duration/60 : UINT16_MAX;
 }

@@ -129,10 +129,17 @@ bool check_temp_should_turn_off_heater()
 // true -> start balancing
 #define LIMITS_TEMP_BALANCING_NEEDED_LOW 5
 #define LIMITS_TEMP_BALANCING_SAFETY_HIGH 45
-bool check_temp_balancing_allowed()
+bool check_temp_low_balancing_allowed()
 {
-    if((module_data_stat.temp_batt_c_lowest > LIMITS_TEMP_BALANCING_NEEDED_LOW && module_data_stat.temp_aux_c_lowest > LIMITS_TEMP_BALANCING_NEEDED_LOW)
-        && (module_data_stat.temp_batt_c_highest < LIMITS_TEMP_BALANCING_SAFETY_HIGH && module_data_stat.temp_aux_c_highest < LIMITS_TEMP_BALANCING_SAFETY_HIGH))
+    if(module_data_stat.temp_batt_c_lowest > LIMITS_TEMP_BALANCING_NEEDED_LOW && module_data_stat.temp_aux_c_lowest > LIMITS_TEMP_BALANCING_NEEDED_LOW)
+    {
+        return true;
+    }
+    return false;
+}
+bool check_temp_high_balancing_allowed()
+{
+    if(module_data_stat.temp_batt_c_highest < LIMITS_TEMP_BALANCING_SAFETY_HIGH && module_data_stat.temp_aux_c_highest < LIMITS_TEMP_BALANCING_SAFETY_HIGH)
     {
         return true;
     }
@@ -142,10 +149,17 @@ bool check_temp_balancing_allowed()
 // true -> stop/end balancing
 #define LIMITS_TEMP_BALANCING_SAFETY_STOP_LOW (LIMITS_TEMP_BALANCING_NEEDED_LOW - 2)
 #define LIMITS_TEMP_BALANCING_SAFETY_STOP_HIGH (LIMITS_TEMP_BALANCING_SAFETY_HIGH + 2)
-bool check_temp_balancing_safety_stop()
+bool check_temp_low_balancing_safety_stop()
 {
-    if((module_data_stat.temp_batt_c_lowest > LIMITS_TEMP_BALANCING_SAFETY_STOP_LOW && module_data_stat.temp_aux_c_lowest > LIMITS_TEMP_BALANCING_SAFETY_STOP_LOW)
-        && (module_data_stat.temp_batt_c_highest < LIMITS_TEMP_BALANCING_SAFETY_STOP_HIGH && module_data_stat.temp_aux_c_highest < LIMITS_TEMP_BALANCING_SAFETY_STOP_HIGH))
+    if(module_data_stat.temp_batt_c_lowest > LIMITS_TEMP_BALANCING_SAFETY_STOP_LOW && module_data_stat.temp_aux_c_lowest > LIMITS_TEMP_BALANCING_SAFETY_STOP_LOW)
+    {
+        return false;
+    }
+    return true;
+}
+bool check_temp_high_balancing_safety_stop()
+{
+    if(module_data_stat.temp_batt_c_highest < LIMITS_TEMP_BALANCING_SAFETY_STOP_HIGH && module_data_stat.temp_aux_c_highest < LIMITS_TEMP_BALANCING_SAFETY_STOP_HIGH)
     {
         return false;
     }
@@ -156,10 +170,17 @@ bool check_temp_balancing_safety_stop()
 // true -> charging on
 #define LIMITS_TEMP_CHARGING_ALLOWED_LOW 11
 #define LIMITS_TEMP_CHARGING_ALLOWED_HIGH 45
-bool check_temp_charging_allowed()
+bool check_temp_low_charging_allowed()
 {
-    if((module_data_stat.temp_batt_c_lowest > LIMITS_TEMP_CHARGING_ALLOWED_LOW && module_data_stat.temp_aux_c_lowest > LIMITS_TEMP_CHARGING_ALLOWED_LOW)
-        && (module_data_stat.temp_batt_c_highest < LIMITS_TEMP_CHARGING_ALLOWED_HIGH && module_data_stat.temp_aux_c_highest < LIMITS_TEMP_CHARGING_ALLOWED_HIGH))
+    if(module_data_stat.temp_batt_c_lowest > LIMITS_TEMP_CHARGING_ALLOWED_LOW && module_data_stat.temp_aux_c_lowest > LIMITS_TEMP_CHARGING_ALLOWED_LOW)
+    {
+        return true;
+    }
+    return false;
+}
+bool check_temp_high_charging_allowed()
+{
+    if(module_data_stat.temp_batt_c_highest < LIMITS_TEMP_CHARGING_ALLOWED_HIGH && module_data_stat.temp_aux_c_highest < LIMITS_TEMP_CHARGING_ALLOWED_HIGH)
     {
         return true;
     }
@@ -184,10 +205,17 @@ bool check_volt_charging_necessary_start()
 // true -> stop/end charging
 #define LIMITS_TEMP_CHARGING_SAFETY_STOP_LOW (LIMITS_TEMP_CHARGING_ALLOWED_LOW - 2)
 #define LIMITS_TEMP_CHARGING_SAFETY_STOP_HIGH (LIMITS_TEMP_CHARGING_ALLOWED_HIGH + 2)
-bool check_temp_charging_safety_stop()
+bool check_temp_low_charging_safety_stop()
 {
-    if((module_data_stat.temp_batt_c_lowest > LIMITS_TEMP_CHARGING_SAFETY_STOP_LOW && module_data_stat.temp_aux_c_lowest > LIMITS_TEMP_CHARGING_SAFETY_STOP_LOW)
-        && (module_data_stat.temp_batt_c_highest < LIMITS_TEMP_CHARGING_SAFETY_STOP_HIGH && module_data_stat.temp_aux_c_highest < LIMITS_TEMP_CHARGING_SAFETY_STOP_HIGH))
+    if(module_data_stat.temp_batt_c_lowest > LIMITS_TEMP_CHARGING_SAFETY_STOP_LOW && module_data_stat.temp_aux_c_lowest > LIMITS_TEMP_CHARGING_SAFETY_STOP_LOW)
+    {
+        return false;
+    }
+    return true;
+}
+bool check_temp_high_charging_safety_stop()
+{
+    if(module_data_stat.temp_batt_c_highest < LIMITS_TEMP_CHARGING_SAFETY_STOP_HIGH && module_data_stat.temp_aux_c_highest < LIMITS_TEMP_CHARGING_SAFETY_STOP_HIGH)
     {
         return false;
     }

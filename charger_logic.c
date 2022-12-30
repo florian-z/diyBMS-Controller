@@ -7,16 +7,18 @@
 #include "cellmodule_data.h"
 
 #define LOG_AND_FREEZE(...)   freeze_va(__VA_ARGS__);capture_compact_freeze_frame=2;
-#define DAYS_TILL_NOW(timestamp)     get_dur_full_days(get_system_time() - timestamp )
-#define HOURS_TILL_NOW(timestamp)   get_dur_full_hours(get_system_time() - timestamp )
-#define MIN_TILL_NOW(timestamp)   get_dur_full_minutes(get_system_time() - timestamp )
+#define DAYS_TILL_NOW(timestamp)     get_dur_total_full_days(get_system_time() - timestamp )
+#define HOURS_TILL_NOW(timestamp)   get_dur_only_full_hours(get_system_time() - timestamp )
+#define MIN_TILL_NOW(timestamp)   get_dur_only_full_minutes(get_system_time() - timestamp )
+#define TOTAL_MIN_TILL_NOW(timestamp)   get_dur_total_full_minutes(get_system_time() - timestamp )
 
 extern shunt_t shunt_data;
 extern uint8_t capture_compact_freeze_frame;
 
-// car_active => true if charging (LINE DETECT) or key-on (KL15 ON)
-static uint8_t reason_charge_not_starting = 0;
-static uint8_t reason_balancer_not_starting = 0;
+#define ALLOWED_CHARGING_ATTEMPTS_SINCE_LINE_PWR     3
+#define MINIMUM_COOLDOWN_BETWEEN_TWO_CHARGING_ATTEMPTS_IN_MINUTES   1
+
+// car_active => true if shore power (LINE DETECT) or key-on (KL15 ON)
 static time_t charge_started_ts = 0;
 static time_t charge_ended_ts = 0;
 static time_t kl15_started_ts = 0;
@@ -48,6 +50,7 @@ void charger_logic_tick()
             // line power on latch
             LOG_AND_FREEZE("LINE DETECT LATCH ON\n");
             chargerlogic.line_pwr_state = true;
+            chargerlogic.num_of_charging_attempts_since_line_pwr = 0; // reset charging attempts per line-power connection
         }
 /// check need for heating
         bool check_temp_should_use_heater_var = check_temp_should_use_heater();
@@ -76,10 +79,15 @@ void charger_logic_tick()
             }
         }
 /// check if good for charging
-        bool check_temp_charging_allowed_var = check_temp_charging_allowed();
+        bool check_temp_low_charging_allowed_var = check_temp_low_charging_allowed();
+        bool check_temp_high_charging_allowed_var = check_temp_high_charging_allowed();
         bool check_volt_charging_necessary_start_var = check_volt_charging_necessary_start();
         //bool check_age_ticks_u_batt_and_temp_allowed_var = check_age_ticks_u_batt_and_temp_allowed();
-        if (check_temp_charging_allowed_var && check_volt_charging_necessary_start_var && check_age_ticks_u_batt_and_temp_allowed_var)
+        bool user_request_heater_only_no_charge_var = chargerlogic.user_request_heater_only_no_charge;
+        bool too_many_charging_attempts_since_line_pwr_var = chargerlogic.num_of_charging_attempts_since_line_pwr >= ALLOWED_CHARGING_ATTEMPTS_SINCE_LINE_PWR;
+        bool cool_down_between_two_charging_attempts_var = (charge_ended_ts && (TOTAL_MIN_TILL_NOW(charge_ended_ts) < MINIMUM_COOLDOWN_BETWEEN_TWO_CHARGING_ATTEMPTS_IN_MINUTES));
+        if (check_temp_low_charging_allowed_var && check_temp_high_charging_allowed_var && check_volt_charging_necessary_start_var && check_age_ticks_u_batt_and_temp_allowed_var
+            && !user_request_heater_only_no_charge_var && !too_many_charging_attempts_since_line_pwr_var && !cool_down_between_two_charging_attempts_var)
         {
             if (!chargerlogic.charger_active_state)
             {
@@ -97,8 +105,9 @@ void charger_logic_tick()
                 }
                 OUT_CHARGER_LOAD_ON
                 chargerlogic.charger_active_state = true;
+                chargerlogic.num_of_charging_attempts_since_line_pwr++;
                 charge_shutdown_in_progress = false; // prevent any weird timing issues
-                reason_charge_not_starting = 0;
+                chargerlogic.reason_charge_not_starting = 0;
                 if (shunt_report_charge_start())
                 {
                     // shunt.charge and .energy will be reset to zero
@@ -122,52 +131,81 @@ void charger_logic_tick()
         } else {
             if (!chargerlogic.charger_active_state)
             {
-                char* msg_temp = "";
+                char* msg_temp_low = "";
+                char* msg_temp_high = "";
                 char* msg_not_needed = "";
                 char* msg_tick_age = "";
+                char* msg_user_request = "";
+                char* msg_too_many_charging_attempts = "";
+                char* msg_cooldown_between_two_charging_attempts = "";
                 uint8_t new_reason_charge_not_starting = 0;
-                if(!check_temp_charging_allowed_var) {
-                    msg_temp = ":TEMP DOES NOT ALLOW";
-                    new_reason_charge_not_starting |= (1<<1);
+                if(!check_temp_low_charging_allowed_var) {
+                    msg_temp_low = ":TEMP TOO LOW";
+                    new_reason_charge_not_starting |= REASON_CHARGE_NOT_STARTING_TEMP_LOW;
+                }
+                if(!check_temp_high_charging_allowed_var) {
+                    msg_temp_high = ":TEMP TOO HIGH";
+                    new_reason_charge_not_starting |= REASON_CHARGE_NOT_STARTING_TEMP_HIGH;
                 }
                 if(!check_volt_charging_necessary_start_var) {
                     msg_not_needed = ":VOLT CHG NOT NEEDED";
-                    new_reason_charge_not_starting |= (1<<2);
+                    new_reason_charge_not_starting |= REASON_CHARGE_NOT_STARTING_VOLT_CHG_NOT_NEEDED;
                 }
                 if(!check_age_ticks_u_batt_and_temp_allowed_var) {
                     msg_tick_age = ":CELL DATA TO OLD";
-                    new_reason_charge_not_starting |= (1<<3);
+                    new_reason_charge_not_starting |= REASON_CHARGE_NOT_STARTING_CELL_DATA_TOO_OLD;
                 }
-                if (new_reason_charge_not_starting != reason_charge_not_starting)
+                if(user_request_heater_only_no_charge_var) {
+                    msg_user_request = ":USER REQUEST";
+                    new_reason_charge_not_starting |= REASON_CHARGE_NOT_STARTING_USER_REQUEST;
+                }
+                if(too_many_charging_attempts_since_line_pwr_var) {
+                    msg_too_many_charging_attempts = ":TOO MANY CHARGING ATTEMPTS SINCE LINE-PWR";
+                    new_reason_charge_not_starting |= REASON_CHARGE_NOT_STARTING_TOO_MANY_CHARGING_ATTEMPTS_SINCE_LINE_PWR;
+                }
+                if(cool_down_between_two_charging_attempts_var) {
+                    msg_cooldown_between_two_charging_attempts = ":COOLDOWN BETWEEN TWO CHARGES";
+                    new_reason_charge_not_starting |= REASON_CHARGE_NOT_STARTING_COOLDOWN_BETWEEN_TWO_CHARGING_ATTEMPTS;
+                }
+                if (new_reason_charge_not_starting != chargerlogic.reason_charge_not_starting)
                 {
-                    LOG_AND_FREEZE("NOT READY TO CHG%s%s%s\n", msg_temp, msg_not_needed, msg_tick_age);
-                    reason_charge_not_starting = new_reason_charge_not_starting;
+                    LOG_AND_FREEZE("NOT READY TO CHG%s%s%s%s%s%s%s\n", msg_temp_low, msg_temp_high, msg_not_needed, msg_tick_age, msg_user_request, msg_too_many_charging_attempts, msg_cooldown_between_two_charging_attempts);
+                    chargerlogic.reason_charge_not_starting = new_reason_charge_not_starting;
                 }
             }
         }
 /// check under/over-temp and charge-stop-voltage
-        bool check_temp_charging_safety_stop_var = check_temp_charging_safety_stop();
+        bool check_temp_low_charging_safety_stop_var = check_temp_low_charging_safety_stop();
+        bool check_temp_high_charging_safety_stop_var = check_temp_high_charging_safety_stop();
         bool check_volt_charging_safety_stop_var = check_volt_charging_safety_stop();
         //bool check_age_ticks_u_batt_and_temp_allowed_var = check_age_ticks_u_batt_and_temp_allowed();
-        if (check_temp_charging_safety_stop_var || check_volt_charging_safety_stop_var || !check_age_ticks_u_batt_and_temp_allowed_var || charge_shutdown_in_progress)
+        if (check_temp_low_charging_safety_stop_var || check_temp_high_charging_safety_stop_var || check_volt_charging_safety_stop_var || !check_age_ticks_u_batt_and_temp_allowed_var || charge_shutdown_in_progress || user_request_heater_only_no_charge_var)
         {
             OUT_CHARGER_DOOR_OFF
             if (chargerlogic.charger_active_state)
             {
-                char* msg_temp = "";
-                char* msg_safety_stop = "";
+                char* msg_temp_low = "";
+                char* msg_temp_high = "";
+                char* msg_volt_safety_stop = "";
                 char* msg_tick_age = "";
-                if(check_temp_charging_safety_stop_var) {
-                    msg_temp = ":TEMP DOES NOT ALLOW";
+                char* msg_user_request = "";
+                if(check_temp_low_charging_safety_stop_var) {
+                    msg_temp_low = ":TEMP TOO LOW";
+                }
+                if(check_temp_high_charging_safety_stop_var) {
+                    msg_temp_high = ":TEMP TOO HIGH";
                 }
                 if (check_volt_charging_safety_stop_var) {
-                    msg_safety_stop = ":VOLT SAFETY STOP";
+                    msg_volt_safety_stop = ":VOLT SAFETY STOP";
                     freezeframe_cellmodule_full_debug();
                 }
                 if (!check_age_ticks_u_batt_and_temp_allowed_var) {
-                    msg_tick_age = ":CELL DATA TO OLD";
+                    msg_tick_age = ":CELL DATA TOO OLD";
                 }
-                LOG_AND_FREEZE("CHARGE LATCH OFF:DOOR OFF%s%s%s charged %.3fAh %.2fWh in %dd%02dh%02dm\n", msg_temp, msg_safety_stop, msg_tick_age,
+                if(user_request_heater_only_no_charge_var) {
+                    msg_user_request = ":USER REQUEST";
+                }
+                LOG_AND_FREEZE("CHARGE LATCH OFF:DOOR OFF%s%s%s%s%s charged %.3fAh %.2fWh in %dd%02dh%02dm\n", msg_temp_low, msg_temp_high, msg_volt_safety_stop, msg_tick_age, msg_user_request,
                     shunt_data.charge - charge_started_charge, shunt_data.energy - charge_started_energy,
                     DAYS_TILL_NOW(charge_started_ts), HOURS_TILL_NOW(charge_started_ts), MIN_TILL_NOW(charge_started_ts));
                 chargerlogic.charger_active_state = false;
@@ -178,7 +216,7 @@ void charger_logic_tick()
                 charge_ended_ts = get_system_time();
                 charge_ended_charge = shunt_data.charge;
                 charge_ended_energy = shunt_data.energy;
-                reason_charge_not_starting = 0;
+                chargerlogic.reason_charge_not_starting = 0;
             } else {
                 charge_shutdown_in_progress = false;
                 OUT_CHARGER_LOAD_OFF
@@ -201,7 +239,7 @@ void charger_logic_tick()
             charge_ended_ts = get_system_time();
             charge_ended_charge = shunt_data.charge;
             charge_ended_energy = shunt_data.energy;
-            reason_charge_not_starting = 0;
+            chargerlogic.reason_charge_not_starting = 0;
             cl_heater_off();
             OUT_CHARGER_DOOR_OFF
             OUT_CHARGER_LOAD_OFF
@@ -240,6 +278,7 @@ void charger_logic_tick()
             kl15_started_ts = get_system_time();
             kl15_started_charge = shunt_data.charge;
             kl15_started_energy = shunt_data.energy;
+            chargerlogic.user_request_heater_only_no_charge = USER_REQUEST_DEFAULT; // reset possbile user request "heater only, no charging"
         }
     } else {
         // no KL15
@@ -276,51 +315,62 @@ void charger_logic_tick()
     }
 
 /// check if balancer is needed and allowed
-    bool check_temp_balancing_allowed_var = check_temp_balancing_allowed();
-    bool check_temp_balancing_safety_stop_var = check_temp_balancing_safety_stop();
+    bool check_temp_low_balancing_allowed_var = check_temp_low_balancing_allowed();
+    bool check_temp_high_balancing_allowed_var = check_temp_high_balancing_allowed();
+    bool check_temp_low_balancing_safety_stop_var = check_temp_low_balancing_safety_stop();
+    bool check_temp_high_balancing_safety_stop_var = check_temp_high_balancing_safety_stop();
     if (!chargerlogic.balancer_active_state)
     {
         // balancer not active
-        if (check_temp_balancing_allowed_var && check_age_ticks_u_batt_and_temp_allowed_var)
+        if (check_temp_low_balancing_allowed_var && check_temp_high_balancing_allowed_var && check_age_ticks_u_batt_and_temp_allowed_var)
         {
             cl_balancer_on();
         }
         else
         {
-            char* msg_temp = "";
+            char* msg_temp_low = "";
+            char* msg_temp_high = "";
             char* msg_tick_age = "";
             uint8_t new_reason_balancer_not_starting = 0;
-            if(!check_temp_balancing_allowed_var) {
-                msg_temp = ":TEMP DOES NOT ALLOW";
-                new_reason_balancer_not_starting |= (1<<1);
+            if(!check_temp_low_balancing_allowed_var) {
+                msg_temp_low = ":TEMP TOO LOW";
+                new_reason_balancer_not_starting |= REASON_BALANCER_NOT_STARTING_TEMP_LOW;
+            }
+            if(!check_temp_high_balancing_allowed_var) {
+                msg_temp_high = ":TEMP TOO HIGH";
+                new_reason_balancer_not_starting |= REASON_BALANCER_NOT_STARTING_TEMP_HIGH;
             }
             if(!check_age_ticks_u_batt_and_temp_allowed_var) {
-                msg_tick_age = ":CELL DATA TO OLD";
-                new_reason_balancer_not_starting |= (1<<2);
+                msg_tick_age = ":CELL DATA TOO OLD";
+                new_reason_balancer_not_starting |= REASON_BALANCER_NOT_STARTING_CELL_DATA_TOO_OLD;
             }
-            if (new_reason_balancer_not_starting != reason_balancer_not_starting)
+            if (new_reason_balancer_not_starting != chargerlogic.reason_balancer_not_starting)
             {
-                LOG_AND_FREEZE("BAL NOT ON%s%s\n", msg_temp, msg_tick_age);
-                reason_balancer_not_starting = new_reason_balancer_not_starting;
+                LOG_AND_FREEZE("BAL NOT ON%s%s%s\n", msg_temp_low, msg_temp_high, msg_tick_age);
+                chargerlogic.reason_balancer_not_starting = new_reason_balancer_not_starting;
             }
         }
     }
     else
     {
         // balancer active
-        if (check_temp_balancing_safety_stop_var || !check_age_ticks_u_batt_and_temp_allowed_var)
+        if (check_temp_low_balancing_safety_stop_var || check_temp_high_balancing_safety_stop_var || !check_age_ticks_u_batt_and_temp_allowed_var)
         {
             cl_balancer_off();
-            char* msg_temp = "";
+            char* msg_temp_low = "";
+            char* msg_temp_high = "";
             char* msg_tick_age = "";
-            if(check_temp_balancing_safety_stop_var) {
-                msg_temp = ":TEMP DOES NOT ALLOW";
+            if(check_temp_low_balancing_safety_stop_var) {
+                msg_temp_low = ":TEMP TOO LOW";
+            }
+            if(check_temp_high_balancing_safety_stop_var) {
+                msg_temp_high = ":TEMP TOO HIGH";
             }
             if(!check_age_ticks_u_batt_and_temp_allowed_var) {
-                msg_tick_age = ":CELL DATA TO OLD";
+                msg_tick_age = ":CELL DATA TOO OLD";
             }
-            LOG_AND_FREEZE("BAL OFF%s%s\n", msg_temp, msg_tick_age);
-            reason_balancer_not_starting = 0;
+            LOG_AND_FREEZE("BAL OFF%s%s%s\n", msg_temp_low, msg_temp_high, msg_tick_age);
+            chargerlogic.reason_balancer_not_starting = 0;
         }
     }
 }
@@ -330,7 +380,7 @@ void cl_balancer_on()
 {
     LOG_AND_FREEZE("BAL LATCH ON\n");
     chargerlogic.balancer_active_state = true;
-    reason_balancer_not_starting = 0;
+    chargerlogic.reason_balancer_not_starting = 0;
     OUT_BAL_LATCH_OFF_IDLE
     OUT_BAL_LATCH_ON_CURR
 }
@@ -338,7 +388,7 @@ void cl_balancer_off()
 {
     LOG_AND_FREEZE("BAL LATCH OFF\n");
     chargerlogic.balancer_active_state = false;
-    reason_balancer_not_starting = 0;
+    chargerlogic.reason_balancer_not_starting = 0;
     OUT_BAL_LATCH_ON_IDLE
     OUT_BAL_LATCH_OFF_CURR
 }
@@ -361,16 +411,27 @@ void print_charger_logic_status()
     #pragma diag_suppress=Pa082
     log_va("[CL: CAR:%d KL15:%d LINE:%d BAL:%d HEATER:%d | CHARGE_ON:%d CHG_DOOR:%d CHG_LOAD:%d REASON:%02X\n",
         chargerlogic.car_active, chargerlogic.kl15_pwr_state, chargerlogic.line_pwr_state, chargerlogic.balancer_active_state,
-        chargerlogic.heater_active_state, chargerlogic.charger_active_state, IS_OUT_CHARGER_DOOR_ON, IS_OUT_CHARGER_LOAD_ON, reason_charge_not_starting);
+        chargerlogic.heater_active_state, chargerlogic.charger_active_state, IS_OUT_CHARGER_DOOR_ON, IS_OUT_CHARGER_LOAD_ON, chargerlogic.reason_charge_not_starting);
 }
 void freeze_charger_logic_status()
 {
     #pragma diag_suppress=Pa082
     freeze_va("[CL: CAR:%d KL15:%d LINE:%d BAL:%d HEATER:%d | CHARGE_ON:%d CHG_DOOR:%d CHG_LOAD:%d REASON:%02X\n",
         chargerlogic.car_active, chargerlogic.kl15_pwr_state, chargerlogic.line_pwr_state, chargerlogic.balancer_active_state,
-        chargerlogic.heater_active_state, chargerlogic.charger_active_state, IS_OUT_CHARGER_DOOR_ON, IS_OUT_CHARGER_LOAD_ON, reason_charge_not_starting);
+        chargerlogic.heater_active_state, chargerlogic.charger_active_state, IS_OUT_CHARGER_DOOR_ON, IS_OUT_CHARGER_LOAD_ON, chargerlogic.reason_charge_not_starting);
 }
 
+
+void set_user_request(uint8_t user_request)
+{
+    if (user_request) {
+        // user requested - heating only, no charging
+        chargerlogic.user_request_heater_only_no_charge = USER_REQUEST_HEATER_ONLY_NO_CHARGE;
+    } else {
+        // user requested - heating and charging
+        chargerlogic.user_request_heater_only_no_charge = USER_REQUEST_DEFAULT;
+    }
+}
 
 
 void update_charger_logic_timestamps(time_t timestamp_delta)

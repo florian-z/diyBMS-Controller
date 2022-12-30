@@ -145,10 +145,13 @@ void send_ble_android()
             memcpy(&msg[58], &chargerlogic.overall_highest_charge, 4);
             memcpy(&msg[62], &chargerlogic.overall_highest_energy, 4);
             bool_tmp = chargerlogic.car_active<<7 | chargerlogic.kl15_pwr_state<<6 | chargerlogic.line_pwr_state<<5 | chargerlogic.heater_active_state<<4 |
-                chargerlogic.balancer_active_state<<3 | chargerlogic.charger_active_state<<2 | (!check_age_ticks_u_batt_and_temp_allowed())<<1;
+                chargerlogic.balancer_active_state<<3 | chargerlogic.charger_active_state<<2 | (!check_age_ticks_u_batt_and_temp_allowed())<<1 | chargerlogic.user_request_heater_only_no_charge<<0;
             memcpy(&msg[66], &bool_tmp, 1);
+            memcpy(&msg[67], &chargerlogic.num_of_charging_attempts_since_line_pwr, 1);
+            memcpy(&msg[68], &chargerlogic.reason_charge_not_starting, 1);
+            memcpy(&msg[69], &chargerlogic.reason_balancer_not_starting, 1);
 
-            msg_len = 67;
+            msg_len = 70;
 
             if (!has_ble_message())
             {
@@ -191,6 +194,21 @@ void recv_ble_msg(uint8_t* msg, uint8_t msglen)
         else
         {
             log("BLE cmd set-ts malformed\n");
+        }
+    }
+    else if(msg[BLE_OPCODE] == SetUserRequest_0x87)
+    {
+        log("BLE Set UserRequest: ");
+        if(msg[BLE_LEN_H] == 0 && msg[BLE_LEN_L] == 2 && msglen == BLE_MINIMUM_LEN + 1)
+        {
+            uint8_t user_request;
+            memcpy(&user_request, &msg[BLE_OPCODE+1], 1);
+            log_va("user request: %u\n", user_request);
+            set_user_request(user_request);
+        }
+        else
+        {
+            log("BLE cmd set-userreq malformed\n");
         }
     }
     else
