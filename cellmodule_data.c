@@ -135,7 +135,7 @@ bool check_temp_should_turn_off_heater()
 // start balance charge only if all cells above LOW and none above HIGH
 // true -> start balancing
 #define LIMITS_TEMP_BALANCING_NEEDED_LOW 5
-#define LIMITS_TEMP_BALANCING_SAFETY_HIGH 45
+#define LIMITS_TEMP_BALANCING_SAFETY_HIGH 55
 bool check_temp_low_balancing_allowed()
 {
     if(module_data_stat.temp_batt_c_lowest > LIMITS_TEMP_BALANCING_NEEDED_LOW && module_data_stat.temp_aux_c_lowest > LIMITS_TEMP_BALANCING_NEEDED_LOW)
@@ -175,7 +175,7 @@ bool check_temp_high_balancing_safety_stop()
 
 // charge only if all cells above LOW and none above HIGH
 // true -> charging on
-#define LIMITS_TEMP_CHARGING_ALLOWED_LOW 11
+#define LIMITS_TEMP_CHARGING_ALLOWED_LOW 12
 #define LIMITS_TEMP_CHARGING_ALLOWED_HIGH 45
 bool check_temp_low_charging_allowed()
 {
@@ -196,8 +196,8 @@ bool check_temp_high_charging_allowed()
 
 // start charging only if all cells below LOW and none above HIGH
 // true -> charging on
-#define LIMITS_VOLT_CHARGING_NECESSARY_LOW 3400
-#define LIMITS_VOLT_CHARGING_NECESSARY_HIGH 3450
+#define LIMITS_VOLT_CHARGING_NECESSARY_LOW 3350
+#define LIMITS_VOLT_CHARGING_NECESSARY_HIGH 3400
 bool check_volt_charging_necessary_start()
 {
     if(module_data_stat.u_batt_mv_lowest < LIMITS_VOLT_CHARGING_NECESSARY_LOW
@@ -231,7 +231,7 @@ bool check_temp_high_charging_safety_stop()
 
 // stop charging if one cell above HIGH
 // true -> stop/end charging
-#define LIMITS_VOLT_CHARGING_SAFETY_STOP_HIGH 3500
+#define LIMITS_VOLT_CHARGING_SAFETY_STOP_HIGH 3600
 bool check_volt_charging_safety_stop()
 {
     if(module_data_stat.u_batt_mv_highest >= LIMITS_VOLT_CHARGING_SAFETY_STOP_HIGH)
