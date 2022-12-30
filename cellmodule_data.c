@@ -63,8 +63,15 @@ void calc_cellmodule_data()
         {
             if (SHUNT_AUX_TEMP_ID == i)
             {
-                // skip shunt temp sensor. only use batt and case temp as temp_aux
+                // skip shunt temp sensor. only use batt temp as temp_aux
                 continue;
+            }
+            for(uint8_t j=0; j<BOTTOM_CASE_AUX_TEMP_ID_LEN; j++)
+            {
+                if (BOTTOM_CASE_AUX_TEMP_IDS[j] == i) {
+                    // skip case temp sensors. only use batt temp as temp_aux
+                    continue;
+                }
             }
             if (module_data[i].temp_aux_c < tmp_low) {
                 tmp_low = module_data[i].temp_aux_c;
@@ -76,7 +83,7 @@ void calc_cellmodule_data()
         }
         module_data_stat.temp_aux_c_lowest = tmp_low;
         module_data_stat.temp_aux_c_highest = tmp_high;
-        module_data_stat.temp_aux_c_mean = (uint8_t)(tmp_sum / (float)(CELLMODULES_TOTAL - 1)); // total cnt - shunt sensor
+        module_data_stat.temp_aux_c_mean = (uint8_t)(tmp_sum / (float)(CELLMODULES_TOTAL - 1 - BOTTOM_CASE_AUX_TEMP_ID_LEN)); // total cnt - shunt temp sensor - case temp sensors
     }
     {
         int8_t tmp_low = INT8_MAX;
